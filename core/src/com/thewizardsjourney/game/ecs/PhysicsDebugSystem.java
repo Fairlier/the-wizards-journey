@@ -14,14 +14,18 @@ public class PhysicsDebugSystem extends EntitySystem {
     public PhysicsDebugSystem(World world, Viewport viewport) {
         this.world = world;
         this.viewport = viewport;
-        debugRenderer = new Box2DDebugRenderer(true,
-                true, true, true,
-                true, true);
+        debugRenderer = new Box2DDebugRenderer(
+                true,
+                true,
+                false,
+                true,
+                true,
+                true
+        );
     }
 
     @Override
     public void update(float deltaTime) {
-        super.update(deltaTime);
         debugRenderer.render(world, viewport.getCamera().combined);
     }
 

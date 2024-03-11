@@ -18,6 +18,7 @@ public class InputHandler extends InputAdapter {
             return true;
         }
         return false;
+        // TODO
     }
 
     @Override
@@ -42,5 +43,20 @@ public class InputHandler extends InputAdapter {
     public boolean scrolled(float amountX, float amountY) {
         return super.scrolled(amountX, amountY);
         // TODO
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.LEFT) {
+            gameScreen.movePlayerLeft();
+            return true;
+        } else if (keycode == Input.Keys.RIGHT) {
+            gameScreen.movePlayerRight();
+            return true;
+        } else if (keycode == Input.Keys.UP) {
+            gameScreen.movePlayerUp();
+            return true;
+        }
+        return false;
     }
 }
