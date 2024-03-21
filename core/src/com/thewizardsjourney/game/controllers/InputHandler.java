@@ -5,6 +5,10 @@ import com.badlogic.gdx.InputAdapter;
 import com.thewizardsjourney.game.screens.GameScreen;
 
 public class InputHandler extends InputAdapter {
+    private boolean left;
+    private boolean right;
+    private boolean jump;
+    private boolean action;
     private GameScreen gameScreen;
 
     public InputHandler(GameScreen gameScreen) {
@@ -47,16 +51,50 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
+        action = false;
         if (keycode == Input.Keys.LEFT) {
-            gameScreen.movePlayerLeft();
-            return true;
-        } else if (keycode == Input.Keys.RIGHT) {
-            gameScreen.movePlayerRight();
-            return true;
-        } else if (keycode == Input.Keys.UP) {
-            gameScreen.movePlayerUp();
-            return true;
+            left = true;
+            action = true;
+            //gameScreen.movePlayerLeft();
         }
-        return false;
+        if (keycode == Input.Keys.RIGHT) {
+            right = true;
+            action = true;
+            //gameScreen.movePlayerRight();
+        }
+        if (keycode == Input.Keys.UP) {
+            jump = true;
+            action = true;
+            //gameScreen.movePlayerUp();
+        }
+        return action;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        action = false;
+        if (keycode == Input.Keys.LEFT) {
+            left = false;
+            action = true;
+        } else if (keycode == Input.Keys.RIGHT) {
+            right = false;
+            action = true;
+        } else if (keycode == Input.Keys.UP) {
+            jump = false;
+            action = true;
+        }
+        return action;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public boolean isJump() {
+        return jump;
     }
 }

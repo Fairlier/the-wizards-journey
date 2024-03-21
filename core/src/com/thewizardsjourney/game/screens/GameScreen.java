@@ -1,10 +1,12 @@
 package com.thewizardsjourney.game.screens;
 
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -17,7 +19,18 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
 import com.thewizardsjourney.game.controllers.InputHandler;
-import com.thewizardsjourney.game.ecs.PhysicsDebugSystem;
+import com.thewizardsjourney.game.ecs.components.BodyComponent;
+import com.thewizardsjourney.game.ecs.components.FacingComponent;
+import com.thewizardsjourney.game.ecs.components.JumpComponent;
+import com.thewizardsjourney.game.ecs.components.MovementComponent;
+import com.thewizardsjourney.game.ecs.components.PlayerComponent;
+import com.thewizardsjourney.game.ecs.components.StateTypeComponent;
+import com.thewizardsjourney.game.ecs.components.TransformComponent;
+import com.thewizardsjourney.game.ecs.systems.JumpSystem;
+import com.thewizardsjourney.game.ecs.systems.MovementSystem;
+import com.thewizardsjourney.game.ecs.systems.PhysicsDebugSystem;
+import com.thewizardsjourney.game.ecs.systems.PhysicsSystem;
+import com.thewizardsjourney.game.ecs.systems.PlayerControlSystem;
 
 public class GameScreen extends ScreenAdapter { // TODO
     private static final String TAG = "GameScreen";
@@ -28,16 +41,17 @@ public class GameScreen extends ScreenAdapter { // TODO
     private Viewport viewport;
     private OrthographicCamera camera;
 
-    private PooledEngine engine;
+    private Engine engine;
 
     private Vector3 point = new Vector3();
     BodyDef defaultDynamicBodyDef;
     World world;
     FixtureDef boxFixtureDef;
     PolygonShape square;
-    Body player;
+    Body playerBody;
+    Entity player;
 
-    private InputHandler inputHandler;
+    private InputHandler controller;
 
     public GameScreen(TheWizardsJourney theWizardsJourney) {
         camera = new OrthographicCamera();
@@ -50,7 +64,9 @@ public class GameScreen extends ScreenAdapter { // TODO
         viewport.getCamera().update();
         viewport.update((int) SCENE_WIDTH, (int) SCENE_HEIGHT);
 
-        inputHandler = new InputHandler(this);
+        controller = new InputHandler(this);
+
+        engine = new Engine();
 
         world = new World(new Vector2(0, -9.8f), true);
         createABox();
@@ -64,13 +80,40 @@ public class GameScreen extends ScreenAdapter { // TODO
         boxFixtureDef.friction = 0.8f;
         boxFixtureDef.restitution = 0.15f;
         defaultDynamicBodyDef.position.set(SCENE_WIDTH * 0.5f, SCENE_HEIGHT * 0.5f);
-        player = world.createBody(defaultDynamicBodyDef);
-        player.createFixture(boxFixtureDef);
-
-        engine = new PooledEngine();
+        playerBody = world.createBody(defaultDynamicBodyDef);
+        playerBody.createFixture(boxFixtureDef);
+        player = engine.createEntity();
+        BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
+        bodyComponent.body = playerBody;
+        bodyComponent.body.setUserData(player);
+        player.add(bodyComponent);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+        transformComponent.position.set(SCENE_WIDTH * 0.5f, SCENE_HEIGHT * 0.5f);
+        player.add(transformComponent);
+        MovementComponent movementComponent = engine.createComponent(MovementComponent.class);
+        movementComponent.speed = 17.0f;
+        player.add(movementComponent);
+        JumpComponent jumpComponent = engine.createComponent(JumpComponent.class);
+        jumpComponent.speed = 2.0f;
+        player.add(jumpComponent);
+        FacingComponent facingComponent = engine.createComponent(FacingComponent.class);
+        player.add(facingComponent);
+        StateTypeComponent stateTypeComponent = engine.createComponent(StateTypeComponent.class);
+        player.add(stateTypeComponent);
+        PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+        player.add(playerComponent);
 
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, viewport);
+        PhysicsSystem physicsSystem = new PhysicsSystem(world);
+        MovementSystem movementSystem = new MovementSystem();
+        JumpSystem jumpSystem = new JumpSystem();
+        PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
+        engine.addEntity(player);
         engine.addSystem(physicsDebugSystem);
+        engine.addSystem(physicsSystem);
+        engine.addSystem(movementSystem);
+        engine.addSystem(jumpSystem);
+        engine.addSystem(playerControlSystem);
     }
 
     private void createABox() {
@@ -95,18 +138,27 @@ public class GameScreen extends ScreenAdapter { // TODO
     }
 
     public void movePlayerLeft() {
-        player.applyLinearImpulse(-2f, 0,
-                player.getPosition().x, player.getPosition().y, true);
+//        playerBody.applyLinearImpulse(-2f, 0,
+//                playerBody.getPosition().x, playerBody.getPosition().y, true);
+        playerBody.setLinearVelocity(MathUtils.lerp(playerBody.getLinearVelocity().x, -7f, 0.2f), playerBody.getLinearVelocity().y);
     }
 
     public void movePlayerRight() {
-        player.applyLinearImpulse(2f, 0,
-                player.getPosition().x, player.getPosition().y, true);
+//        playerBody.applyLinearImpulse(2f, 0,
+//                playerBody.getPosition().x, playerBody.getPosition().y, true);
+        playerBody.setLinearVelocity(MathUtils.lerp(playerBody.getLinearVelocity().x, 7f, 0.2f), playerBody.getLinearVelocity().y);
     }
 
     public void movePlayerUp() {
-        player.applyLinearImpulse(0, 5f,
-                player.getPosition().x, player.getPosition().y, true);
+//        playerBody.applyLinearImpulse(0, 5f,
+//                playerBody.getPosition().x, playerBody.getPosition().y, true);
+        playerBody.applyLinearImpulse(
+                0,
+                0.8f * playerBody.getMass(),
+                playerBody.getWorldCenter().x,
+                playerBody.getWorldCenter().y,
+                true
+        );
     }
 
     private void createSquare(float x, float y) {
@@ -122,15 +174,15 @@ public class GameScreen extends ScreenAdapter { // TODO
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(inputHandler);
+        Gdx.input.setInputProcessor(controller);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(.25f, .25f, .25f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        world.step(1/60f, 6, 2);
-        camera.position.set(player.getPosition(), 0);
+        // world.step(1/60f, 6, 2);
+        camera.position.set(playerBody.getPosition(), 0);
         camera.update();
         engine.update(delta);
     }
