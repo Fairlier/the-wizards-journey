@@ -27,14 +27,6 @@ public class MovementSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         BodyComponent bodyComponent = bm.get(entity);
         MovementComponent movementComponent  = mm.get(entity);
-//        bodyComponent.body.setLinearVelocity(
-//                MathUtils.lerp(
-//                        bodyComponent.body.getLinearVelocity().x,
-//                        movementComponent.velocity.x,
-//                        PROGRESS
-//                ),
-//                bodyComponent.body.getLinearVelocity().y
-//        );
         bodyComponent.body.setLinearVelocity(
                 movementComponent.velocity.x,
                 bodyComponent.body.getLinearVelocity().y

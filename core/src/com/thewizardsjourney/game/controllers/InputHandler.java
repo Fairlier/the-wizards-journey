@@ -1,89 +1,96 @@
 package com.thewizardsjourney.game.controllers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.thewizardsjourney.game.screens.GameScreen;
+import com.badlogic.gdx.math.Vector2;
 
 public class InputHandler extends InputAdapter {
     private boolean left;
     private boolean right;
-    private boolean jump;
+    private boolean up;
     private boolean action;
-    private GameScreen gameScreen;
 
-    public InputHandler(GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
-    }
+    // TODO
+    public boolean isDragged;
+    private Vector2 fingerLocation = new Vector2(0,0);
+    private Vector2 joystickLocation = new Vector2(0, 0);
+    private byte joystickPointer = -1;
+    private byte jumpPointer = -1;
+    float BUTTON_RADIUS = 1 / 9f;
+    Vector2 JUMP_BUTTON_CENTER = new Vector2(15 / 16f, 7 / 8f);
+    //
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            gameScreen.createSquare(screenX, screenY);
-            return true;
+            if ((screenX < (Gdx.graphics.getWidth() >> 1)) && (joystickPointer == -1)) {
+                joystickPointer = (byte) pointer;
+                joystickLocation.x = screenX;
+                joystickLocation.y = screenY;
+            }
+            else if (((screenX - JUMP_BUTTON_CENTER.x * Gdx.graphics.getWidth()) * (screenX - JUMP_BUTTON_CENTER.x * Gdx.graphics.getWidth())
+                    + (screenY - JUMP_BUTTON_CENTER.y * Gdx.graphics.getHeight()) * (screenY - JUMP_BUTTON_CENTER.y * Gdx.graphics.getHeight())
+                    <= BUTTON_RADIUS * Gdx.graphics.getHeight() * BUTTON_RADIUS * Gdx.graphics.getHeight()) && (jumpPointer == -1)) {
+                jumpPointer = (byte) pointer;
+                up = true;
+            }
         }
+        fingerLocation.x = screenX;
+        fingerLocation.y = screenY;
         return false;
-        // TODO
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return super.touchUp(screenX, screenY, pointer, button);
-        // TODO
-    }
+        isDragged = false;
 
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return super.touchCancelled(screenX, screenY, pointer, button);
-        // TODO
+        if (pointer == joystickPointer) {
+            joystickPointer = -1;
+            right = false;
+            left = false;
+        }
+        if (pointer == jumpPointer) {
+            jumpPointer = -1;
+            up = false;
+        }
+        fingerLocation.x = screenX;
+        fingerLocation.y = screenY;
+
+        return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return super.touchDragged(screenX, screenY, pointer);
-        // TODO
+        isDragged = true;
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            if (pointer == joystickPointer) {
+                if (screenX > joystickLocation.x) {
+                    right = true;
+                    left = false;
+                }
+                else if (screenX < joystickLocation.x) {
+                    left = true;
+                    right = false;
+                }
+                else {
+                    left = false;
+                    right = false;
+                }
+            }
+        }
+        fingerLocation.x = screenX;
+        fingerLocation.y = screenY;
+
+        return false;
     }
 
     @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return super.scrolled(amountX, amountY);
-        // TODO
-    }
+    public boolean mouseMoved(int screenX, int screenY) {
+        fingerLocation.x = screenX;
+        fingerLocation.y = screenY;
 
-    @Override
-    public boolean keyDown(int keycode) {
-        action = false;
-        if (keycode == Input.Keys.LEFT) {
-            left = true;
-            action = true;
-            //gameScreen.movePlayerLeft();
-        }
-        if (keycode == Input.Keys.RIGHT) {
-            right = true;
-            action = true;
-            //gameScreen.movePlayerRight();
-        }
-        if (keycode == Input.Keys.UP) {
-            jump = true;
-            action = true;
-            //gameScreen.movePlayerUp();
-        }
-        return action;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        action = false;
-        if (keycode == Input.Keys.LEFT) {
-            left = false;
-            action = true;
-        } else if (keycode == Input.Keys.RIGHT) {
-            right = false;
-            action = true;
-        } else if (keycode == Input.Keys.UP) {
-            jump = false;
-            action = true;
-        }
-        return action;
+        return false;
     }
 
     public boolean isLeft() {
@@ -94,7 +101,7 @@ public class InputHandler extends InputAdapter {
         return right;
     }
 
-    public boolean isJump() {
-        return jump;
+    public boolean isUp() {
+        return up;
     }
 }

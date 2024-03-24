@@ -24,6 +24,7 @@ public class JumpSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         BodyComponent bodyComponent = bm.get(entity);
         JumpComponent jumpComponent  = jm.get(entity);
+        // TODO
         bodyComponent.body.applyLinearImpulse(
                 0,
                 jumpComponent.velocity.y * bodyComponent.body.getMass(),

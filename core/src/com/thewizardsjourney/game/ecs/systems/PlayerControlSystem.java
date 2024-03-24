@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.thewizardsjourney.game.constants.Constants;
 import com.thewizardsjourney.game.controllers.InputHandler;
 import com.thewizardsjourney.game.ecs.components.FacingComponent;
@@ -53,11 +55,11 @@ public class PlayerControlSystem extends IteratingSystem {
             facingComponent.direction = Constants.FacingDirection.RIGHT;
             stateTypeComponent.stateType = Constants.StateType.RUN;
         } else {
-            movementComponent.velocity.x = 0.0f;
+            movementComponent.velocity.setZero();
             stateTypeComponent.stateType = Constants.StateType.IDLE;
         }
 
-        if (controller.isJump()) {
+        if (controller.isUp()) {
             jumpComponent.velocity.y = jumpComponent.speed;
             stateTypeComponent.stateType = Constants.StateType.JUMP;
         } else {

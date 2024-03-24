@@ -43,7 +43,6 @@ public class GameScreen extends ScreenAdapter { // TODO
 
     private Engine engine;
 
-    private Vector3 point = new Vector3();
     BodyDef defaultDynamicBodyDef;
     World world;
     FixtureDef boxFixtureDef;
@@ -64,8 +63,7 @@ public class GameScreen extends ScreenAdapter { // TODO
         viewport.getCamera().update();
         viewport.update((int) SCENE_WIDTH, (int) SCENE_HEIGHT);
 
-        controller = new InputHandler(this);
-
+        controller = new InputHandler();
         engine = new Engine();
 
         world = new World(new Vector2(0, -9.8f), true);
@@ -116,6 +114,34 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.addSystem(playerControlSystem);
     }
 
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(controller);
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(.25f, .25f, .25f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.position.set(playerBody.getPosition(), 0);
+        camera.update();
+        engine.update(delta);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+    }
+
+    @Override
+    public void dispose() {
+        engine.removeAllEntities();
+        engine.removeAllSystems();
+        square.dispose();
+        world.dispose();
+    }
+
     private void createABox() {
         ChainShape chainShape = new ChainShape();
         chainShape.createLoop(new Vector2[] {
@@ -135,69 +161,5 @@ public class GameScreen extends ScreenAdapter { // TODO
         groundFD.density = 0;
         groundBody.createFixture(groundFD);
         chainShape.dispose();
-    }
-
-    public void movePlayerLeft() {
-//        playerBody.applyLinearImpulse(-2f, 0,
-//                playerBody.getPosition().x, playerBody.getPosition().y, true);
-        playerBody.setLinearVelocity(MathUtils.lerp(playerBody.getLinearVelocity().x, -7f, 0.2f), playerBody.getLinearVelocity().y);
-    }
-
-    public void movePlayerRight() {
-//        playerBody.applyLinearImpulse(2f, 0,
-//                playerBody.getPosition().x, playerBody.getPosition().y, true);
-        playerBody.setLinearVelocity(MathUtils.lerp(playerBody.getLinearVelocity().x, 7f, 0.2f), playerBody.getLinearVelocity().y);
-    }
-
-    public void movePlayerUp() {
-//        playerBody.applyLinearImpulse(0, 5f,
-//                playerBody.getPosition().x, playerBody.getPosition().y, true);
-        playerBody.applyLinearImpulse(
-                0,
-                0.8f * playerBody.getMass(),
-                playerBody.getWorldCenter().x,
-                playerBody.getWorldCenter().y,
-                true
-        );
-    }
-
-    private void createSquare(float x, float y) {
-        defaultDynamicBodyDef.position.set(x,y);
-        Body body = world.createBody(defaultDynamicBodyDef);
-        body.createFixture(boxFixtureDef);
-    }
-
-    public void createSquare(int screenX, int screenY) {
-        viewport.getCamera().unproject(point.set(screenX, screenY, 0));
-        createSquare(point.x, point.y);
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(controller);
-    }
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(.25f, .25f, .25f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        // world.step(1/60f, 6, 2);
-        camera.position.set(playerBody.getPosition(), 0);
-        camera.update();
-        engine.update(delta);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        engine.removeAllEntities();
-        engine.removeAllSystems();
-        square.dispose();
-        world.dispose();
     }
 }
