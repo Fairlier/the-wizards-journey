@@ -1,4 +1,4 @@
-package com.thewizardsjourney.game.ecs.systems;
+package com.thewizardsjourney.game.ecs.system;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;

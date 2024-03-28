@@ -1,4 +1,4 @@
-package com.thewizardsjourney.game.controllers;
+package com.thewizardsjourney.game.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

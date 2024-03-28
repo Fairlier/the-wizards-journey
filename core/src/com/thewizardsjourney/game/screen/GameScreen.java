@@ -1,4 +1,4 @@
-package com.thewizardsjourney.game.screens;
+package com.thewizardsjourney.game.screen;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -6,9 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
@@ -18,19 +16,19 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
-import com.thewizardsjourney.game.controllers.InputHandler;
-import com.thewizardsjourney.game.ecs.components.BodyComponent;
-import com.thewizardsjourney.game.ecs.components.FacingComponent;
-import com.thewizardsjourney.game.ecs.components.JumpComponent;
-import com.thewizardsjourney.game.ecs.components.MovementComponent;
-import com.thewizardsjourney.game.ecs.components.PlayerComponent;
-import com.thewizardsjourney.game.ecs.components.StateTypeComponent;
-import com.thewizardsjourney.game.ecs.components.TransformComponent;
-import com.thewizardsjourney.game.ecs.systems.JumpSystem;
-import com.thewizardsjourney.game.ecs.systems.MovementSystem;
-import com.thewizardsjourney.game.ecs.systems.PhysicsDebugSystem;
-import com.thewizardsjourney.game.ecs.systems.PhysicsSystem;
-import com.thewizardsjourney.game.ecs.systems.PlayerControlSystem;
+import com.thewizardsjourney.game.controller.InputHandler;
+import com.thewizardsjourney.game.ecs.component.BodyComponent;
+import com.thewizardsjourney.game.ecs.component.FacingComponent;
+import com.thewizardsjourney.game.ecs.component.JumpComponent;
+import com.thewizardsjourney.game.ecs.component.MovementComponent;
+import com.thewizardsjourney.game.ecs.component.PlayerComponent;
+import com.thewizardsjourney.game.ecs.component.StateTypeComponent;
+import com.thewizardsjourney.game.ecs.component.TransformComponent;
+import com.thewizardsjourney.game.ecs.system.JumpSystem;
+import com.thewizardsjourney.game.ecs.system.MovementSystem;
+import com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem;
+import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
+import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
 
 public class GameScreen extends ScreenAdapter { // TODO
     private static final String TAG = "GameScreen";

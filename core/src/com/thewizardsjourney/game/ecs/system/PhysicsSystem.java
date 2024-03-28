@@ -1,23 +1,20 @@
-package com.thewizardsjourney.game.ecs.systems;
+package com.thewizardsjourney.game.ecs.system;
 
-import static com.thewizardsjourney.game.constants.Constants.PhysicsSystem.FIXED_STEP_TIME;
-import static com.thewizardsjourney.game.constants.Constants.PhysicsSystem.MAX_FRAME_TIME;
-import static com.thewizardsjourney.game.constants.Constants.PhysicsSystem.POSITION_ITERATIONS;
-import static com.thewizardsjourney.game.constants.Constants.PhysicsSystem.VELOCITY_ITERATIONS;
+import static com.thewizardsjourney.game.constant.ECS.PhysicsSystem.FIXED_STEP_TIME;
+import static com.thewizardsjourney.game.constant.ECS.PhysicsSystem.MAX_FRAME_TIME;
+import static com.thewizardsjourney.game.constant.ECS.PhysicsSystem.POSITION_ITERATIONS;
+import static com.thewizardsjourney.game.constant.ECS.PhysicsSystem.VELOCITY_ITERATIONS;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.thewizardsjourney.game.ecs.components.BodyComponent;
-import com.thewizardsjourney.game.ecs.components.TransformComponent;
+import com.thewizardsjourney.game.ecs.component.BodyComponent;
+import com.thewizardsjourney.game.ecs.component.TransformComponent;
 
 public class PhysicsSystem extends IteratingSystem {
     private static float accumulator = 0.0f;

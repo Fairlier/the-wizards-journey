@@ -1,14 +1,11 @@
-package com.thewizardsjourney.game.ecs.systems;
-
-import static com.thewizardsjourney.game.constants.Constants.MovementSystem.PROGRESS;
+package com.thewizardsjourney.game.ecs.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.MathUtils;
-import com.thewizardsjourney.game.ecs.components.BodyComponent;
-import com.thewizardsjourney.game.ecs.components.MovementComponent;
+import com.thewizardsjourney.game.ecs.component.BodyComponent;
+import com.thewizardsjourney.game.ecs.component.MovementComponent;
 
 public class MovementSystem extends IteratingSystem {
     private final ComponentMapper<BodyComponent> bm =

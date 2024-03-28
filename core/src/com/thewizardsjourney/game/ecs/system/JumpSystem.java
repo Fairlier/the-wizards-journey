@@ -1,11 +1,11 @@
-package com.thewizardsjourney.game.ecs.systems;
+package com.thewizardsjourney.game.ecs.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.thewizardsjourney.game.ecs.components.BodyComponent;
-import com.thewizardsjourney.game.ecs.components.JumpComponent;
+import com.thewizardsjourney.game.ecs.component.BodyComponent;
+import com.thewizardsjourney.game.ecs.component.JumpComponent;
 
 public class JumpSystem extends IteratingSystem {
     private final ComponentMapper<BodyComponent> bm =

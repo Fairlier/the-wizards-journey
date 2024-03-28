@@ -1,7 +1,7 @@
 package com.thewizardsjourney.game;
 
 import com.badlogic.gdx.Game;
-import com.thewizardsjourney.game.screens.GameScreen;
+import com.thewizardsjourney.game.screen.GameScreen;
 
 public class TheWizardsJourney extends Game {
 	private static final String TAG = "TheWizardsJourney";

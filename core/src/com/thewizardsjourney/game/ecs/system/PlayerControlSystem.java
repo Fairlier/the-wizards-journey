@@ -1,18 +1,16 @@
-package com.thewizardsjourney.game.ecs.systems;
+package com.thewizardsjourney.game.ecs.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.thewizardsjourney.game.constants.Constants;
-import com.thewizardsjourney.game.controllers.InputHandler;
-import com.thewizardsjourney.game.ecs.components.FacingComponent;
-import com.thewizardsjourney.game.ecs.components.JumpComponent;
-import com.thewizardsjourney.game.ecs.components.MovementComponent;
-import com.thewizardsjourney.game.ecs.components.PlayerComponent;
-import com.thewizardsjourney.game.ecs.components.StateTypeComponent;
+import com.thewizardsjourney.game.constant.ECS;
+import com.thewizardsjourney.game.controller.InputHandler;
+import com.thewizardsjourney.game.ecs.component.FacingComponent;
+import com.thewizardsjourney.game.ecs.component.JumpComponent;
+import com.thewizardsjourney.game.ecs.component.MovementComponent;
+import com.thewizardsjourney.game.ecs.component.PlayerComponent;
+import com.thewizardsjourney.game.ecs.component.StateTypeComponent;
 
 public class PlayerControlSystem extends IteratingSystem {
     private InputHandler controller;
@@ -48,23 +46,23 @@ public class PlayerControlSystem extends IteratingSystem {
 
         if (controller.isLeft()) {
             movementComponent.velocity.x = -movementComponent.speed;
-            facingComponent.direction = Constants.FacingDirection.LEFT;
-            stateTypeComponent.stateType = Constants.StateType.RUN;
+            facingComponent.direction = ECS.FacingDirection.LEFT;
+            stateTypeComponent.stateType = ECS.StateType.RUN;
         } else if (controller.isRight()) {
             movementComponent.velocity.x = movementComponent.speed;
-            facingComponent.direction = Constants.FacingDirection.RIGHT;
-            stateTypeComponent.stateType = Constants.StateType.RUN;
+            facingComponent.direction = ECS.FacingDirection.RIGHT;
+            stateTypeComponent.stateType = ECS.StateType.RUN;
         } else {
             movementComponent.velocity.setZero();
-            stateTypeComponent.stateType = Constants.StateType.IDLE;
+            stateTypeComponent.stateType = ECS.StateType.IDLE;
         }
 
         if (controller.isUp()) {
             jumpComponent.velocity.y = jumpComponent.speed;
-            stateTypeComponent.stateType = Constants.StateType.JUMP;
+            stateTypeComponent.stateType = ECS.StateType.JUMP;
         } else {
             jumpComponent.velocity.y = 0.0f;
-            stateTypeComponent.stateType = Constants.StateType.FALLING;
+            stateTypeComponent.stateType = ECS.StateType.FALLING;
         }
     }
 }
