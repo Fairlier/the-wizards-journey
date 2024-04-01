@@ -13,7 +13,7 @@ import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.StateTypeComponent;
 
 public class PlayerControlSystem extends IteratingSystem {
-    private InputHandler controller;
+    private final InputHandler controller;
     private final ComponentMapper<MovementComponent> mm =
             ComponentMapper.getFor(MovementComponent.class);
     private final ComponentMapper<JumpComponent> jm =
@@ -37,7 +37,7 @@ public class PlayerControlSystem extends IteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) {
+    protected void processEntity(Entity entity, float deltaTime) { // TODO
         MovementComponent movementComponent = mm.get(entity);
         JumpComponent jumpComponent = jm.get(entity);
         FacingComponent facingComponent = fm.get(entity);
@@ -48,11 +48,13 @@ public class PlayerControlSystem extends IteratingSystem {
             movementComponent.velocity.x = -movementComponent.speed;
             facingComponent.direction = ECS.FacingDirection.LEFT;
             stateTypeComponent.stateType = ECS.StateType.RUN;
-        } else if (controller.isRight()) {
+        }
+        else if (controller.isRight()) {
             movementComponent.velocity.x = movementComponent.speed;
             facingComponent.direction = ECS.FacingDirection.RIGHT;
             stateTypeComponent.stateType = ECS.StateType.RUN;
-        } else {
+        }
+        else {
             movementComponent.velocity.setZero();
             stateTypeComponent.stateType = ECS.StateType.IDLE;
         }
@@ -60,7 +62,8 @@ public class PlayerControlSystem extends IteratingSystem {
         if (controller.isUp()) {
             jumpComponent.velocity.y = jumpComponent.speed;
             stateTypeComponent.stateType = ECS.StateType.JUMP;
-        } else {
+        }
+        else {
             jumpComponent.velocity.y = 0.0f;
             stateTypeComponent.stateType = ECS.StateType.FALLING;
         }

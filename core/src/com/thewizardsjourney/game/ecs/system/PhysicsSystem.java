@@ -53,10 +53,4 @@ public class PhysicsSystem extends IteratingSystem {
         transformComponent.position.y = bodyPosition.y;
         transformComponent.rotation = bodyTransform.getRotation();
     }
-
-    @Override
-    public void removedFromEngine(Engine engine) {
-        super.removedFromEngine(engine);
-        world.dispose();
-    }
 }

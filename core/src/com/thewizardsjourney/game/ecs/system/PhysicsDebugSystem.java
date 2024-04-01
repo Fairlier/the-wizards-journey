@@ -31,7 +31,6 @@ public class PhysicsDebugSystem extends EntitySystem {
 
     @Override
     public void removedFromEngine(Engine engine) {
-        world.dispose();
         debugRenderer.dispose();
     }
 }

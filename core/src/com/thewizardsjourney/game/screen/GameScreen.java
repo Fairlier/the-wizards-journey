@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -29,6 +30,7 @@ import com.thewizardsjourney.game.ecs.system.MovementSystem;
 import com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem;
 import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
+import com.thewizardsjourney.game.map.MapHandler;
 
 public class GameScreen extends ScreenAdapter { // TODO
     private static final String TAG = "GameScreen";
@@ -42,11 +44,13 @@ public class GameScreen extends ScreenAdapter { // TODO
     private Engine engine;
 
     BodyDef defaultDynamicBodyDef;
-    World world;
     FixtureDef boxFixtureDef;
     PolygonShape square;
     Body playerBody;
     Entity player;
+
+    MapHandler mapHandler;
+    OrthogonalTiledMapRenderer renderer;
 
     private InputHandler controller;
 
@@ -63,9 +67,10 @@ public class GameScreen extends ScreenAdapter { // TODO
 
         controller = new InputHandler();
         engine = new Engine();
+        mapHandler = new MapHandler(engine);
+        World world = mapHandler.getWorld();
+        renderer = new OrthogonalTiledMapRenderer(mapHandler.getMap(), 1.0f / 30.0f);
 
-        world = new World(new Vector2(0, -9.8f), true);
-        createABox();
         defaultDynamicBodyDef = new BodyDef();
         defaultDynamicBodyDef.type = BodyDef.BodyType.DynamicBody;
         square = new PolygonShape();
@@ -124,6 +129,9 @@ public class GameScreen extends ScreenAdapter { // TODO
 
         camera.position.set(playerBody.getPosition(), 0);
         camera.update();
+        renderer.setView(camera);
+        renderer.render();
+
         engine.update(delta);
     }
 
@@ -137,27 +145,6 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.removeAllEntities();
         engine.removeAllSystems();
         square.dispose();
-        world.dispose();
-    }
-
-    private void createABox() {
-        ChainShape chainShape = new ChainShape();
-        chainShape.createLoop(new Vector2[] {
-                new Vector2(0f, 0f),
-                new Vector2(SCENE_WIDTH * 2f, 0f),
-                new Vector2(SCENE_WIDTH * 2f, SCENE_HEIGHT * 2f),
-                new Vector2(0f, SCENE_HEIGHT * 2f),
-        });
-        BodyDef chainBodyDef = new BodyDef();
-        chainBodyDef.type = BodyDef.BodyType.StaticBody;
-        chainBodyDef.position.set(.0f, .0f);
-        Body groundBody = world.createBody(chainBodyDef);
-        FixtureDef groundFD = new FixtureDef();
-        groundFD.filter.categoryBits = 0x0004;;
-        groundFD.filter.maskBits = -1;
-        groundFD.shape = chainShape;
-        groundFD.density = 0;
-        groundBody.createFixture(groundFD);
-        chainShape.dispose();
+        mapHandler.destroyPhysics();
     }
 }
