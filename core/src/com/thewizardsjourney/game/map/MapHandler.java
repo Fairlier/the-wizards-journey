@@ -1,5 +1,6 @@
 package com.thewizardsjourney.game.map;
 
+import static com.thewizardsjourney.game.constant.Asset.AssetGroup.MapSettings;
 import static com.thewizardsjourney.game.constant.General.MapHandler.GRAVITY;
 
 import com.badlogic.ashley.core.Engine;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -17,7 +17,6 @@ import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -36,6 +35,7 @@ import com.badlogic.gdx.utils.JsonValue.JsonIterator;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.thewizardsjourney.game.asset.AssetHandler;
+import com.thewizardsjourney.game.asset.material.MaterialsData;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.TransformComponent;
 
@@ -50,19 +50,22 @@ public class MapHandler {
     private TiledMap map;
     private World world;
     private RayHandler rayHandler;
-    private Array<Body> bodies = new Array<Body>();
-    private ObjectMap<String, FixtureDef> materials = new ObjectMap<String, FixtureDef>();
+    private Array<Body> bodies = new Array<>();
+    private ObjectMap<String, FixtureDef> materials;
 
-    public MapHandler(Engine engine) {
+    public MapHandler(Engine engine, AssetHandler assetHandler) {
         logger = new Logger("MapHandler", Logger.INFO);
         logger.info("initialising");
 
         this.engine = engine;
+        this.assetHandler = assetHandler;
+
         world = new World(GRAVITY, true);
         rayHandler = new RayHandler(world);
-        TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load("data/box2D/map/tiled.tmx");
-        loadMaterialsFile(Gdx.files.internal("data/box2D/materials.json"));
+
+        map = assetHandler.get(MapSettings.GROUP_NAME, MapSettings.MAP_1);
+        materials = ((MaterialsData) assetHandler.get(MapSettings.GROUP_NAME, MapSettings.MATERIALS)).getMaterials();
+        //loadMaterialsFile(Gdx.files.internal("data/box2D/materials.json"));
         createPhysics(map);
     }
 
@@ -91,15 +94,19 @@ public class MapHandler {
             if (object instanceof RectangleMapObject) {
                 RectangleMapObject rectangle = (RectangleMapObject)object;
                 shape = getRectangle(rectangle);
+                logger.info("RectangleMapObject " + object);
             }
             else if (object instanceof PolygonMapObject) {
                 shape = getPolygon((PolygonMapObject)object);
+                logger.info("PolygonMapObject " + object);
             }
             else if (object instanceof PolylineMapObject) {
                 shape = getPolyline((PolylineMapObject)object);
+                logger.info("PolylineMapObject " + object);
             }
             else if (object instanceof CircleMapObject) {
                 shape = getCircle((CircleMapObject)object);
+                logger.info("CircleMapObject " + object);
             }
             else {
                 logger.error("non suported shape " + object);

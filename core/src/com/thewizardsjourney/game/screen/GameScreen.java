@@ -33,7 +33,7 @@ import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
 import com.thewizardsjourney.game.map.MapHandler;
 
 public class GameScreen extends ScreenAdapter { // TODO
-    private static final String TAG = "GameScreen";
+    private TheWizardsJourney main;
 
     private static final float SCENE_WIDTH = 12.80f;
     private static final float SCENE_HEIGHT = 7.20f;
@@ -54,7 +54,8 @@ public class GameScreen extends ScreenAdapter { // TODO
 
     private InputHandler controller;
 
-    public GameScreen(TheWizardsJourney theWizardsJourney) {
+    public GameScreen(TheWizardsJourney main) {
+        this.main = main;
         camera = new OrthographicCamera();
         viewport = new FitViewport(SCENE_WIDTH, SCENE_HEIGHT, camera);
         viewport.getCamera().position.set(
@@ -67,7 +68,7 @@ public class GameScreen extends ScreenAdapter { // TODO
 
         controller = new InputHandler();
         engine = new Engine();
-        mapHandler = new MapHandler(engine);
+        mapHandler = new MapHandler(engine, this.main.getAssetHandler());
         World world = mapHandler.getWorld();
         renderer = new OrthogonalTiledMapRenderer(mapHandler.getMap(), 1.0f / 30.0f);
 
