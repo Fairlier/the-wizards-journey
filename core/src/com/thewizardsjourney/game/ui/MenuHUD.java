@@ -1,4 +1,7 @@
 package com.thewizardsjourney.game.ui;
 
-public class MenuHUD {
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
+public class MenuHUD extends Table {
+
 }

@@ -1,14 +1,9 @@
 {
 	"map_settings" : [
 		{
-			"name": "materials",
+			"name" : "materials",
 			"type" : "com.thewizardsjourney.game.asset.material.MaterialsData",
-			"path" : "data/box2D/materials.json"
-		},
-		{
-			"name": "map_1",
-			"type" : "com.badlogic.gdx.maps.tiled.TiledMap",
-			"path" : "data/box2D/map/tiled.tmx"
+			"path" : "data/box2D/general/materials.json"
 		}
 	]
 }
