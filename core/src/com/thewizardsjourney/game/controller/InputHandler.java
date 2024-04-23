@@ -38,6 +38,8 @@ public class InputHandler extends InputAdapter {
         }
         fingerLocation.x = screenX;
         fingerLocation.y = screenY;
+
+        //Gdx.app.log("InputHandler", "touchDown " + String.valueOf(up));
         return false;
     }
 
@@ -57,6 +59,8 @@ public class InputHandler extends InputAdapter {
         fingerLocation.x = screenX;
         fingerLocation.y = screenY;
 
+        //Gdx.app.log("InputHandler", "touchUp " +
+        //        String.valueOf(left) + " " + String.valueOf(right) + " " + String.valueOf(up));
         return false;
     }
 
@@ -82,6 +86,7 @@ public class InputHandler extends InputAdapter {
         fingerLocation.x = screenX;
         fingerLocation.y = screenY;
 
+        // Gdx.app.log("InputHandler", "touchDragged " + String.valueOf(left) + " " + String.valueOf(right));
         return false;
     }
 

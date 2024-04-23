@@ -60,6 +60,13 @@ public class LoadingScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (main.getAssetHandler().update()) {
+//            if (previousScreen != null) {
+//                if (previousScreen.equals(MenuScreen.class)) {
+//                    main.getMenuScreen().hide();
+//                } else if (previousScreen.equals(GameScreen.class)) {
+//                    main.getGameScreen().hide();
+//                }
+//            }
             if (nextScreen != null) {
                 if (nextScreen.equals(MenuScreen.class)) {
                     main.setScreen(main.getMenuScreen());

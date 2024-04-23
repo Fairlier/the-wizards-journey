@@ -1,33 +1,23 @@
 package com.thewizardsjourney.game.screen;
 
+import static com.thewizardsjourney.game.constant.General.Screens.UNITS;
+
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
 import com.thewizardsjourney.game.controller.InputHandler;
-import com.thewizardsjourney.game.ecs.component.BodyComponent;
-import com.thewizardsjourney.game.ecs.component.FacingComponent;
-import com.thewizardsjourney.game.ecs.component.JumpComponent;
-import com.thewizardsjourney.game.ecs.component.MovementComponent;
-import com.thewizardsjourney.game.ecs.component.PlayerComponent;
-import com.thewizardsjourney.game.ecs.component.StateTypeComponent;
-import com.thewizardsjourney.game.ecs.component.TransformComponent;
 import com.thewizardsjourney.game.ecs.system.JumpSystem;
+import com.thewizardsjourney.game.ecs.system.LightSystem;
 import com.thewizardsjourney.game.ecs.system.MovementSystem;
 import com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem;
 import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
+import com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
 import com.thewizardsjourney.game.map.MapHandler;
 
@@ -52,7 +42,6 @@ public class GameScreen extends ScreenAdapter { // TODO
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(controller);
         initialization();
     }
 
@@ -63,7 +52,7 @@ public class GameScreen extends ScreenAdapter { // TODO
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(.25f, .25f, .25f, 1f);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
@@ -80,6 +69,7 @@ public class GameScreen extends ScreenAdapter { // TODO
 
     @Override
     public void dispose() {
+        Gdx.input.setInputProcessor(null);
         engine.removeAllEntities();
         engine.removeAllSystems();
         mapHandler.dispose();
@@ -97,22 +87,26 @@ public class GameScreen extends ScreenAdapter { // TODO
         viewport.update((int) SCENE_WIDTH, (int) SCENE_HEIGHT);
 
         controller = new InputHandler();
-
+        Gdx.input.setInputProcessor(controller);
         engine = new Engine();
 
         mapHandler = new MapHandler(engine, this.main.getAssetHandler(), main.getGameData());
-        renderer = new OrthogonalTiledMapRenderer(mapHandler.getMap(), 1.0f / 30.0f);
+        renderer = new OrthogonalTiledMapRenderer(mapHandler.getMap(), 1.0f / UNITS);
 
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(mapHandler.getWorld(), viewport);
         PhysicsSystem physicsSystem = new PhysicsSystem(mapHandler.getWorld());
+        LightSystem lightSystem = new LightSystem(mapHandler.getRayHandler(), camera);
         MovementSystem movementSystem = new MovementSystem();
         JumpSystem jumpSystem = new JumpSystem();
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
+        PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem();
 
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(physicsSystem);
+        engine.addSystem(lightSystem);
         engine.addSystem(movementSystem);
         engine.addSystem(jumpSystem);
         engine.addSystem(playerControlSystem);
+        engine.addSystem(playerCollisionSystem);
     }
 }

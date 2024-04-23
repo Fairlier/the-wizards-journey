@@ -4,13 +4,14 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.thewizardsjourney.game.constant.ECS;
+import com.badlogic.gdx.Gdx;
+import com.thewizardsjourney.game.constant.ECS.PlayerStateType;
+import com.thewizardsjourney.game.constant.ECS.FacingDirection;
 import com.thewizardsjourney.game.controller.InputHandler;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
 import com.thewizardsjourney.game.ecs.component.JumpComponent;
 import com.thewizardsjourney.game.ecs.component.MovementComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerComponent;
-import com.thewizardsjourney.game.ecs.component.StateTypeComponent;
 
 public class PlayerControlSystem extends IteratingSystem {
     private final InputHandler controller;
@@ -20,8 +21,6 @@ public class PlayerControlSystem extends IteratingSystem {
             ComponentMapper.getFor(JumpComponent.class);
     private final ComponentMapper<FacingComponent> fm =
             ComponentMapper.getFor(FacingComponent.class);
-    private final ComponentMapper<StateTypeComponent> stm =
-            ComponentMapper.getFor(StateTypeComponent.class);
     private final ComponentMapper<PlayerComponent> pm =
             ComponentMapper.getFor(PlayerComponent.class);
 
@@ -30,7 +29,6 @@ public class PlayerControlSystem extends IteratingSystem {
                 MovementComponent.class,
                 JumpComponent.class,
                 FacingComponent.class,
-                StateTypeComponent.class,
                 PlayerComponent.class
         ).get());
         this.controller = controller;
@@ -41,31 +39,31 @@ public class PlayerControlSystem extends IteratingSystem {
         MovementComponent movementComponent = mm.get(entity);
         JumpComponent jumpComponent = jm.get(entity);
         FacingComponent facingComponent = fm.get(entity);
-        StateTypeComponent stateTypeComponent = stm.get(entity);
         PlayerComponent playerComponent = pm.get(entity);
 
         if (controller.isLeft()) {
             movementComponent.velocity.x = -movementComponent.speed;
-            facingComponent.direction = ECS.FacingDirection.LEFT;
-            stateTypeComponent.stateType = ECS.StateType.RUN;
+            facingComponent.direction = FacingDirection.LEFT;
+            playerComponent.playerStateType = PlayerStateType.RUN;
         }
         else if (controller.isRight()) {
             movementComponent.velocity.x = movementComponent.speed;
-            facingComponent.direction = ECS.FacingDirection.RIGHT;
-            stateTypeComponent.stateType = ECS.StateType.RUN;
+            facingComponent.direction = FacingDirection.RIGHT;
+            playerComponent.playerStateType = PlayerStateType.RUN;
         }
         else {
             movementComponent.velocity.setZero();
-            stateTypeComponent.stateType = ECS.StateType.IDLE;
+            playerComponent.playerStateType = PlayerStateType.IDLE;
         }
 
         if (controller.isUp()) {
+            jumpComponent.state = false;
             jumpComponent.velocity.y = jumpComponent.speed;
-            stateTypeComponent.stateType = ECS.StateType.JUMP;
+            playerComponent.playerStateType = PlayerStateType.JUMP;
         }
         else {
-            jumpComponent.velocity.y = 0.0f;
-            stateTypeComponent.stateType = ECS.StateType.FALLING;
+            jumpComponent.velocity.setZero();
+            playerComponent.playerStateType = PlayerStateType.FALLING;
         }
     }
 }

@@ -6,8 +6,6 @@ public class Material {
     private float restitution;
     private float friction;
 
-    public Material() {}
-
     public String getName() {
         return name;
     }

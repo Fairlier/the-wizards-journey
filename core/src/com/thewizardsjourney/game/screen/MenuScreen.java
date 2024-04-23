@@ -1,16 +1,18 @@
 package com.thewizardsjourney.game.screen;
 
-import static com.thewizardsjourney.game.constant.General.Main.SCENE_HEIGHT;
-import static com.thewizardsjourney.game.constant.General.Main.SCENE_WIDTH;
+import static com.thewizardsjourney.game.constant.General.Screens.SCENE_HEIGHT;
+import static com.thewizardsjourney.game.constant.General.Screens.SCENE_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -34,6 +36,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
+        Gdx.app.log("MenuScreen", "HIDE");
         dispose();
     }
 
@@ -55,6 +58,8 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
+        Gdx.app.log("MenuScreen", "DISPOSE");
+        Gdx.input.setInputProcessor(null);
         stage.dispose();
         skin.dispose();
     }
@@ -94,8 +99,14 @@ public class MenuScreen extends ScreenAdapter {
         buttonTable.add().expandX().fillX(); // Пустая ячейка для отцентрирования кнопки "Settings"
         buttonTable.add().expand().top().left().pad(10f); // Пустая ячейка для размещения кнопки "PLAY" в верхнем левом углу
 
-
         stage.addActor(buttonTable);
+
+        playButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                main.setIntermediateScreen(main.getMenuScreen().getClass(), main.getGameScreen().getClass());
+            }
+        });
     }
 
 }

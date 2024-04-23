@@ -21,16 +21,17 @@ public class JumpSystem extends IteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) { // TODO
+    protected void processEntity(Entity entity, float deltaTime) {
         BodyComponent bodyComponent = bm.get(entity);
         JumpComponent jumpComponent  = jm.get(entity);
-        // TODO
-        bodyComponent.body.applyLinearImpulse(
-                0,
-                jumpComponent.velocity.y * bodyComponent.body.getMass(),
-                bodyComponent.body.getWorldCenter().x,
-                bodyComponent.body.getWorldCenter().y,
-                true
-        );
+        if (jumpComponent.state) {
+            bodyComponent.body.applyLinearImpulse(
+                    0,
+                    jumpComponent.velocity.y * bodyComponent.body.getMass(),
+                    bodyComponent.body.getWorldCenter().x,
+                    bodyComponent.body.getWorldCenter().y,
+                    true
+            );
+        }
     }
 }

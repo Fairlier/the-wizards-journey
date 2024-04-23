@@ -18,6 +18,17 @@ public class Asset {
         public static final String PATH = "path";
     }
 
+    public static class MapData {
+        public static final String LN_STATIC_OBJECTS = "static_objects";
+        public static final String LN_OTHER_OBJECTS = "other_objects";
+        public static final String LN_PLAYER_OBJECTS = "player_objects";
+        public static final String MP_MATERIAL = "material";
+        public static final String MP_MATERIAL_DEFAULT = "default";
+        public static final String OB_PLAYER = "player";
+
+
+    }
+
     public static class CustomAsset {
         public static class Material {
             public static final String NAME = "name";
@@ -28,6 +39,9 @@ public class Asset {
     }
 
     public static class AssetGroups {
+        public static class General {
+            public static final String GROUP_NAME = "general";
+        }
         public static class LoadingScreen {
 
             public static final String GROUP_NAME = "loading_screen";
@@ -48,9 +62,6 @@ public class Asset {
         public static class MapList {
 
             public static final String GROUP_NAME = "map_list";
-        }
-        public static class Graphics {
-            public static final String GROUP_NAME = "graphics";
         }
     }
 }
