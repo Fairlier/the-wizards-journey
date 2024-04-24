@@ -4,9 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.thewizardsjourney.game.constant.ECS.EntityType;
+import com.thewizardsjourney.game.constant.General;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.EntityTypeComponent;
@@ -45,7 +44,7 @@ public class PlayerCollisionSystem extends IteratingSystem {
             beginCollision(bodyComponent, collisionComponent, jumpComponent, playerComponent);
         }
 
-        if (collisionComponent.firstCollidedEntity != null && collisionComponent.lastCollidedEntity == null) {
+        if (collisionComponent.firstCollidedEntity == null && collisionComponent.lastCollidedEntity != null) {
             endCollision(bodyComponent, collisionComponent, jumpComponent, playerComponent);
         }
     }
@@ -54,16 +53,25 @@ public class PlayerCollisionSystem extends IteratingSystem {
                                 CollisionComponent collisionComponent,
                                 JumpComponent jumpComponent,
                                 PlayerComponent playerComponent) { // TODO
-        if (collisionComponent.firstCollidedEntity.getComponent(EntityTypeComponent.class)
-                .entityType == EntityType.STATIC_OBJECT) {
-            System.out.println();
+        if (collisionComponent.category == General.CollisionFilters.CATEGORY_SENSOR) {
+            if (collisionComponent.firstCollidedEntity.getComponent(EntityTypeComponent.class)
+                    .entityType == EntityType.STATIC_OBJECT) {
+                System.out.println("yes");
+                jumpComponent.state = true;
             }
+        }
     }
 
     private void endCollision(BodyComponent bodyComponent,
                               CollisionComponent collisionComponent,
                               JumpComponent jumpComponent,
                               PlayerComponent playerComponent) {
-
+        if (collisionComponent.category == General.CollisionFilters.CATEGORY_SENSOR) {
+            if (collisionComponent.lastCollidedEntity.getComponent(EntityTypeComponent.class)
+                    .entityType == EntityType.STATIC_OBJECT) {
+                System.out.println("no");
+                jumpComponent.state = false;
+            }
+        }
     }
 }

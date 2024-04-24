@@ -25,12 +25,9 @@ public class JumpSystem extends IteratingSystem {
         BodyComponent bodyComponent = bm.get(entity);
         JumpComponent jumpComponent  = jm.get(entity);
         if (jumpComponent.state) {
-            bodyComponent.body.applyLinearImpulse(
-                    0,
-                    jumpComponent.velocity.y * bodyComponent.body.getMass(),
-                    bodyComponent.body.getWorldCenter().x,
-                    bodyComponent.body.getWorldCenter().y,
-                    true
+            bodyComponent.body.setLinearVelocity(
+                    bodyComponent.body.getLinearVelocity().x,
+                    jumpComponent.velocity.y * bodyComponent.body.getMass()
             );
         }
     }

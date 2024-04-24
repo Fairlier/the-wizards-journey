@@ -42,6 +42,7 @@ public class PhysicsSystem extends IteratingSystem {
             world.step(FIXED_STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
             accumulator -= FIXED_STEP_TIME;
         }
+//        world.step(1.0 / 60.0f, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
     @Override

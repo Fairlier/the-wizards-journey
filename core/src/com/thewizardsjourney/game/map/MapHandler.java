@@ -7,8 +7,6 @@ import static com.thewizardsjourney.game.constant.Asset.MapData.LN_STATIC_OBJECT
 import static com.thewizardsjourney.game.constant.Asset.MapData.MP_MATERIAL;
 import static com.thewizardsjourney.game.constant.Asset.MapData.MP_MATERIAL_DEFAULT;
 import static com.thewizardsjourney.game.constant.Asset.MapData.OB_PLAYER;
-import static com.thewizardsjourney.game.constant.General.CollisionFilters.CATEGORY_PLAYER;
-import static com.thewizardsjourney.game.constant.General.CollisionFilters.CATEGORY_STATIC_OBJECT;
 import static com.thewizardsjourney.game.constant.General.Screens.SCENE_HEIGHT;
 import static com.thewizardsjourney.game.constant.General.Screens.SCENE_WIDTH;
 import static com.thewizardsjourney.game.constant.General.Physics.GRAVITY;
@@ -31,9 +29,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
@@ -41,6 +39,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.asset.material.MaterialsData;
 import com.thewizardsjourney.game.constant.ECS;
+import com.thewizardsjourney.game.constant.General;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.EntityTypeComponent;
@@ -80,7 +79,7 @@ public class MapHandler {
         world.setContactListener(bodyContactListener);
 
         rayHandler = new RayHandler(world);
-        rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.25f);
+        rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 0.25f);
 
         Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15, SCENE_WIDTH*0.2f, SCENE_HEIGHT, 270, 45);
 
@@ -107,11 +106,12 @@ public class MapHandler {
             logger.error("layer " + layerName + " does not exist");
             return;
         }
+        Array<MapObjectData> objectsData = new Array<>();
         for (MapObject object : layer.getObjects()) {
             if (object instanceof TextureMapObject){
                 continue;
             }
-            ObjectData objectData;
+            MapObjectData objectData;
             if (object instanceof RectangleMapObject) {
                 objectData = getRectangle((RectangleMapObject) object);
                 logger.info("RectangleMapObject " + object);
@@ -125,39 +125,44 @@ public class MapHandler {
                 logger.error("non suported shape " + object);
                 continue;
             }
-
-            Shape shape = objectData.getShape();
-            BodyDef bodyDef = objectData.getBodyDef();
-
-            MapProperties properties = object.getProperties();
-            String material = properties.get(MP_MATERIAL, MP_MATERIAL_DEFAULT, String.class);
-            logger.info("Body: " + object.getName() + ", material: " + material);
-
-            handler.createObject(object, shape, bodyDef, material);
-
-            shape.dispose();
+            objectsData.add(objectData);
+        }
+        handler.createObject(objectsData);
+        for (MapObjectData objectData : objectsData) {
+            if (objectData != null) {
+                if (objectData.getShape() != null) {
+                    objectData.getShape().dispose();
+                }
+            }
         }
     }
 
-    private void createStaticObject(MapObject object, Shape shape, BodyDef bodyDef, String material) {
-        FixtureDef fixtureDef = materials.get(material);
+    private void createStaticObject(Array<MapObjectData> objectsData) {
+        for (MapObjectData objectData : objectsData) {
+            MapProperties properties = objectData.getObject().getProperties();
+            String material = properties.get(MP_MATERIAL, MP_MATERIAL_DEFAULT, String.class);
 
-        if (fixtureDef == null) {
-            logger.error("material does not exist " + material + " using default");
-            fixtureDef = materials.get(MP_MATERIAL_DEFAULT);
+            FixtureDef fixtureDef = materials.get(material);
+            if (fixtureDef == null) {
+                logger.error("material does not exist " + material + " using default");
+                fixtureDef = materials.get(MP_MATERIAL_DEFAULT);
+            }
+            fixtureDef.shape = objectData.getShape();
+            fixtureDef.filter.categoryBits = General.CollisionFilters.CATEGORY_STATIC_OBJECT;
+            fixtureDef.filter.maskBits = General.CollisionFilters.MASK_STATIC_OBJECT;
+
+            BodyDef bodyDef = objectData.getBodyDef();
+            bodyDef.position.setZero();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+
+            Body body = world.createBody(bodyDef);
+            body.createFixture(fixtureDef);
+
+            createEntityForStaticObject(body);
+            bodies.add(body);
+
+            fixtureDef.shape = null;
         }
-
-        fixtureDef.shape = shape;
-        fixtureDef.filter.categoryBits = CATEGORY_STATIC_OBJECT;
-        bodyDef.position.setZero();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef);
-
-        createEntityForStaticObject(body);
-        bodies.add(body);
-
-        fixtureDef.shape = null;
     }
 
     private void createEntityForStaticObject(Body body) {
@@ -175,33 +180,58 @@ public class MapHandler {
         engine.addEntity(entity);
     }
 
-    private void createOtherObject(MapObject object, Shape shape, BodyDef bodyDef, String material) {
-        String name = object.getName();
-        if (name.equals(OB_PLAYER)) {
-            createPlayerObject(shape, bodyDef, material);
+    private void createOtherObject(Array<MapObjectData> objectsData) {
+        for (MapObjectData objectData : objectsData) {
+            if (objectData.getObject().getName().equals(OB_PLAYER)) {
+                createPlayerObject(objectData);
+            }
         }
     }
 
-    private void createPlayerObject(Shape shape, BodyDef bodyDef, String material) {
-        FixtureDef fixtureDef = materials.get(material);
+    private void createPlayerObject(MapObjectData objectData) {
+        MapProperties properties = objectData.getObject().getProperties();
+        String material = properties.get(MP_MATERIAL, MP_MATERIAL_DEFAULT, String.class);
 
+        FixtureDef fixtureDef = materials.get(material);
         if (fixtureDef == null) {
             logger.error("material does not exist " + material + " using default");
             fixtureDef = materials.get(MP_MATERIAL_DEFAULT);
         }
+        fixtureDef.shape = objectData.getShape();
+        fixtureDef.filter.categoryBits = General.CollisionFilters.CATEGORY_PLAYER;
+        fixtureDef.filter.maskBits = General.CollisionFilters.MASK_PLAYER;
 
-        fixtureDef.shape = shape;
-        fixtureDef.filter.categoryBits = CATEGORY_PLAYER;
+        Vector2 bottomLeftPoint = new Vector2();
+        ((PolygonShape) objectData.getShape()).getVertex(0, bottomLeftPoint);
+        Vector2 center = new Vector2(
+                0.0f,
+                -Math.abs(bottomLeftPoint.y) * 1.0f);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(
+                Math.abs(bottomLeftPoint.x) * 0.5f,
+                Math.abs(bottomLeftPoint.y) * 0.5f,
+                center,
+                0.0f);
+        FixtureDef sensorFD = new FixtureDef();
+        // TODO
+        sensorFD.isSensor = true;
+        sensorFD.shape = circleShape;
+        sensorFD.filter.categoryBits = General.CollisionFilters.CATEGORY_SENSOR;
+        sensorFD.filter.maskBits = General.CollisionFilters.MASK_SENSOR;
 
+        BodyDef bodyDef = objectData.getBodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.fixedRotation = true;
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
+        body.createFixture(sensorFD);
 
         createEntityForPlayerObject(body);
         bodies.add(body);
 
         fixtureDef.shape = null;
+        sensorFD.shape = null;
+        shape.dispose();
     }
 
     private void createEntityForPlayerObject(Body body) {
@@ -240,8 +270,8 @@ public class MapHandler {
         engine.addEntity(entity);
     }
 
-    private ObjectData getRectangle(RectangleMapObject rectangleObject) {
-        Rectangle rectangle = rectangleObject.getRectangle();
+    private MapObjectData getRectangle(RectangleMapObject object) {
+        Rectangle rectangle = object.getRectangle();
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(
                 rectangle.width * 0.5f / units,
@@ -250,23 +280,23 @@ public class MapHandler {
         bodyDef.position.set(
                 (rectangle.x + rectangle.width * 0.5f) / units,
                 (rectangle.y + rectangle.height * 0.5f)  / units);
-        return new ObjectData(shape, bodyDef);
+        return new MapObjectData(object, shape, bodyDef);
     }
 
-    private ObjectData getPolygon(PolygonMapObject polygonObject) {
+    private MapObjectData getPolygon(PolygonMapObject object) {
         PolygonShape shape = new PolygonShape();
-        float[] vertices = polygonObject.getPolygon().getTransformedVertices();
+        float[] vertices = object.getPolygon().getTransformedVertices();
         float[] worldVertices = new float[vertices.length];
         for (int i = 0; i < vertices.length; ++i) {
             worldVertices[i] = vertices[i] / units;
         }
         shape.set(worldVertices);
         BodyDef bodyDef = new BodyDef();
-        return new ObjectData(shape, bodyDef);
+        return new MapObjectData(object, shape, bodyDef);
     }
 
-    private ObjectData getPolyline(PolylineMapObject polylineObject) {
-        float[] vertices = polylineObject.getPolyline().getTransformedVertices();
+    private MapObjectData getPolyline(PolylineMapObject object) {
+        float[] vertices = object.getPolyline().getTransformedVertices();
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
         for (int i = 0; i < vertices.length / 2; ++i) {
             worldVertices[i] = new Vector2(
@@ -276,7 +306,7 @@ public class MapHandler {
         ChainShape shape = new ChainShape();
         shape.createChain(worldVertices);
         BodyDef bodyDef = new BodyDef();
-        return new ObjectData(shape, bodyDef);
+        return new MapObjectData(object, shape, bodyDef);
     }
 
     public World getWorld() {
@@ -292,24 +322,6 @@ public class MapHandler {
     }
 
     private interface ObjectCreationHandler {
-        void createObject(MapObject object, Shape shape, BodyDef bodyDef, String material);
-    }
-
-    private static class ObjectData {
-        private final Shape shape;
-        private final BodyDef bodyDef;
-
-        public ObjectData(Shape shape, BodyDef bodyDef) {
-            this.shape = shape;
-            this.bodyDef = bodyDef;
-        }
-
-        public Shape getShape() {
-            return shape;
-        }
-
-        public BodyDef getBodyDef() {
-            return bodyDef;
-        }
+        void createObject(Array<MapObjectData> objectsData);
     }
 }

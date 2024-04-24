@@ -20,6 +20,6 @@ public class General {
 
         public static final short MASK_PLAYER = ~CATEGORY_PLAYER;
         public static final short MASK_STATIC_OBJECT = -1;
-        public static final short MASK_SENSOR = CATEGORY_PLAYER;
+        public static final short MASK_SENSOR = CATEGORY_STATIC_OBJECT;
     }
 }

@@ -21,7 +21,6 @@ public class Asset {
     public static class MapData {
         public static final String LN_STATIC_OBJECTS = "static_objects";
         public static final String LN_OTHER_OBJECTS = "other_objects";
-        public static final String LN_PLAYER_OBJECTS = "player_objects";
         public static final String MP_MATERIAL = "material";
         public static final String MP_MATERIAL_DEFAULT = "default";
         public static final String OB_PLAYER = "player";

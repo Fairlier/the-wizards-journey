@@ -57,7 +57,6 @@ public class PlayerControlSystem extends IteratingSystem {
         }
 
         if (controller.isUp()) {
-            jumpComponent.state = false;
             jumpComponent.velocity.y = jumpComponent.speed;
             playerComponent.playerStateType = PlayerStateType.JUMP;
         }

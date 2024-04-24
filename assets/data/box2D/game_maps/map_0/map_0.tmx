@@ -38,9 +38,6 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="player_objects">
-  <object id="33" name="sensor" x="63" y="126" width="21" height="0.282609"/>
- </objectgroup>
  <objectgroup id="5" name="static_objects">
   <object id="10" x="0" y="168">
    <polyline points="0,0 36.3333,-11.6667 63,-21 273.667,-21 273.667,84 0,84 -0.666667,-168"/>
@@ -58,8 +55,5 @@
    <polyline points="0,0 0,-42 21,-42 21,-105 42,-105 42,-126 84,-126 84,0 0,0"/>
   </object>
   <object id="19" x="418.667" y="291.333" width="0.666667"/>
-  <object id="37" name="point" x="97.5" y="106.125">
-   <point/>
-  </object>
  </objectgroup>
 </map>
