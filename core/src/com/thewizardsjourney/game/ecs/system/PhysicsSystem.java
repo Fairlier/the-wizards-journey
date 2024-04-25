@@ -36,13 +36,14 @@ public class PhysicsSystem extends IteratingSystem {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        float frameTime = Math.min(deltaTime, MAX_FRAME_TIME);
-        accumulator += frameTime;
-        while (accumulator >= FIXED_STEP_TIME) {
-            world.step(FIXED_STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-            accumulator -= FIXED_STEP_TIME;
-        }
-//        world.step(1.0 / 60.0f, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+//        float frameTime = Math.min(deltaTime, MAX_FRAME_TIME);
+//        accumulator += frameTime;
+//        while (accumulator >= FIXED_STEP_TIME) {
+//            world.step(FIXED_STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+//            accumulator -= FIXED_STEP_TIME;
+//        }
+        // TODO
+        world.step((float) (1.0 / 60.0f), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
     @Override

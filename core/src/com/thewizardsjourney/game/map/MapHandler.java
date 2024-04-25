@@ -148,8 +148,6 @@ public class MapHandler {
                 fixtureDef = materials.get(MP_MATERIAL_DEFAULT);
             }
             fixtureDef.shape = objectData.getShape();
-            fixtureDef.filter.categoryBits = General.CollisionFilters.CATEGORY_STATIC_OBJECT;
-            fixtureDef.filter.maskBits = General.CollisionFilters.MASK_STATIC_OBJECT;
 
             BodyDef bodyDef = objectData.getBodyDef();
             bodyDef.position.setZero();
@@ -198,40 +196,18 @@ public class MapHandler {
             fixtureDef = materials.get(MP_MATERIAL_DEFAULT);
         }
         fixtureDef.shape = objectData.getShape();
-        fixtureDef.filter.categoryBits = General.CollisionFilters.CATEGORY_PLAYER;
-        fixtureDef.filter.maskBits = General.CollisionFilters.MASK_PLAYER;
-
-        Vector2 bottomLeftPoint = new Vector2();
-        ((PolygonShape) objectData.getShape()).getVertex(0, bottomLeftPoint);
-        Vector2 center = new Vector2(
-                0.0f,
-                -Math.abs(bottomLeftPoint.y) * 1.0f);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(
-                Math.abs(bottomLeftPoint.x) * 0.5f,
-                Math.abs(bottomLeftPoint.y) * 0.5f,
-                center,
-                0.0f);
-        FixtureDef sensorFD = new FixtureDef();
-        // TODO
-        sensorFD.isSensor = true;
-        sensorFD.shape = circleShape;
-        sensorFD.filter.categoryBits = General.CollisionFilters.CATEGORY_SENSOR;
-        sensorFD.filter.maskBits = General.CollisionFilters.MASK_SENSOR;
 
         BodyDef bodyDef = objectData.getBodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.fixedRotation = true;
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
-        body.createFixture(sensorFD);
+        body.getFixtureList().get(0).setUserData(General.Categories.PLAYER);
 
         createEntityForPlayerObject(body);
         bodies.add(body);
 
         fixtureDef.shape = null;
-        sensorFD.shape = null;
-        shape.dispose();
     }
 
     private void createEntityForPlayerObject(Body body) {

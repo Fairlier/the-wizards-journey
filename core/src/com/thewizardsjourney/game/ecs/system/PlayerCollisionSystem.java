@@ -53,25 +53,13 @@ public class PlayerCollisionSystem extends IteratingSystem {
                                 CollisionComponent collisionComponent,
                                 JumpComponent jumpComponent,
                                 PlayerComponent playerComponent) { // TODO
-        if (collisionComponent.category == General.CollisionFilters.CATEGORY_SENSOR) {
-            if (collisionComponent.firstCollidedEntity.getComponent(EntityTypeComponent.class)
-                    .entityType == EntityType.STATIC_OBJECT) {
-                System.out.println("yes");
-                jumpComponent.state = true;
-            }
-        }
+
     }
 
     private void endCollision(BodyComponent bodyComponent,
                               CollisionComponent collisionComponent,
                               JumpComponent jumpComponent,
                               PlayerComponent playerComponent) {
-        if (collisionComponent.category == General.CollisionFilters.CATEGORY_SENSOR) {
-            if (collisionComponent.lastCollidedEntity.getComponent(EntityTypeComponent.class)
-                    .entityType == EntityType.STATIC_OBJECT) {
-                System.out.println("no");
-                jumpComponent.state = false;
-            }
-        }
+
     }
 }

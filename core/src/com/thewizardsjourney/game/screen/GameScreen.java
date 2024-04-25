@@ -97,7 +97,7 @@ public class GameScreen extends ScreenAdapter { // TODO
         PhysicsSystem physicsSystem = new PhysicsSystem(mapHandler.getWorld());
         LightSystem lightSystem = new LightSystem(mapHandler.getRayHandler(), camera);
         MovementSystem movementSystem = new MovementSystem();
-        JumpSystem jumpSystem = new JumpSystem();
+        JumpSystem jumpSystem = new JumpSystem(mapHandler.getWorld());
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
         PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem();
 

@@ -23,6 +23,10 @@ public class BodyContactListener implements ContactListener {
         short categoryB = fixtureB.getFilterData().categoryBits;
         Entity entityB = (Entity) fixtureB.getBody().getUserData();
 
+        if (fixtureA.isSensor() || fixtureB.isSensor()) {
+            System.out.println("sensor");
+        }
+
         if (entityA != null && entityB != null) {
             addCollisionData(categoryA, entityA, entityB);
             addCollisionData(categoryB, entityB, entityA);

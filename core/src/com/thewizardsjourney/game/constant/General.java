@@ -13,13 +13,9 @@ public class General {
         public static final Vector2 GRAVITY = new Vector2(0, -9.8f);
     }
 
-    public static class CollisionFilters {
-        public static final short CATEGORY_PLAYER = 0x0001;
-        public static final short CATEGORY_STATIC_OBJECT = 0x0002;
-        public static final short CATEGORY_SENSOR = 0x0004;
-
-        public static final short MASK_PLAYER = ~CATEGORY_PLAYER;
-        public static final short MASK_STATIC_OBJECT = -1;
-        public static final short MASK_SENSOR = CATEGORY_STATIC_OBJECT;
+    public enum Categories {
+        PLAYER,
+        STATIC_OBJECT,
+        NONE
     }
 }
