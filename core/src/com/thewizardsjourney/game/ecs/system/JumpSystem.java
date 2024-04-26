@@ -34,7 +34,6 @@ public class JumpSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         BodyComponent bodyComponent = bm.get(entity);
         JumpComponent jumpComponent  = jm.get(entity);
-
         if (jumpComponent.state) {
             isColliding = false;
             collisionCheck(bodyComponent.body);
@@ -58,11 +57,10 @@ public class JumpSystem extends IteratingSystem {
         bottomRightPoint.set(
                 body.getTransform().getPosition().x + (bottomRightPoint.x * 0.7f),
                 body.getTransform().getPosition().y + (bottomRightPoint.y * 1.01f));
-
-        world.QueryAABB(areaCallback, bottomLeftPoint.x, bottomLeftPoint.y, bottomRightPoint.x, bottomRightPoint.y);
+        world.QueryAABB(callback, bottomLeftPoint.x, bottomLeftPoint.y, bottomRightPoint.x, bottomRightPoint.y);
     }
 
-    private final QueryCallback areaCallback = new QueryCallback() {
+    private final QueryCallback callback = new QueryCallback() {
         @Override
         public boolean reportFixture(Fixture fixture) {
             if (fixture.getUserData() != General.Categories.PLAYER) {

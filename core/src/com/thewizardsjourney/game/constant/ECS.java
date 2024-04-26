@@ -13,7 +13,7 @@ public class ECS {
         RIGHT
     }
 
-    public enum PlayerStateType {
+    public enum AnimationStateType {
         IDLE,
         JUMP,
         FALLING,

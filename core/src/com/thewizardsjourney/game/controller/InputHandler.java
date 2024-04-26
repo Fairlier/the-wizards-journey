@@ -9,10 +9,10 @@ public class InputHandler extends InputAdapter {
     private boolean left;
     private boolean right;
     private boolean up;
-    private boolean action;
+    private boolean ability;
+    public boolean isDragged;
 
     // TODO
-    public boolean isDragged;
     private Vector2 fingerLocation = new Vector2(0,0);
     private Vector2 joystickLocation = new Vector2(0, 0);
     private byte joystickPointer = -1;
@@ -39,7 +39,6 @@ public class InputHandler extends InputAdapter {
         fingerLocation.x = screenX;
         fingerLocation.y = screenY;
 
-        //Gdx.app.log("InputHandler", "touchDown " + String.valueOf(up));
         return false;
     }
 
@@ -59,8 +58,6 @@ public class InputHandler extends InputAdapter {
         fingerLocation.x = screenX;
         fingerLocation.y = screenY;
 
-        //Gdx.app.log("InputHandler", "touchUp " +
-        //        String.valueOf(left) + " " + String.valueOf(right) + " " + String.valueOf(up));
         return false;
     }
 
@@ -86,7 +83,6 @@ public class InputHandler extends InputAdapter {
         fingerLocation.x = screenX;
         fingerLocation.y = screenY;
 
-        // Gdx.app.log("InputHandler", "touchDragged " + String.valueOf(left) + " " + String.valueOf(right));
         return false;
     }
 
@@ -108,5 +104,9 @@ public class InputHandler extends InputAdapter {
 
     public boolean isUp() {
         return up;
+    }
+
+    public Vector2 getFingerLocation() {
+        return fingerLocation;
     }
 }

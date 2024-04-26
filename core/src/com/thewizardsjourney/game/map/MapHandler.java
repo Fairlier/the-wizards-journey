@@ -40,6 +40,8 @@ import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.asset.material.MaterialsData;
 import com.thewizardsjourney.game.constant.ECS;
 import com.thewizardsjourney.game.constant.General;
+import com.thewizardsjourney.game.ecs.component.AbilityComponent;
+import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.EntityTypeComponent;
@@ -237,8 +239,15 @@ public class MapHandler {
         FacingComponent facingComponent = engine.createComponent(FacingComponent.class);
         entity.add(facingComponent);
 
+        AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
+        entity.add(animationComponent);
+
         CollisionComponent collisionComponent = engine.createComponent(CollisionComponent.class);
         entity.add(collisionComponent);
+
+        AbilityComponent abilityComponent = engine.createComponent(AbilityComponent.class);
+        abilityComponent.state = true;
+        entity.add(abilityComponent);
 
         PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
         entity.add(playerComponent);

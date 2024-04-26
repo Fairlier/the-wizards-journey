@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
 import com.thewizardsjourney.game.controller.InputHandler;
+import com.thewizardsjourney.game.ecs.system.AbilitySystem;
 import com.thewizardsjourney.game.ecs.system.JumpSystem;
 import com.thewizardsjourney.game.ecs.system.LightSystem;
 import com.thewizardsjourney.game.ecs.system.MovementSystem;
@@ -100,6 +101,7 @@ public class GameScreen extends ScreenAdapter { // TODO
         JumpSystem jumpSystem = new JumpSystem(mapHandler.getWorld());
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
         PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem();
+        AbilitySystem abilitySystem = new AbilitySystem(mapHandler.getWorld(), controller, viewport);
 
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(physicsSystem);
@@ -108,5 +110,6 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.addSystem(jumpSystem);
         engine.addSystem(playerControlSystem);
         engine.addSystem(playerCollisionSystem);
+        engine.addSystem(abilitySystem);
     }
 }

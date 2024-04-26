@@ -4,10 +4,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.thewizardsjourney.game.constant.ECS.PlayerStateType;
+import com.thewizardsjourney.game.constant.ECS.AnimationStateType;
 import com.thewizardsjourney.game.constant.ECS.FacingDirection;
 import com.thewizardsjourney.game.controller.InputHandler;
+import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
 import com.thewizardsjourney.game.ecs.component.JumpComponent;
 import com.thewizardsjourney.game.ecs.component.MovementComponent;
@@ -21,6 +21,8 @@ public class PlayerControlSystem extends IteratingSystem {
             ComponentMapper.getFor(JumpComponent.class);
     private final ComponentMapper<FacingComponent> fm =
             ComponentMapper.getFor(FacingComponent.class);
+    private final ComponentMapper<AnimationComponent> am =
+            ComponentMapper.getFor(AnimationComponent.class);
     private final ComponentMapper<PlayerComponent> pm =
             ComponentMapper.getFor(PlayerComponent.class);
 
@@ -29,6 +31,7 @@ public class PlayerControlSystem extends IteratingSystem {
                 MovementComponent.class,
                 JumpComponent.class,
                 FacingComponent.class,
+                AnimationComponent.class,
                 PlayerComponent.class
         ).get());
         this.controller = controller;
@@ -39,32 +42,32 @@ public class PlayerControlSystem extends IteratingSystem {
         MovementComponent movementComponent = mm.get(entity);
         JumpComponent jumpComponent = jm.get(entity);
         FacingComponent facingComponent = fm.get(entity);
-        PlayerComponent playerComponent = pm.get(entity);
+        AnimationComponent animationComponent = am.get(entity);
 
         if (controller.isLeft()) {
             movementComponent.velocity.x = -movementComponent.speed;
             facingComponent.direction = FacingDirection.LEFT;
-            playerComponent.playerStateType = PlayerStateType.RUN;
+            animationComponent.stateType = AnimationStateType.RUN;
         }
         else if (controller.isRight()) {
             movementComponent.velocity.x = movementComponent.speed;
             facingComponent.direction = FacingDirection.RIGHT;
-            playerComponent.playerStateType = PlayerStateType.RUN;
+            animationComponent.stateType = AnimationStateType.RUN;
         }
         else {
             movementComponent.velocity.setZero();
-            playerComponent.playerStateType = PlayerStateType.IDLE;
+            animationComponent.stateType = AnimationStateType.IDLE;
         }
 
         if (controller.isUp()) {
             jumpComponent.state = true;
             jumpComponent.velocity.y = jumpComponent.speed;
-            playerComponent.playerStateType = PlayerStateType.JUMP;
+            animationComponent.stateType = AnimationStateType.JUMP;
         }
         else {
             jumpComponent.state = false;
             jumpComponent.velocity.setZero();
-            playerComponent.playerStateType = PlayerStateType.FALLING;
+            animationComponent.stateType = AnimationStateType.FALLING;
         }
     }
 }
