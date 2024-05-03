@@ -1,5 +1,5 @@
 {
-	"map_settings" : [
+	"general" : [
 		{
 			"name" : "materials",
 			"type" : "com.thewizardsjourney.game.asset.material.MaterialsData",

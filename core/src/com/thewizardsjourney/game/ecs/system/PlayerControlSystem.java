@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.thewizardsjourney.game.constant.ECS.AnimationStateType;
+import com.thewizardsjourney.game.constant.ECS.AnimationState;
 import com.thewizardsjourney.game.constant.ECS.FacingDirection;
 import com.thewizardsjourney.game.controller.InputHandler;
 import com.thewizardsjourney.game.ecs.component.AnimationComponent;
@@ -47,27 +47,27 @@ public class PlayerControlSystem extends IteratingSystem {
         if (controller.isLeft()) {
             movementComponent.velocity.x = -movementComponent.speed;
             facingComponent.direction = FacingDirection.LEFT;
-            animationComponent.stateType = AnimationStateType.RUN;
+            animationComponent.state = AnimationState.RUN;
         }
         else if (controller.isRight()) {
             movementComponent.velocity.x = movementComponent.speed;
             facingComponent.direction = FacingDirection.RIGHT;
-            animationComponent.stateType = AnimationStateType.RUN;
+            animationComponent.state = AnimationState.RUN;
         }
         else {
             movementComponent.velocity.setZero();
-            animationComponent.stateType = AnimationStateType.IDLE;
+            animationComponent.state = AnimationState.IDLE;
         }
 
         if (controller.isUp()) {
             jumpComponent.state = true;
             jumpComponent.velocity.y = jumpComponent.speed;
-            animationComponent.stateType = AnimationStateType.JUMP;
+            animationComponent.state = AnimationState.JUMP;
         }
         else {
             jumpComponent.state = false;
             jumpComponent.velocity.setZero();
-            animationComponent.stateType = AnimationStateType.FALLING;
+            animationComponent.state = AnimationState.FALL;
         }
     }
 }

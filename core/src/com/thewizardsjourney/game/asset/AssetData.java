@@ -1,13 +1,14 @@
 package com.thewizardsjourney.game.asset;
 
-import static com.thewizardsjourney.game.constant.Asset.AssetData.ASSET_TYPE;
-import static com.thewizardsjourney.game.constant.Asset.AssetData.NAME;
-import static com.thewizardsjourney.game.constant.Asset.AssetData.PATH;
-import static com.thewizardsjourney.game.constant.Asset.AssetData.TYPE;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AssetConfig.NAME;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AssetConfig.ASSET_TYPE;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AssetConfig.PATH;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AssetConfig.TYPE;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.thewizardsjourney.game.constant.Asset;
 
 public class AssetData implements Json.Serializable {
     private String name;

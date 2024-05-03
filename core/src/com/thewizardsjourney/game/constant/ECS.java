@@ -13,10 +13,10 @@ public class ECS {
         RIGHT
     }
 
-    public enum AnimationStateType {
+    public enum AnimationState {
         IDLE,
         JUMP,
-        FALLING,
+        FALL,
         RUN,
         HURT,
         ABILITY

@@ -10,15 +10,15 @@ public class MaterialsData {
         materials = new ObjectMap<>();
     }
 
-    public ObjectMap<String, FixtureDef> getMaterials() {
-        return materials;
-    }
-
-    public void putMaterial(Material material) {
+    public void putMaterial(MaterialAttributes material) {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = material.getDensity();
         fixtureDef.friction = material.getFriction();
         fixtureDef.restitution = material.getRestitution();
         materials.put(material.getName(), fixtureDef);
+    }
+
+    public ObjectMap<String, FixtureDef> getMaterials() {
+        return materials;
     }
 }

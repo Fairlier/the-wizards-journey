@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -50,7 +49,7 @@ public class AbilitySystem extends IteratingSystem {
             BodyComponent bodyComponent = bodyComponentCM.get(entity);
             drawInnerCircleAroundCharacter(bodyComponent.body.getTransform().getPosition());
             drawOuterCircleAroundCharacter(bodyComponent.body.getTransform().getPosition());
-            if (abilityComponent.initialPointPosition) {
+            if (abilityComponent.isStateChanged) {
                 touchPoint.set(bodyComponent.body.getTransform().getPosition());
             } else {
                 Vector3 worldCoordinates = new Vector3(controller.getFingerLocation(), 0);

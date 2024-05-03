@@ -2,13 +2,13 @@ package com.thewizardsjourney.game.helper;
 
 import com.badlogic.gdx.utils.Array;
 
-public class GameData {
+public class GameInfo {
     private Array<String> mapsName;
     private Array<String> charactersName;
-    private String selectedMapName = "map_0";
+    private String selectedMapName = "map_0_tiled_map";
     private String selectedCharacterName;
 
-    public GameData() {}
+    public GameInfo() {}
 
     public Array<String> getMapsName() {
         return mapsName;

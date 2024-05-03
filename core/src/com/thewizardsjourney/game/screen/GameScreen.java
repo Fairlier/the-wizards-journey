@@ -59,7 +59,7 @@ public class GameScreen extends ScreenAdapter { // TODO
         camera.update();
         renderer.setView(camera);
         renderer.render();
-
+        
         engine.update(delta);
     }
 
@@ -110,6 +110,6 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.addSystem(jumpSystem);
         engine.addSystem(playerControlSystem);
         engine.addSystem(playerCollisionSystem);
-        engine.addSystem(abilitySystem);
+//        engine.addSystem(abilitySystem);
     }
 }

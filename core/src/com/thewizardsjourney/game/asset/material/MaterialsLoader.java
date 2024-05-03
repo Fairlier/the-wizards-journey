@@ -1,9 +1,9 @@
 package com.thewizardsjourney.game.asset.material;
 
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.Material.DENSITY;
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.Material.FRICTION;
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.Material.NAME;
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.Material.RESTITUTION;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.MaterialConfig.DENSITY;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.MaterialConfig.FRICTION;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.MaterialConfig.NAME;
+import static com.thewizardsjourney.game.constant.Asset.CustomAsset.MaterialConfig.RESTITUTION;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -28,13 +28,13 @@ public class MaterialsLoader extends AsynchronousAssetLoader<MaterialsData, Mate
         try {
             JsonReader reader = new JsonReader();
             JsonValue root = reader.parse(file);
-            for (JsonValue materialsValue : root) {
-                Material material = new Material();
-                material.setName(materialsValue.getString(NAME));
-                material.setDensity(materialsValue.getFloat(DENSITY));
-                material.setFriction(materialsValue.getFloat(FRICTION));
-                material.setRestitution(materialsValue.getFloat(RESTITUTION));
-                materials.putMaterial(material);
+            for (JsonValue materialValue : root) {
+                MaterialAttributes settings = new MaterialAttributes();
+                settings.setName(materialValue.getString(NAME));
+                settings.setDensity(materialValue.getFloat(DENSITY));
+                settings.setFriction(materialValue.getFloat(FRICTION));
+                settings.setRestitution(materialValue.getFloat(RESTITUTION));
+                materials.putMaterial(settings);
             }
 
         } catch (Exception e) {
@@ -52,6 +52,5 @@ public class MaterialsLoader extends AsynchronousAssetLoader<MaterialsData, Mate
         return null;
     }
 
-    public static class MaterialsParameter extends AssetLoaderParameters<MaterialsData> {
-    }
+    public static class MaterialsParameter extends AssetLoaderParameters<MaterialsData> {}
 }

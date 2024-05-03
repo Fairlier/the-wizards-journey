@@ -1,6 +1,6 @@
 package com.thewizardsjourney.game.asset.material;
 
-public class Material {
+public class MaterialAttributes {
     private String name;
     private float density;
     private float restitution;

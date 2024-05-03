@@ -1,12 +1,13 @@
 package com.thewizardsjourney.game.map;
 
-import static com.thewizardsjourney.game.constant.Asset.AssetGroups.MapSettings;
-import static com.thewizardsjourney.game.constant.Asset.AssetGroups.MapList;
-import static com.thewizardsjourney.game.constant.Asset.MapData.LN_OTHER_OBJECTS;
-import static com.thewizardsjourney.game.constant.Asset.MapData.LN_STATIC_OBJECTS;
-import static com.thewizardsjourney.game.constant.Asset.MapData.MP_MATERIAL;
-import static com.thewizardsjourney.game.constant.Asset.MapData.MP_MATERIAL_DEFAULT;
-import static com.thewizardsjourney.game.constant.Asset.MapData.OB_PLAYER;
+import static com.thewizardsjourney.game.constant.Asset.AssetGroups.General.GROUP_NAME;
+import static com.thewizardsjourney.game.constant.Asset.AssetGroups.General.MATERIALS;
+import static com.thewizardsjourney.game.constant.Asset.AssetGroups.Maps;
+import static com.thewizardsjourney.game.constant.Asset.TiledMapDefinitions.LN_OTHER_OBJECTS;
+import static com.thewizardsjourney.game.constant.Asset.TiledMapDefinitions.LN_STATIC_OBJECTS;
+import static com.thewizardsjourney.game.constant.Asset.TiledMapDefinitions.MP_MATERIAL;
+import static com.thewizardsjourney.game.constant.Asset.TiledMapDefinitions.MP_MATERIAL_DEFAULT;
+import static com.thewizardsjourney.game.constant.Asset.TiledMapDefinitions.OB_PLAYER;
 import static com.thewizardsjourney.game.constant.General.Screens.SCENE_HEIGHT;
 import static com.thewizardsjourney.game.constant.General.Screens.SCENE_WIDTH;
 import static com.thewizardsjourney.game.constant.General.Physics.GRAVITY;
@@ -29,7 +30,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -50,7 +50,7 @@ import com.thewizardsjourney.game.ecs.component.JumpComponent;
 import com.thewizardsjourney.game.ecs.component.MovementComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.TransformComponent;
-import com.thewizardsjourney.game.helper.GameData;
+import com.thewizardsjourney.game.helper.GameInfo;
 
 import box2dLight.ConeLight;
 import box2dLight.Light;
@@ -68,7 +68,7 @@ public class MapHandler {
     private Array<Body> bodies = new Array<>();
     private ObjectMap<String, FixtureDef> materials;
 
-    public MapHandler(Engine engine, AssetsHandler assetsHandler, GameData gameData) {
+    public MapHandler(Engine engine, AssetsHandler assetsHandler, GameInfo gameInfo) {
         logger = new Logger("MapHandler", Logger.INFO);
         logger.info("initialising");
 
@@ -85,10 +85,8 @@ public class MapHandler {
 
         Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15, SCENE_WIDTH*0.2f, SCENE_HEIGHT, 270, 45);
 
-        map = assetsHandler.get(MapList.GROUP_NAME, gameData.getSelectedMapName());
-        materials = ((MaterialsData) assetsHandler.get(
-                MapSettings.GROUP_NAME, MapSettings.MATERIALS)
-        ).getMaterials();
+        map = assetsHandler.get(Maps.GROUP_NAME, gameInfo.getSelectedMapName());
+        materials = ((MaterialsData) assetsHandler.get(GROUP_NAME, MATERIALS)).getMaterials();
 
         createObjects(map, LN_STATIC_OBJECTS, this::createStaticObject);
         createObjects(map, LN_OTHER_OBJECTS, this::createOtherObject);
@@ -169,7 +167,7 @@ public class MapHandler {
         Entity entity = engine.createEntity();
 
         EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
-        entityTypeComponent.entityType = ECS.EntityType.STATIC_OBJECT;
+        entityTypeComponent.type = ECS.EntityType.STATIC_OBJECT;
         entity.add(entityTypeComponent);
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
@@ -216,7 +214,7 @@ public class MapHandler {
         Entity entity = engine.createEntity();
 
         EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
-        entityTypeComponent.entityType = ECS.EntityType.PLAYER;
+        entityTypeComponent.type = ECS.EntityType.PLAYER;
         entity.add(entityTypeComponent);
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);

@@ -1,21 +1,17 @@
 package com.thewizardsjourney.game;
 
-import static com.thewizardsjourney.game.constant.Asset.AssetPath;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.thewizardsjourney.game.asset.AssetsHandler;
-import com.thewizardsjourney.game.constant.Asset.AssetGroups.MapSettings;
-import com.thewizardsjourney.game.constant.Asset.AssetGroups.MapList;
-import com.thewizardsjourney.game.helper.GameData;
+import com.thewizardsjourney.game.helper.GameInfo;
 import com.thewizardsjourney.game.screen.GameScreen;
 import com.thewizardsjourney.game.screen.LoadingScreen;
 import com.thewizardsjourney.game.screen.MenuScreen;
 
 public class TheWizardsJourney extends Game {
 	private AssetsHandler assetsHandler;
-	private GameData gameData;
+	private GameInfo gameInfo;
 	private Music music;
 	private LoadingScreen loadingScreen;
 	private MenuScreen menuScreen;
@@ -23,7 +19,7 @@ public class TheWizardsJourney extends Game {
 
 	@Override
 	public void create() {
-		gameData = new GameData();
+		gameInfo = new GameInfo();
 		assetsHandler = new AssetsHandler();
 		loadingScreen = new LoadingScreen(this);
 		menuScreen = new MenuScreen(this);
@@ -40,8 +36,8 @@ public class TheWizardsJourney extends Game {
 		return assetsHandler;
 	}
 
-	public GameData getGameData() {
-		return gameData;
+	public GameInfo getGameData() {
+		return gameInfo;
 	}
 
 	public LoadingScreen getLoadingScreen() {

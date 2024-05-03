@@ -1,11 +1,15 @@
 package com.thewizardsjourney.game.asset;
 
+import static com.thewizardsjourney.game.constant.Asset.AssetPath.Map;
+import static com.thewizardsjourney.game.constant.Asset.AssetPath.Player;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
@@ -14,8 +18,15 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.thewizardsjourney.game.asset.animation.AnimationsData;
+import com.thewizardsjourney.game.asset.animation.AnimationsLoader;
+import com.thewizardsjourney.game.asset.map.MapSettingsData;
+import com.thewizardsjourney.game.asset.map.MapSettingsLoader;
 import com.thewizardsjourney.game.asset.material.MaterialsData;
 import com.thewizardsjourney.game.asset.material.MaterialsLoader;
+import com.thewizardsjourney.game.asset.player.PlayerSettingsData;
+import com.thewizardsjourney.game.asset.player.PlayerSettingsLoader;
+import com.thewizardsjourney.game.constant.Asset.AssetGroups;
 
 public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
     private static final String TAG = "AssetHandler";
@@ -26,8 +37,11 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
         manager = new AssetManager();
         groups = new ObjectMap<>();
         manager.setErrorListener(this);
-        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         manager.setLoader(MaterialsData.class, new MaterialsLoader(new InternalFileHandleResolver()));
+        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        manager.setLoader(MapSettingsData.class, new MapSettingsLoader(new InternalFileHandleResolver()));
+        manager.setLoader(AnimationsData.class, new AnimationsLoader(new InternalFileHandleResolver()));
+        manager.setLoader(PlayerSettingsData.class, new PlayerSettingsLoader(new InternalFileHandleResolver()));
     }
 
     @Override
@@ -66,7 +80,7 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
         }
     }
 
-    public void loadGroupsFromFile(String assetFile) {
+    public void parseGroupsFromFile(String assetFile) {
         Gdx.app.log(TAG, "loading file " + assetFile);
         try {
             Json json = new Json();
@@ -91,24 +105,75 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
         }
     }
 
-    public void loadMapFromDirectory(String directoryPath, String groupName, String suffix, Class<?> type) {
+    public void parseMapsFromDirectory(String directoryPath) {
         FileHandle mapsDirectory = Gdx.files.internal(directoryPath);
         if (mapsDirectory.exists() && mapsDirectory.isDirectory()) {
             FileHandle[] mapDirectories = mapsDirectory.list();
-            ObjectMap<String, AssetData> assets = new ObjectMap<>();
-            for (FileHandle mapDirectory: mapDirectories) {
+            ObjectMap<String, AssetData> maps = new ObjectMap<>();
+            ObjectMap<String, AssetData> settings = new ObjectMap<>();
+            for (FileHandle mapDirectory : mapDirectories) {
                 if (mapDirectory.isDirectory()) {
-                    FileHandle[] mapFiles = mapDirectory.list(suffix);
-                    if (mapFiles != null && mapFiles.length > 0) {
+                    FileHandle mapFile = mapDirectory.child(mapDirectory.name() + Map.TILED_MAP);
+                    if (mapFile.exists()) {
                         AssetData assetData = new AssetData();
-                        assetData.setName(mapFiles[0].nameWithoutExtension());
-                        assetData.setType(type);
-                        assetData.setPath(mapFiles[0].path());
-                        assets.put(assetData.getName(), assetData);
+                        assetData.setName(mapFile.nameWithoutExtension());
+                        assetData.setType(TiledMap.class);
+                        assetData.setPath(mapFile.path());
+                        maps.put(assetData.getName(), assetData);
+                    }
+                    FileHandle settingsFile = mapDirectory.child(mapDirectory.name() + Map.SETTINGS);
+                    if (settingsFile.exists()) {
+                        AssetData assetData = new AssetData();
+                        assetData.setName(settingsFile.nameWithoutExtension());
+                        assetData.setType(MapSettingsData.class);
+                        assetData.setPath(settingsFile.path());
+                        settings.put(assetData.getName(), assetData);
                     }
                 }
             }
-            groups.put(groupName, assets);
+            groups.put(AssetGroups.Maps.GROUP_NAME, maps);
+            groups.put(AssetGroups.MapsSettings.GROUP_NAME, settings);
+        }
+    }
+
+    public void parsePlayersFromDirectory(String directoryPath) {
+        FileHandle mapsDirectory = Gdx.files.internal(directoryPath);
+        if (mapsDirectory.exists() && mapsDirectory.isDirectory()) {
+            FileHandle[] mapDirectories = mapsDirectory.list();
+            ObjectMap<String, AssetData> atlases = new ObjectMap<>();
+            ObjectMap<String, AssetData> animationsCollection = new ObjectMap<>();
+            ObjectMap<String, AssetData> settings = new ObjectMap<>();
+            for (FileHandle mapDirectory : mapDirectories) {
+                if (mapDirectory.isDirectory()) {
+                    FileHandle atlasFile = mapDirectory.child(mapDirectory.name() + Player.TEXTURE_ATLAS);
+                    if (atlasFile.exists()) {
+                        AssetData assetData = new AssetData();
+                        assetData.setName(atlasFile.nameWithoutExtension());
+                        assetData.setType(TextureAtlas.class);
+                        assetData.setPath(atlasFile.path());
+                        atlases.put(assetData.getName(), assetData);
+                    }
+                    FileHandle animationsFile = mapDirectory.child(mapDirectory.name() + Player.ANIMATIONS);
+                    if (animationsFile.exists()) {
+                        AssetData assetData = new AssetData();
+                        assetData.setName(animationsFile.nameWithoutExtension());
+                        assetData.setType(AnimationsData.class);
+                        assetData.setPath(animationsFile.path());
+                        animationsCollection.put(assetData.getName(), assetData);
+                    }
+                    FileHandle settingsFile = mapDirectory.child(mapDirectory.name() + Player.SETTINGS);
+                    if (settingsFile.exists()) {
+                        AssetData assetData = new AssetData();
+                        assetData.setName(settingsFile.nameWithoutExtension());
+                        assetData.setType(PlayerSettingsData.class);
+                        assetData.setPath(settingsFile.path());
+                        settings.put(assetData.getName(), assetData);
+                    }
+                }
+            }
+            groups.put(AssetGroups.PlayerTextureAtlases.GROUP_NAME, atlases);
+            groups.put(AssetGroups.PlayerAnimations.GROUP_NAME, animationsCollection);
+            groups.put(AssetGroups.PlayerSettings.GROUP_NAME, settings);
         }
     }
 
