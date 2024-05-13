@@ -1,7 +1,7 @@
 package com.thewizardsjourney.game.asset;
 
-import static com.thewizardsjourney.game.constant.Asset.AssetPath.Map;
-import static com.thewizardsjourney.game.constant.Asset.AssetPath.Player;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.Map;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -26,7 +26,6 @@ import com.thewizardsjourney.game.asset.material.MaterialsData;
 import com.thewizardsjourney.game.asset.material.MaterialsLoader;
 import com.thewizardsjourney.game.asset.player.PlayerSettingsData;
 import com.thewizardsjourney.game.asset.player.PlayerSettingsLoader;
-import com.thewizardsjourney.game.constant.Asset.AssetGroups;
 
 public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
     private static final String TAG = "AssetHandler";
@@ -105,88 +104,90 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
         }
     }
 
-    public void parseMapsFromDirectory(String directoryPath) {
+    public Array<String> parseMapsFromDirectory(String directoryPath) {
+        Array<String> groupNames = new Array<>();
         FileHandle mapsDirectory = Gdx.files.internal(directoryPath);
         if (mapsDirectory.exists() && mapsDirectory.isDirectory()) {
             FileHandle[] mapDirectories = mapsDirectory.list();
-            ObjectMap<String, AssetData> maps = new ObjectMap<>();
-            ObjectMap<String, AssetData> settings = new ObjectMap<>();
             for (FileHandle mapDirectory : mapDirectories) {
                 if (mapDirectory.isDirectory()) {
-                    FileHandle mapFile = mapDirectory.child(mapDirectory.name() + Map.TILED_MAP);
+                    ObjectMap<String, AssetData> assets = new ObjectMap<>();
+                    FileHandle mapFile = mapDirectory.child(Map.TILED_MAP);
                     if (mapFile.exists()) {
                         AssetData assetData = new AssetData();
                         assetData.setName(mapFile.nameWithoutExtension());
                         assetData.setType(TiledMap.class);
                         assetData.setPath(mapFile.path());
-                        maps.put(assetData.getName(), assetData);
+                        assets.put(assetData.getName(), assetData);
                     }
-                    FileHandle settingsFile = mapDirectory.child(mapDirectory.name() + Map.SETTINGS);
+                    FileHandle settingsFile = mapDirectory.child(Map.SETTINGS);
                     if (settingsFile.exists()) {
                         AssetData assetData = new AssetData();
                         assetData.setName(settingsFile.nameWithoutExtension());
                         assetData.setType(MapSettingsData.class);
                         assetData.setPath(settingsFile.path());
-                        settings.put(assetData.getName(), assetData);
+                        assets.put(assetData.getName(), assetData);
+                    }
+                    FileHandle materialsFile = mapDirectory.child(Map.MATERIALS);
+                    if (materialsFile.exists()) {
+                        AssetData assetData = new AssetData();
+                        assetData.setName(materialsFile.nameWithoutExtension());
+                        assetData.setType(MaterialsData.class);
+                        assetData.setPath(materialsFile.path());
+                        assets.put(assetData.getName(), assetData);
+                    }
+                    if (mapFile.exists() && settingsFile.exists()) {
+                        String groupName = String.join("_", mapDirectory.parent().name(), mapDirectory.name());
+                        groupNames.add(groupName);
+                        groups.put(groupName, assets);
                     }
                 }
             }
-            groups.put(AssetGroups.Maps.GROUP_NAME, maps);
-            groups.put(AssetGroups.MapsSettings.GROUP_NAME, settings);
         }
+        return groupNames;
     }
 
-    public void parsePlayersFromDirectory(String directoryPath) {
+    public Array<String> parsePlayersFromDirectory(String directoryPath) {
+        Array<String> groupNames = new Array<>();
         FileHandle mapsDirectory = Gdx.files.internal(directoryPath);
         if (mapsDirectory.exists() && mapsDirectory.isDirectory()) {
             FileHandle[] mapDirectories = mapsDirectory.list();
-            ObjectMap<String, AssetData> atlases = new ObjectMap<>();
-            ObjectMap<String, AssetData> animationsCollection = new ObjectMap<>();
-            ObjectMap<String, AssetData> settings = new ObjectMap<>();
             for (FileHandle mapDirectory : mapDirectories) {
                 if (mapDirectory.isDirectory()) {
-                    FileHandle atlasFile = mapDirectory.child(mapDirectory.name() + Player.TEXTURE_ATLAS);
+                    ObjectMap<String, AssetData> assets = new ObjectMap<>();
+                    FileHandle atlasFile = mapDirectory.child(Player.TEXTURE_ATLAS);
                     if (atlasFile.exists()) {
                         AssetData assetData = new AssetData();
                         assetData.setName(atlasFile.nameWithoutExtension());
                         assetData.setType(TextureAtlas.class);
                         assetData.setPath(atlasFile.path());
-                        atlases.put(assetData.getName(), assetData);
+                        assets.put(assetData.getName(), assetData);
                     }
-                    FileHandle animationsFile = mapDirectory.child(mapDirectory.name() + Player.ANIMATIONS);
+                    FileHandle animationsFile = mapDirectory.child(Player.ANIMATIONS);
                     if (animationsFile.exists()) {
                         AssetData assetData = new AssetData();
                         assetData.setName(animationsFile.nameWithoutExtension());
                         assetData.setType(AnimationsData.class);
                         assetData.setPath(animationsFile.path());
-                        animationsCollection.put(assetData.getName(), assetData);
+                        assets.put(assetData.getName(), assetData);
                     }
-                    FileHandle settingsFile = mapDirectory.child(mapDirectory.name() + Player.SETTINGS);
+                    FileHandle settingsFile = mapDirectory.child(Player.SETTINGS);
                     if (settingsFile.exists()) {
                         AssetData assetData = new AssetData();
                         assetData.setName(settingsFile.nameWithoutExtension());
                         assetData.setType(PlayerSettingsData.class);
                         assetData.setPath(settingsFile.path());
-                        settings.put(assetData.getName(), assetData);
+                        assets.put(assetData.getName(), assetData);
+                    }
+                    if (atlasFile.exists() && animationsFile.exists() && settingsFile.exists()) {
+                        String groupName = String.join("_", mapDirectory.parent().name(), mapDirectory.name());
+                        groupNames.add(groupName);
+                        groups.put(groupName, assets);
                     }
                 }
             }
-            groups.put(AssetGroups.PlayerTextureAtlases.GROUP_NAME, atlases);
-            groups.put(AssetGroups.PlayerAnimations.GROUP_NAME, animationsCollection);
-            groups.put(AssetGroups.PlayerSettings.GROUP_NAME, settings);
         }
-    }
-
-    public Array<String> getSortedMapNames(String groupName) {
-        Array<String> mapNames = new Array<>();
-        ObjectMap<String, AssetData> group = groups.get(groupName);
-        if (group != null) {
-            for (AssetData assetData : group.values()) {
-                mapNames.add(assetData.getName());
-            }
-            mapNames.sort();
-        }
-        return mapNames;
+        return groupNames;
     }
 
     public synchronized <T> T get(String groupName, String fileAlias) {
@@ -221,5 +222,9 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
 
     public float getProgress() {
         return manager.getProgress();
+    }
+
+    public ObjectMap<String, ObjectMap<String, AssetData>> getGroups() {
+        return groups;
     }
 }

@@ -1,20 +1,21 @@
 package com.thewizardsjourney.game.constant;
 
-public class Asset {
+public class AssetConstants {
     public static class AssetPath {
         public static final String ASSETS = "data/assets.json";
 
         public static class Player {
-            public static final String PARENT = "data/box2D/players";
-            public static final String TEXTURE_ATLAS = "_texture_atlas.atlas";
-            public static final String ANIMATIONS = "_animations.json";
-            public static final String SETTINGS = "_settings.json";
+            public static final String PARENT_DIRECTORY = "data/box2D/players";
+            public static final String TEXTURE_ATLAS = "player_texture_atlas.atlas";
+            public static final String ANIMATIONS = "player_animations.json";
+            public static final String SETTINGS = "player_settings.json";
         }
 
         public static class Map {
-            public static final String PARENT = "data/box2D/maps";
-            public static final String TILED_MAP = "_tiled_map.tmx";
-            public static final String SETTINGS = "_settings.json";
+            public static final String PARENT_DIRECTORY = "data/box2D/maps";
+            public static final String TILED_MAP = "map_tiled_map.tmx";
+            public static final String SETTINGS = "map_settings.json";
+            public static final String MATERIALS = "map_materials.json";
         }
     }
 
@@ -46,6 +47,7 @@ public class Asset {
             public static final String FRAME_DURATION = "frame_duration";
             public static final String PLAY_MODE = "play_mode";
             public static final String FRAMES = "frames";
+            public static final String ANIMATION_SPEED = "animation_speed";
         }
 
         public static class MapConfig {
@@ -59,15 +61,16 @@ public class Asset {
             public static final String HEALTH = "health";
             public static final String ENERGY = "energy";
             public static final String RANGE = "range";
+            public static final String MOVEMENT_SPEED = "movement_speed";
+            public static final String JUMP_SPEED = "jump_speed";
             public static final String COST = "cost";
             public static final String PURCHASED = "purchased";
         }
     }
 
     public static class AssetGroups {
-        public static class General {
-            public static final String GROUP_NAME = "general";
-            public static final String MATERIALS = "materials";
+        public static class Default {
+            public static final String GROUP_NAME = "default";
         }
 
         public static class LoadingScreen {
@@ -80,26 +83,6 @@ public class Asset {
 
         public static class GameScreen {
             public static final String GROUP_NAME = "game_screen";
-        }
-
-        public static class PlayerTextureAtlases {
-            public static final String GROUP_NAME = "player_texture_atlases";
-        }
-
-        public static class PlayerAnimations {
-            public static final String GROUP_NAME = "player_animations";
-
-        }
-        public static class PlayerSettings {
-            public static final String GROUP_NAME = "player_settings";
-        }
-
-        public static class Maps {
-            public static final String GROUP_NAME = "maps";
-        }
-        
-        public static class MapsSettings {
-            public static final String GROUP_NAME = "maps_settings";
         }
     }
 }

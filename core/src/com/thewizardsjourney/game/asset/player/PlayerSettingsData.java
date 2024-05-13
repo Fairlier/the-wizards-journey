@@ -4,7 +4,9 @@ public class PlayerSettingsData {
     private String name;
     private int health;
     private int energy;
-    private float range;
+    private int range;
+    private float movementSpeed;
+    private float jumpSpeed;
     private int cost;
     private boolean purchased;
 
@@ -32,12 +34,28 @@ public class PlayerSettingsData {
         this.energy = energy;
     }
 
-    public float getRange() {
+    public int getRange() {
         return range;
     }
 
-    public void setRange(float range) {
+    public void setRange(int range) {
         this.range = range;
+    }
+
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public void setMovementSpeed(float movementSpeed) {
+        this.movementSpeed = movementSpeed;
+    }
+
+    public float getJumpSpeed() {
+        return jumpSpeed;
+    }
+
+    public void setJumpSpeed(float jumpSpeed) {
+        this.jumpSpeed = jumpSpeed;
     }
 
     public int getCost() {

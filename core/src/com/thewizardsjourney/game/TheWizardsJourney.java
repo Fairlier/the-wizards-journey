@@ -36,7 +36,7 @@ public class TheWizardsJourney extends Game {
 		return assetsHandler;
 	}
 
-	public GameInfo getGameData() {
+	public GameInfo getGameInfo() {
 		return gameInfo;
 	}
 

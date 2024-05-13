@@ -1,6 +1,6 @@
 package com.thewizardsjourney.game.constant;
 
-public class ECS {
+public class ECSConstants {
     public static class PhysicsSystem {
         public static final int VELOCITY_ITERATIONS = 6;
         public static final int POSITION_ITERATIONS = 2;
@@ -18,8 +18,8 @@ public class ECS {
         JUMP,
         FALL,
         RUN,
-        HURT,
-        ABILITY
+        ABILITY,
+        HURT
     }
 
     public enum EntityType {

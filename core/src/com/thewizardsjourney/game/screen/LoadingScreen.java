@@ -1,7 +1,7 @@
 package com.thewizardsjourney.game.screen;
 
-import static com.thewizardsjourney.game.constant.Asset.AssetPath;
-import static com.thewizardsjourney.game.constant.Asset.AssetGroups;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetGroups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -13,16 +13,20 @@ public class LoadingScreen extends ScreenAdapter {
     private Class<? extends ScreenAdapter> previousScreen;
     private Class<? extends ScreenAdapter> nextScreen;
 
-    public LoadingScreen(TheWizardsJourney main) {
+    public LoadingScreen(TheWizardsJourney main) { // TODO
         this.main = main;
         main.getAssetHandler().parseGroupsFromFile(AssetPath.ASSETS);
-        main.getAssetHandler().loadGroup(AssetGroups.General.GROUP_NAME);
+        main.getGameInfo().setMapGroupNames(main.getAssetHandler().parseMapsFromDirectory(AssetPath.Map.PARENT_DIRECTORY));
+        main.getGameInfo().setPlayerGroupNames(main.getAssetHandler().parsePlayersFromDirectory(AssetPath.Player.PARENT_DIRECTORY));
+        main.getAssetHandler().loadGroup(AssetGroups.Default.GROUP_NAME);
         main.getAssetHandler().loadGroup(AssetGroups.LoadingScreen.GROUP_NAME);
-        main.getAssetHandler().parseMapsFromDirectory(AssetPath.Map.PARENT);
+        for (String mapGroupName : main.getGameInfo().getMapGroupNames()) {
+            main.getAssetHandler().loadGroup(mapGroupName);
+        }
+        for (String playerGroupName : main.getGameInfo().getPlayerGroupNames()) {
+            main.getAssetHandler().loadGroup(playerGroupName);
+        }
         main.getAssetHandler().finishLoading();
-        main.getGameData().setMapsName(
-                main.getAssetHandler().getSortedMapNames(AssetGroups.Maps.GROUP_NAME)
-        );
     }
 
     @Override
@@ -34,13 +38,35 @@ public class LoadingScreen extends ScreenAdapter {
         } else if (previousScreen != null && nextScreen != null) {
             if (previousScreen.equals(MenuScreen.class) && nextScreen.equals(GameScreen.class)) {
                 main.getAssetHandler().unloadGroup(AssetGroups.MenuScreen.GROUP_NAME);
+                for (String mapGroupName : main.getGameInfo().getMapGroupNames()) {
+                    if (mapGroupName.equals(main.getGameInfo().getSelectedMapGroupName())) {
+                        continue;
+                    }
+                    main.getAssetHandler().unloadGroup(mapGroupName);
+                }
+                for (String playerGroupName : main.getGameInfo().getPlayerGroupNames()) {
+                    if (playerGroupName.equals(main.getGameInfo().getSelectedPlayerGroupName())) {
+                        continue;
+                    }
+                    main.getAssetHandler().unloadGroup(playerGroupName);
+                }
+
                 main.getAssetHandler().loadGroup(AssetGroups.GameScreen.GROUP_NAME);
-                main.getAssetHandler().loadGroup(AssetGroups.MapsSettings.GROUP_NAME);
-                main.getAssetHandler().loadGroup(AssetGroups.Maps.GROUP_NAME);
             } else if (previousScreen.equals(GameScreen.class) && nextScreen.equals(MenuScreen.class)) {
                 main.getAssetHandler().unloadGroup(AssetGroups.GameScreen.GROUP_NAME);
-                main.getAssetHandler().unloadGroup(AssetGroups.MapsSettings.GROUP_NAME);
-                main.getAssetHandler().unloadGroup(AssetGroups.Maps.GROUP_NAME);
+
+                for (String mapGroupName : main.getGameInfo().getMapGroupNames()) {
+                    if (mapGroupName.equals(main.getGameInfo().getSelectedMapGroupName())) {
+                        continue;
+                    }
+                    main.getAssetHandler().loadGroup(mapGroupName);
+                }
+                for (String playerGroupName : main.getGameInfo().getPlayerGroupNames()) {
+                    if (playerGroupName.equals(main.getGameInfo().getSelectedPlayerGroupName())) {
+                        continue;
+                    }
+                    main.getAssetHandler().loadGroup(playerGroupName);
+                }
                 main.getAssetHandler().loadGroup(AssetGroups.MenuScreen.GROUP_NAME);
             }
         }

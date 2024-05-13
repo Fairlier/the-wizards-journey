@@ -3,42 +3,42 @@ package com.thewizardsjourney.game.helper;
 import com.badlogic.gdx.utils.Array;
 
 public class GameInfo {
-    private Array<String> mapsName;
-    private Array<String> charactersName;
-    private String selectedMapName = "map_0_tiled_map";
-    private String selectedCharacterName;
+    private Array<String> mapGroupNames;
+    private Array<String> playerGroupNames;
+    private String selectedMapGroupName = "maps_map_0";
+    private String selectedPlayerGroupName = "players_player_0";
 
     public GameInfo() {}
 
-    public Array<String> getMapsName() {
-        return mapsName;
+    public Array<String> getMapGroupNames() {
+        return mapGroupNames;
     }
 
-    public void setMapsName(Array<String> mapsName) {
-        this.mapsName = mapsName;
+    public void setMapGroupNames(Array<String> mapGroupNames) {
+        this.mapGroupNames = mapGroupNames;
     }
 
-    public Array<String> getCharactersName() {
-        return charactersName;
+    public Array<String> getPlayerGroupNames() {
+        return playerGroupNames;
     }
 
-    public void setCharactersName(Array<String> charactersName) {
-        this.charactersName = charactersName;
+    public void setPlayerGroupNames(Array<String> playerGroupNames) {
+        this.playerGroupNames = playerGroupNames;
     }
 
-    public String getSelectedMapName() {
-        return selectedMapName;
+    public String getSelectedMapGroupName() {
+        return selectedMapGroupName;
     }
 
-    public void setSelectedMapName(String selectedMapName) {
-        this.selectedMapName = selectedMapName;
+    public void setSelectedMapGroupName(String selectedMapGroupName) {
+        this.selectedMapGroupName = selectedMapGroupName;
     }
 
-    public String getSelectedCharacterName() {
-        return selectedCharacterName;
+    public String getSelectedPlayerGroupName() {
+        return selectedPlayerGroupName;
     }
 
-    public void setSelectedCharacterName(String selectedCharacterName) {
-        this.selectedCharacterName = selectedCharacterName;
+    public void setSelectedPlayerGroupName(String selectedPlayerGroupName) {
+        this.selectedPlayerGroupName = selectedPlayerGroupName;
     }
 }

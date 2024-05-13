@@ -1,10 +1,10 @@
 package com.thewizardsjourney.game.asset.animation;
 
-import static com.thewizardsjourney.game.constant.Asset.AssetPath.Player.TEXTURE_ATLAS;
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AnimationConfig.FRAMES;
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AnimationConfig.FRAME_DURATION;
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AnimationConfig.PLAY_MODE;
-import static com.thewizardsjourney.game.constant.Asset.CustomAsset.AnimationConfig.STATE;
+import static com.thewizardsjourney.game.constant.AssetConstants.CustomAsset.AnimationConfig.ANIMATION_SPEED;
+import static com.thewizardsjourney.game.constant.AssetConstants.CustomAsset.AnimationConfig.FRAMES;
+import static com.thewizardsjourney.game.constant.AssetConstants.CustomAsset.AnimationConfig.FRAME_DURATION;
+import static com.thewizardsjourney.game.constant.AssetConstants.CustomAsset.AnimationConfig.PLAY_MODE;
+import static com.thewizardsjourney.game.constant.AssetConstants.CustomAsset.AnimationConfig.STATE;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -12,15 +12,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
-import java.io.File;
-
 public class AnimationsLoader extends AsynchronousAssetLoader<AnimationsData, AnimationsLoader.AnimationsParameter> {
-    private AnimationsData animations;
+    private AnimationsData animationsData;
 
     public AnimationsLoader(FileHandleResolver resolver) {
         super(resolver);
@@ -28,35 +25,32 @@ public class AnimationsLoader extends AsynchronousAssetLoader<AnimationsData, An
 
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file, AnimationsParameter parameter) {
-        FileHandle atlasFile = file.parent().child(file.parent().name() + TEXTURE_ATLAS);
-        TextureAtlas atlas = manager.get(atlasFile.path(), TextureAtlas.class);
-        if (atlas != null) {
-            animations = new AnimationsData(atlas);
-            try {
-                JsonReader reader = new JsonReader();
-                JsonValue root = reader.parse(file);
-                for (JsonValue animationValue : root) {
-                    AnimationAttributes settings = new AnimationAttributes();
-                    settings.setState(animationValue.getString(STATE));
-                    settings.setFrameDuration(animationValue.getFloat(FRAME_DURATION));
-                    settings.setPlayMode(animationValue.getString(PLAY_MODE));
-                    Array<String> frames = new Array<>();
-                    JsonValue framesValue = animationValue.get(FRAMES);
-                    for (JsonValue frameValue : framesValue) {
-                        frames.add(frameValue.asString());
-                    }
-                    settings.setFrames(frames);
-                    animations.putAnimation(settings);
+        animationsData = new AnimationsData();
+        try {
+            JsonReader reader = new JsonReader();
+            JsonValue root = reader.parse(file);
+            for (JsonValue animationValue : root) {
+                AnimationAttributes attributes = new AnimationAttributes();
+                attributes.setState(animationValue.getString(STATE));
+                attributes.setFrameDuration(animationValue.getFloat(FRAME_DURATION));
+                attributes.setAnimationSpeed(animationValue.getFloat(ANIMATION_SPEED));
+                attributes.setPlayMode(animationValue.getString(PLAY_MODE));
+                Array<String> frames = new Array<>();
+                JsonValue framesValue = animationValue.get(FRAMES);
+                for (JsonValue frameValue : framesValue) {
+                    frames.add(frameValue.asString());
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                attributes.setFrames(frames);
+                animationsData.putAnimation(attributes);
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public AnimationsData loadSync(AssetManager manager, String fileName, FileHandle file, AnimationsLoader.AnimationsParameter parameter) {
-        return animations;
+        return animationsData;
     }
 
     @Override

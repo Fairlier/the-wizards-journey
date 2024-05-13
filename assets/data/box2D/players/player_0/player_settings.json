@@ -1,0 +1,10 @@
+{
+  "name": "Wizard",
+  "health": 3,
+  "energy": 3,
+  "range": 3,
+  "movement_speed": 5.0,
+  "jump_speed": 5.0,
+  "cost": 0,
+  "purchased": true
+}

@@ -1,14 +1,11 @@
 package com.thewizardsjourney.game.map;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.WorldManifold;
-import com.thewizardsjourney.game.constant.General;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.EntityTypeComponent;

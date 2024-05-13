@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 public class AnimationAttributes {
     private String state;
     private float frameDuration;
+    private float animationSpeed;
     private String playMode;
     private Array<String> frames;
 
@@ -22,6 +23,14 @@ public class AnimationAttributes {
 
     public void setFrameDuration(float frameDuration) {
         this.frameDuration = frameDuration;
+    }
+
+    public float getAnimationSpeed() {
+        return animationSpeed;
+    }
+
+    public void setAnimationSpeed(float animationSpeed) {
+        this.animationSpeed = animationSpeed;
     }
 
     public String getPlayMode() {

@@ -1,0 +1,37 @@
+[
+  {
+    "state": "IDLE",
+    "frame_duration": 0.025,
+    "animation_speed": 0.3,
+    "play_mode": "LOOP",
+    "frames": ["idle_0", "idle_1", "idle_2", "idle_3", "idle_4", "idle_5", "idle_6", "idle_7"]
+  },
+  {
+    "state": "RUN",
+    "frame_duration": 0.025,
+    "animation_speed": 0.3,
+    "play_mode": "LOOP",
+    "frames": ["run_0", "run_1", "run_2", "run_3", "run_4", "run_5", "run_6", "run_7"]
+  },
+  {
+    "state": "JUMP",
+    "frame_duration": 0.025,
+    "animation_speed": 1.0,
+    "play_mode": "NORMAL",
+    "frames": ["jump_3", "jump_4"]
+  },
+  {
+    "state": "FALL",
+    "frame_duration": 0.025,
+    "animation_speed": 1.0,
+    "play_mode": "LOOP",
+    "frames": ["jump_5"]
+  },
+  {
+    "state": "ABILITY",
+    "frame_duration": 0.025,
+    "animation_speed": 0.3,
+    "play_mode": "LOOP",
+    "frames": ["attack_0_2", "attack_0_3", "attack_0_4", "attack_0_5", "attack_0_6"]
+  }
+]
