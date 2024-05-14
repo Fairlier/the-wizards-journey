@@ -51,7 +51,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         for (int i = 0; i < layers.size(); i++) {
             MapLayer layer = layers.get(i);
             if (layer instanceof TiledMapTileLayer && layer.isVisible()) {
-                TiledMapTileLayer tiledLayer = (TiledMapTileLayer) layer;
+                TiledMapTileLayer tiledLayer = (TiledMapTileLayer) layer; // TODO фор ич
                 if (tiledLayer.getName().startsWith("bgd")) {
                     mapBackgroundLayers.add(tiledLayer);
                 } else {

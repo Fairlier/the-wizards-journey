@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-up" compressionlevel="0" width="96" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="18" nextobjectid="46">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-up" compressionlevel="0" width="96" height="26" tilewidth="16" tileheight="16" infinite="0" nextlayerid="19" nextobjectid="56">
  <properties>
   <property name="ambient" type="color" value="#e6000000"/>
   <property name="shadow_angle" type="float" value="225"/>
@@ -154,5 +154,30 @@
  <objectgroup id="17" name="other_objects">
   <object id="44" name="player" x="16" y="224" width="16" height="32"/>
   <object id="45" name="box" x="160" y="224" width="20.6667" height="19.3333"/>
+  <object id="46" name="test" x="104" y="246.667">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="18" name="puzzle_objects_1">
+  <properties>
+   <property name="joints" value="prismatic"/>
+  </properties>
+  <object id="48" name="sensor" x="432.667" y="222.667" width="128" height="64">
+   <properties>
+    <property name="group" value="1"/>
+   </properties>
+  </object>
+  <object id="54" name="fixed" x="592" y="-0.5" width="16.5" height="223.5">
+   <properties>
+    <property name="group" value="1"/>
+    <property name="joint_type" value="prismatic"/>
+   </properties>
+  </object>
+  <object id="55" name="moving" x="596" y="222" width="8.5" height="64.5">
+   <properties>
+    <property name="group" value="1"/>
+    <property name="joint_type" value="prismatic"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

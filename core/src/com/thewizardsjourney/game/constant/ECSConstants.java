@@ -25,6 +25,10 @@ public class ECSConstants {
     public enum EntityType {
         PLAYER,
         STATIC_OBJECT,
+        DYNAMIC_OBJECT,
+        PUZZLE_SENSOR,
+        PRISMATIC_FIXED,
+        PRISMATIC_MOVING,
         NONE
     }
 }

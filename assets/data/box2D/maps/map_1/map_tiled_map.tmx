@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="12" tilewidth="21" tileheight="21" infinite="0" nextlayerid="6" nextobjectid="16">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="12" tilewidth="21" tileheight="21" infinite="0" nextlayerid="6" nextobjectid="17">
  <properties>
   <property name="music" value="data/music/song_1.mp3"/>
  </properties>
@@ -51,5 +51,8 @@
    <polyline points="0,0 0,-42 21,-42 21,-105 42,-105 42,-126 84,-126 84,0 0,0"/>
   </object>
   <object id="15" x="209.727" y="104.863" width="63.8553" height="21.6757"/>
+  <object id="16" x="41.008" y="62.6837">
+   <polygon points="0,0 63.8553,20.504 85.531,-20.504"/>
+  </object>
  </objectgroup>
 </map>

@@ -16,10 +16,4 @@ public class GlobalConstants {
     public static class Physics {
         public static final Vector2 GRAVITY = new Vector2(0, -9.8f);
     }
-
-    public enum Categories {
-        PLAYER,
-        STATIC_OBJECT,
-        NONE
-    }
 }

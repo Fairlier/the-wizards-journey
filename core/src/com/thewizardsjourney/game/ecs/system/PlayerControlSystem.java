@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.thewizardsjourney.game.constant.ECSConstants.FacingDirection;
 import com.thewizardsjourney.game.controller.InputHandler;
-import com.thewizardsjourney.game.ecs.component.AbilityComponent;
+import com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerMovementComponent;
@@ -19,13 +19,13 @@ public class PlayerControlSystem extends IteratingSystem {
             ComponentMapper.getFor(FacingComponent.class);
     private final ComponentMapper<PlayerComponent> pm =
             ComponentMapper.getFor(PlayerComponent.class);
-    private final ComponentMapper<AbilityComponent> abilityComponentCM =
-            ComponentMapper.getFor(AbilityComponent.class);
+    private final ComponentMapper<PlayerAbilityComponent> abilityComponentCM =
+            ComponentMapper.getFor(PlayerAbilityComponent.class);
 
     public PlayerControlSystem(InputHandler controller) {
         super(Family.all(
                 PlayerMovementComponent.class,
-                AbilityComponent.class,
+                PlayerAbilityComponent.class,
                 FacingComponent.class,
                 PlayerComponent.class
         ).get());
@@ -36,7 +36,7 @@ public class PlayerControlSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) { // TODO
         FacingComponent facingComponent = fm.get(entity);
         PlayerMovementComponent playerMovementComponent  = playerMovementComponentCM.get(entity);
-        AbilityComponent abilityComponent = abilityComponentCM.get(entity);
+        PlayerAbilityComponent playerAbilityComponent = abilityComponentCM.get(entity);
 
         if (controller.isLeft()) {
             playerMovementComponent.isRunning = true;
@@ -60,14 +60,14 @@ public class PlayerControlSystem extends IteratingSystem {
         }
 
         if (controller.isAbility()) {
-            abilityComponent.isInAbilityMode = true;
+            playerAbilityComponent.isInAbilityMode = true;
             if (controller.isCast()) {
-                abilityComponent.isCasting = true;
+                playerAbilityComponent.isCasting = true;
             } else {
-                abilityComponent.isCasting = false;
+                playerAbilityComponent.isCasting = false;
             }
         } else {
-            abilityComponent.isInAbilityMode = false;
+            playerAbilityComponent.isInAbilityMode = false;
         }
     }
 }

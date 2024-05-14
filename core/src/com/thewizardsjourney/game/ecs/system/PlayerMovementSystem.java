@@ -11,11 +11,11 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.thewizardsjourney.game.constant.ECSConstants;
-import com.thewizardsjourney.game.constant.GlobalConstants;
-import com.thewizardsjourney.game.ecs.component.AbilityComponent;
+import com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent;
 import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerMovementComponent;
+import com.thewizardsjourney.game.helper.EntityTypeInfo;
 
 public class PlayerMovementSystem extends IteratingSystem {
     private boolean isColliding;
@@ -26,14 +26,14 @@ public class PlayerMovementSystem extends IteratingSystem {
             ComponentMapper.getFor(PlayerMovementComponent.class);
     private final ComponentMapper<AnimationComponent> animationComponentCM =
             ComponentMapper.getFor(AnimationComponent.class);
-    private final ComponentMapper<AbilityComponent> abilityComponentCM =
-            ComponentMapper.getFor(AbilityComponent.class);
+    private final ComponentMapper<PlayerAbilityComponent> abilityComponentCM =
+            ComponentMapper.getFor(PlayerAbilityComponent.class);
 
     public PlayerMovementSystem(World world) {
         super(Family.all(
                 BodyComponent.class,
                 PlayerMovementComponent.class,
-                AbilityComponent.class,
+                PlayerAbilityComponent.class,
                 AnimationComponent.class
         ).get());
         this.world = world;
@@ -44,7 +44,7 @@ public class PlayerMovementSystem extends IteratingSystem {
         BodyComponent bodyComponent = bodyComponentCM.get(entity);
         PlayerMovementComponent playerMovementComponent  = playerMovementComponentCM.get(entity);
         AnimationComponent animationComponent = animationComponentCM.get(entity);
-        AbilityComponent abilityComponent = abilityComponentCM.get(entity);
+        PlayerAbilityComponent playerAbilityComponent = abilityComponentCM.get(entity);
         isColliding = false;
         collisionCheck(bodyComponent.body);
         ECSConstants.AnimationState previousState = animationComponent.state;
@@ -61,7 +61,7 @@ public class PlayerMovementSystem extends IteratingSystem {
                 animationComponent.state = ECSConstants.AnimationState.JUMP;
             }
             if (bodyComponent.body.getLinearVelocity().equals(Vector2.Zero)) {
-                if (abilityComponent.isInAbilityMode) {
+                if (playerAbilityComponent.isInAbilityMode) {
                     animationComponent.state = ECSConstants.AnimationState.ABILITY;
                 } else {
                     animationComponent.state = ECSConstants.AnimationState.IDLE;
@@ -95,7 +95,7 @@ public class PlayerMovementSystem extends IteratingSystem {
     private final QueryCallback callback = new QueryCallback() {
         @Override
         public boolean reportFixture(Fixture fixture) {
-            if (fixture.getUserData() != GlobalConstants.Categories.PLAYER) { // TODO
+            if (((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.PLAYER) { // TODO
                 isColliding = true;
             }
             return true;

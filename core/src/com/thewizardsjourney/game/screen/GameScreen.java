@@ -23,7 +23,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
 import com.thewizardsjourney.game.controller.InputHandler;
-import com.thewizardsjourney.game.ecs.system.AbilitySystem;
+import com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent;
+import com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem;
 import com.thewizardsjourney.game.ecs.system.AnimationSystem;
 import com.thewizardsjourney.game.ecs.system.CameraSystem;
 import com.thewizardsjourney.game.ecs.system.LightSystem;
@@ -32,6 +33,7 @@ import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerMovementSystem;
+import com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem;
 import com.thewizardsjourney.game.ecs.system.RenderingSystem;
 import com.thewizardsjourney.game.event.GameEventHandler;
 import com.thewizardsjourney.game.map.MapHandler;
@@ -131,7 +133,7 @@ public class GameScreen extends ScreenAdapter { // TODO
         PlayerMovementSystem playerMovementSystem = new PlayerMovementSystem(mapHandler.getWorld());
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
         PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem();
-        AbilitySystem abilitySystem = new AbilitySystem(mapHandler.getWorld(), controller, viewport);
+        PlayerAbilitySystem playerAbilitySystem = new PlayerAbilitySystem(mapHandler.getWorld(), controller, viewport);
 
         CameraSystem cameraSystem = new CameraSystem(camera);
         cameraSystem.setTargetEntity(mapHandler.getPlayer());
@@ -139,6 +141,8 @@ public class GameScreen extends ScreenAdapter { // TODO
         RenderingSystem renderingSystem = new RenderingSystem(batch, viewport, mapHandler.getMap());
 
         AnimationSystem animationSystem = new AnimationSystem();
+
+        PuzzleSensorSystem puzzleSensorSystem = new PuzzleSensorSystem(mapHandler.getWorld());
 
         engine.addSystem(physicsSystem);
         engine.addSystem(lightSystem);
@@ -149,7 +153,8 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.addSystem(animationSystem);
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsDebugSystem);
-        engine.addSystem(abilitySystem);
+        engine.addSystem(playerAbilitySystem);
+        engine.addSystem(puzzleSensorSystem);
     }
 
     private void uiListeners() {

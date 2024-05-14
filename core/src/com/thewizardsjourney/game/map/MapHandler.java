@@ -2,52 +2,50 @@ package com.thewizardsjourney.game.map;
 
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.LN_OTHER_OBJECTS;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.LN_STATIC_OBJECTS;
-import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.MP_MATERIAL;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.MP_MATERIAL_DEFAULT;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_PLAYER;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_HEIGHT;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_WIDTH;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Physics.GRAVITY;
-import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.UNIT_SCALE;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.PolylineMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Joint;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.constant.ECSConstants;
-import com.thewizardsjourney.game.constant.GlobalConstants;
-import com.thewizardsjourney.game.ecs.component.AbilityComponent;
+import com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent;
 import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.EntityTypeComponent;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
+import com.thewizardsjourney.game.ecs.component.JointComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerMovementComponent;
+import com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent;
 import com.thewizardsjourney.game.ecs.component.RenderComponent;
 import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
 import com.thewizardsjourney.game.ecs.component.TransformComponent;
 import com.thewizardsjourney.game.helper.GameInfo;
 import com.thewizardsjourney.game.helper.MapInfo;
+import com.thewizardsjourney.game.helper.EntityTypeInfo;
 import com.thewizardsjourney.game.helper.PlayerInfo;
 
 import box2dLight.ConeLight;
@@ -60,7 +58,6 @@ public class MapHandler {
     private Engine engine;
     private World world;
     private RayHandler rayHandler;
-    private Array<Body> bodies = new Array<>();
     private MapInfo mapInfo;
     private PlayerInfo playerInfo;
     private Entity player;
@@ -79,7 +76,7 @@ public class MapHandler {
 
         rayHandler = new RayHandler(world);
         // TODO
-       rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 0.25f);
+        rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 0.25f);
 
         Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15, VIRTUAL_WIDTH *0.2f, VIRTUAL_HEIGHT, 270, 45);
 
@@ -95,15 +92,28 @@ public class MapHandler {
             // TODO сменить экран на меню, то есть выдать ошибку
         }
 
-        createObjects(mapInfo.getMap(), LN_STATIC_OBJECTS, this::createStaticObject);
-        createObjects(mapInfo.getMap(), LN_OTHER_OBJECTS, this::createOtherObject);
+        createObjects(mapInfo.getMap(), LN_STATIC_OBJECTS, this::createStaticObjects);
+        createObjects(mapInfo.getMap(), LN_OTHER_OBJECTS, this::createOtherObjects);
+
+        MapLayers layers = mapInfo.getMap().getLayers();
+        for (MapLayer layer : layers) {
+            if (layer.getName().startsWith("puzzle_objects")) { // TODO
+                createObjects(mapInfo.getMap(), layer.getName(), this::createPuzzleObjects);
+            }
+        }
     }
 
     public void dispose() {
+        Array<Joint> joints = new Array<>();
+        world.getJoints(joints);
+        for (Joint joint : joints) {
+            world.destroyJoint(joint);
+        }
+        Array<Body> bodies = new Array<>();
+        world.getBodies(bodies);
         for (Body body : bodies) {
             world.destroyBody(body);
         }
-        bodies.clear();
         world.dispose();
     }
 
@@ -118,116 +128,339 @@ public class MapHandler {
             if (object instanceof TextureMapObject){
                 continue;
             }
-            MapObjectData objectData;
-            if (object instanceof RectangleMapObject) {
-                objectData = getRectangle((RectangleMapObject) object);
-                logger.info("RectangleMapObject " + object);
-            }  else if (object instanceof PolygonMapObject) {
-                objectData = getPolygon((PolygonMapObject) object);
-                logger.info("PolygonMapObject " + object);
-            }  else if (object instanceof PolylineMapObject) {
-                objectData = getPolyline((PolylineMapObject) object);
-                logger.info("PolylineMapObject " + object);
-            } else {
-                logger.error("non suported shape " + object);
-                continue;
-            }
+            MapObjectData objectData = new MapObjectData(object);
             objectsData.add(objectData);
         }
         handler.createObject(objectsData);
-        for (MapObjectData objectData : objectsData) {
-            if (objectData != null) {
-                if (objectData.getShape() != null) {
-                    objectData.getShape().dispose();
-                }
-            }
-        }
     }
 
-    private void createStaticObject(Array<MapObjectData> objectsData) {
+    private void createStaticObjects(Array<MapObjectData> objectsData) {
         for (MapObjectData objectData : objectsData) {
-            MapProperties properties = objectData.getObject().getProperties();
-            String material = properties.get(MP_MATERIAL, MP_MATERIAL_DEFAULT, String.class);
-
-            FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(material);
+            Shape shape = objectData.getShapeStaticObject();
+            if (shape == null) {
+                continue;
+            }
+            FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
             if (fixtureDef == null) {
-                logger.error("material does not exist " + material + " using default");
+                logger.error("material does not exist, using default");
                 fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
             }
-            fixtureDef.shape = objectData.getShape();
-
-            BodyDef bodyDef = objectData.getBodyDef();
-            bodyDef.position.setZero();
+            fixtureDef.shape = shape;
+            BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.StaticBody;
 
             Body body = world.createBody(bodyDef);
             body.createFixture(fixtureDef);
+            EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                    ECSConstants.EntityType.STATIC_OBJECT,
+                    objectData.getObject().getName());
+            body.getFixtureList().get(0).setUserData(entityTypeInfo);
 
-            //createEntityForStaticObject(body);
-            bodies.add(body);
+            createEntityForStaticObject(body);
 
             fixtureDef.shape = null;
+            shape.dispose();
+        }
+    }
+
+    private void createOtherObjects(Array<MapObjectData> objectsData) {
+        for (MapObjectData objectData : objectsData) {
+            switch (objectData.getObject().getName()) {
+                case OB_PLAYER:
+                    createPlayerObject(objectData);
+                    break;
+                case "box":
+                    Shape shape = objectData.getShapeOtherObject();
+                    if (shape == null) {
+                        return;
+                    }
+                    FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+                    if (fixtureDef == null) {
+                        logger.error("material does not exist, using default");
+                        fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+                    }
+                    fixtureDef.shape = shape;
+                    BodyDef bodyDef = new BodyDef();
+                    bodyDef.position.set(objectData.getCenterPositionOtherObject());
+                    bodyDef.type = BodyDef.BodyType.DynamicBody;
+                    bodyDef.fixedRotation = true;
+
+                    Body body = world.createBody(bodyDef);
+                    body.createFixture(fixtureDef);
+                    EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                            ECSConstants.EntityType.NONE,
+                            objectData.getObject().getName());
+                    body.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+                    fixtureDef.shape = null;
+                    shape.dispose();
+                default:
+                    break;
+            }
         }
     }
 
     private void createEntityForStaticObject(Body body) {
         Entity entity = engine.createEntity();
 
+        BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
+        bodyComponent.body = body;
+        bodyComponent.body.setUserData(entity);
+        entity.add(bodyComponent);
+
         EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
-        entityTypeComponent.type = ECSConstants.EntityType.STATIC_OBJECT;
+        entityTypeComponent.type = ((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getEntityType();
         entity.add(entityTypeComponent);
+
+        engine.addEntity(entity);
+    }
+
+    private void createPlayerObject(MapObjectData objectData) { // TODO
+        Shape shape = objectData.getShapeOtherObject();
+        if (shape == null) {
+            return;
+        }
+        FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+        if (fixtureDef == null) {
+            logger.error("material does not exist, using default");
+            fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+        }
+        fixtureDef.shape = shape;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(objectData.getCenterPositionOtherObject());
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.fixedRotation = true;
+
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                ECSConstants.EntityType.PLAYER,
+                objectData.getObject().getName());
+        body.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+        createEntityForPlayerObject(body);
+        fixtureDef.shape = null;
+        shape.dispose();
+    }
+
+    private void createPuzzleObjects(Array<MapObjectData> objectsData) { // TODO
+        ObjectMap<String, PuzzleGroupObject> puzzleGroupObjects = new ObjectMap<>();
+        for (MapObjectData objectData : objectsData) {
+            String group = objectData.getObject().getProperties().get("group", String.class);
+            String jointType = objectData.getObject().getProperties().get("joint_type", String.class);
+            switch (objectData.getObject().getName()) {
+                case "sensor":
+                    if (!puzzleGroupObjects.containsKey(group)) {
+                        puzzleGroupObjects.put(group, new PuzzleGroupObject(null, new ObjectMap<>()));
+                    }
+                    puzzleGroupObjects.get(group).setSensor(objectData);
+                    break;
+                default:
+                    if (!puzzleGroupObjects.containsKey(group)) {
+                        puzzleGroupObjects.put(group, new PuzzleGroupObject(null, new ObjectMap<>()));
+                    }
+                    if (!puzzleGroupObjects.get(group).getMapObjectsForJoints().containsKey(jointType)) {
+                        puzzleGroupObjects.get(group).getMapObjectsForJoints().put(jointType, new Array<>());
+                    }
+                    puzzleGroupObjects.get(group).getMapObjectsForJoints().get(jointType).add(objectData);
+                    break;
+            }
+        }
+        for (String group : puzzleGroupObjects.keys()) {
+            PuzzleGroupObject puzzleGroupObject = puzzleGroupObjects.get(group);
+            for (String jointType : puzzleGroupObject.getMapObjectsForJoints().keys()) {
+                createPuzzleJointForGroup(puzzleGroupObject, jointType, puzzleGroupObject.getMapObjectsForJoints().get(jointType));
+            }
+        }
+        for (PuzzleGroupObject puzzleGroupObject : puzzleGroupObjects.values()) {
+            if (puzzleGroupObject.getSensor() != null) {
+                createPuzzleSensorForGroup(puzzleGroupObject, puzzleGroupObject.getSensor());
+            }
+        }
+    }
+
+    private void createPuzzleJointForGroup(PuzzleGroupObject groupObject, String jointType, Array<MapObjectData> objectsData) {
+        switch (jointType) {
+            case "prismatic":
+                createPrismaticJoint(groupObject, objectsData);
+                break;
+            default:
+                System.err.println("Joint type " + jointType + " is not recognized.");
+                break;
+        }
+    }
+
+    private void createPuzzleSensorForGroup(PuzzleGroupObject puzzleGroupObject, MapObjectData objectData) { // TODO
+        Shape shape = objectData.getShapeStaticObject();
+        if (shape == null) {
+            return;
+        }
+        FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+        if (fixtureDef == null) {
+            logger.error("material does not exist, using default");
+            fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+        }
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.fixedRotation = true;
+
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                ECSConstants.EntityType.PUZZLE_SENSOR,
+                objectData.getObject().getName());
+        body.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+
+        float[] vertices = objectData.getVerticesStaticObject();
+        createEntityForPuzzleSensorObject(body, puzzleGroupObject, new Vector2(vertices[0], vertices[1]), new Vector2(vertices[4], vertices[5]));
+
+        fixtureDef.shape = null;
+        shape.dispose();
+    }
+
+    private void createEntityForPuzzleSensorObject(Body body, PuzzleGroupObject puzzleGroupObject, Vector2 lowerBound, Vector2 upperBound) {
+        Entity entity = engine.createEntity();
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
         bodyComponent.body = body;
         bodyComponent.body.setUserData(entity);
         entity.add(bodyComponent);
 
+        EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
+        entityTypeComponent.type = ((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getEntityType();
+        entity.add(entityTypeComponent);
+
+        PuzzleSensorComponent puzzleSensorComponent = engine.createComponent(PuzzleSensorComponent.class);
+        puzzleSensorComponent.targetObjectName = puzzleGroupObject.getSensor().getObject().getProperties().get("target_object", String.class);
+        puzzleSensorComponent.lowerBound = lowerBound;
+        puzzleSensorComponent.upperBound = upperBound;
+        puzzleSensorComponent.joints = puzzleGroupObject.getJoints();
+        entity.add(puzzleSensorComponent);
+
         engine.addEntity(entity);
     }
 
-    private void createOtherObject(Array<MapObjectData> objectsData) {
+    private void createPrismaticJoint(PuzzleGroupObject puzzleGroupObject, Array<MapObjectData> objectsData) {
+        Body fixedBody = null;
+        Body movingBody = null;
+        Vector2 fixedBodySize = null;
+        Vector2 movingBodySize = null;
         for (MapObjectData objectData : objectsData) {
-            if (objectData.getObject().getName().equals(OB_PLAYER)) {
-                createPlayerObject(objectData);
+            if (objectData.getObject().getName().equals("fixed")) {
+                Shape shape = objectData.getShapeOtherObject();
+                if (shape == null) {
+                    return;
+                }
+                FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+                if (fixtureDef == null) {
+                    logger.error("material does not exist, using default");
+                    fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+                }
+                fixtureDef.shape = shape;
+
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.position.set(objectData.getCenterPositionOtherObject());
+                fixedBodySize = objectData.getSizeOtherObject();
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                bodyDef.fixedRotation = true;
+
+                fixedBody = world.createBody(bodyDef);
+                fixedBody.createFixture(fixtureDef);
+                EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                        ECSConstants.EntityType.PRISMATIC_FIXED,
+                        objectData.getObject().getName());
+                fixedBody.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+                fixtureDef.shape = null;
+                shape.dispose();
+            } else if (objectData.getObject().getName().equals("moving")) {
+                Shape shape = objectData.getShapeOtherObject();
+                if (shape == null) {
+                    return;
+                }
+                FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+                if (fixtureDef == null) {
+                    logger.error("material does not exist, using default");
+                    fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+                }
+                fixtureDef.shape = shape;
+
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.position.set(objectData.getCenterPositionOtherObject());
+                movingBodySize = objectData.getSizeOtherObject();
+                bodyDef.type = BodyDef.BodyType.DynamicBody;
+                bodyDef.fixedRotation = true;
+
+                movingBody = world.createBody(bodyDef);
+                movingBody.createFixture(fixtureDef);
+                EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                        ECSConstants.EntityType.PRISMATIC_MOVING,
+                        objectData.getObject().getName());
+                movingBody.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+                fixtureDef.shape = null;
+                shape.dispose();
             }
         }
-    }
-
-    private void createPlayerObject(MapObjectData objectData) { // TODO
-        MapProperties properties = objectData.getObject().getProperties();
-        String material = properties.get(MP_MATERIAL, MP_MATERIAL_DEFAULT, String.class);
-
-        FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(material);
-        if (fixtureDef == null) {
-            logger.error("material does not exist " + material + " using default");
-            fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+        if (fixedBody == null || movingBody == null ||
+            fixedBodySize == null || movingBodySize == null) {
+            System.out.println("NULLLL");
+            return;
         }
-        fixtureDef.shape = objectData.getShape();
+        PrismaticJointDef prismaticJointDef = new PrismaticJointDef();
+        prismaticJointDef.enableMotor = true;
+        prismaticJointDef.motorSpeed = 10;
+        prismaticJointDef.maxMotorForce = 500;
+        prismaticJointDef.bodyA = fixedBody;
+        prismaticJointDef.bodyB = movingBody;
+        prismaticJointDef.enableLimit = true;
+        prismaticJointDef.lowerTranslation = 1;
+        prismaticJointDef.upperTranslation = 1;
+        prismaticJointDef.localAnchorB.set(0, fixedBodySize.y);
+        prismaticJointDef.collideConnected = false;
 
-        BodyDef bodyDef = objectData.getBodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.fixedRotation = true;
-        Body body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef);
-        body.getFixtureList().get(0).setUserData(GlobalConstants.Categories.PLAYER);
+        Joint joint = world.createJoint(prismaticJointDef);
+        puzzleGroupObject.getJoints().add(joint);
 
-        createEntityForPlayerObject(body);
-        bodies.add(body);
-
-        fixtureDef.shape = null;
+        createEntityForPrismaticObject(fixedBody, joint);
+        createEntityForPrismaticObject(movingBody, joint);
     }
+
+    private void createEntityForPrismaticObject(Body body, Joint joint) { // TODO
+        Entity entity = engine.createEntity();
+
+        BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
+        bodyComponent.body = body;
+        bodyComponent.body.setUserData(entity);
+        entity.add(bodyComponent);
+
+        EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
+        entityTypeComponent.type = ((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getEntityType();
+        entity.add(entityTypeComponent);
+
+        JointComponent jointComponent = engine.createComponent(JointComponent.class);
+        jointComponent.joint = joint;
+        entity.add(jointComponent);
+
+        engine.addEntity(entity);
+    }
+
 
     private void createEntityForPlayerObject(Body body) { // TODO
         player = engine.createEntity();
-
-        EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
-        entityTypeComponent.type = ECSConstants.EntityType.PLAYER;
-        player.add(entityTypeComponent);
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
         bodyComponent.body = body;
         bodyComponent.body.setUserData(player);
         player.add(bodyComponent);
+
+        EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
+        entityTypeComponent.type = ((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getEntityType();
+        player.add(entityTypeComponent);
 
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         transformComponent.position.set(body.getPosition());
@@ -242,8 +475,8 @@ public class MapHandler {
         CollisionComponent collisionComponent = engine.createComponent(CollisionComponent.class);
         player.add(collisionComponent);
 
-        AbilityComponent abilityComponent = engine.createComponent(AbilityComponent.class);
-        player.add(abilityComponent);
+        PlayerAbilityComponent playerAbilityComponent = engine.createComponent(PlayerAbilityComponent.class);
+        player.add(playerAbilityComponent);
 
         RenderComponent renderComponent = engine.createComponent(RenderComponent.class);
         player.add(renderComponent);
@@ -260,45 +493,6 @@ public class MapHandler {
         setPlayerComponentValues();
 
         engine.addEntity(player);
-    }
-
-    private MapObjectData getRectangle(RectangleMapObject object) {
-        Rectangle rectangle = object.getRectangle();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(
-                rectangle.width * 0.5f * UNIT_SCALE,
-                rectangle.height * 0.5f * UNIT_SCALE);
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(
-                (rectangle.x + rectangle.width * 0.5f) * UNIT_SCALE,
-                (rectangle.y + rectangle.height * 0.5f) * UNIT_SCALE);
-        return new MapObjectData(object, shape, bodyDef);
-    }
-
-    private MapObjectData getPolygon(PolygonMapObject object) {
-        PolygonShape shape = new PolygonShape();
-        float[] vertices = object.getPolygon().getTransformedVertices();
-        float[] worldVertices = new float[vertices.length];
-        for (int i = 0; i < vertices.length; ++i) {
-            worldVertices[i] = vertices[i] * UNIT_SCALE;
-        }
-        shape.set(worldVertices);
-        BodyDef bodyDef = new BodyDef();
-        return new MapObjectData(object, shape, bodyDef);
-    }
-
-    private MapObjectData getPolyline(PolylineMapObject object) {
-        float[] vertices = object.getPolyline().getTransformedVertices();
-        Vector2[] worldVertices = new Vector2[vertices.length / 2];
-        for (int i = 0; i < vertices.length / 2; ++i) {
-            worldVertices[i] = new Vector2(
-                    vertices[i * 2] * UNIT_SCALE,
-                    vertices[i * 2 + 1] * UNIT_SCALE);
-        }
-        ChainShape shape = new ChainShape();
-        shape.createChain(worldVertices);
-        BodyDef bodyDef = new BodyDef();
-        return new MapObjectData(object, shape, bodyDef);
     }
 
     public void setPlayerInfo(String playerGroupName) {
