@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
 import com.thewizardsjourney.game.controller.InputHandler;
-import com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent;
 import com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem;
 import com.thewizardsjourney.game.ecs.system.AnimationSystem;
 import com.thewizardsjourney.game.ecs.system.CameraSystem;

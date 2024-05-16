@@ -1,0 +1,5 @@
+{
+  "name": "Level1",
+  "interacted_objects": ["object1", "object2", "object3"],
+  "accessible": true
+}

@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -24,7 +25,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -36,7 +40,6 @@ import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.EntityTypeComponent;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
-import com.thewizardsjourney.game.ecs.component.JointComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerMovementComponent;
 import com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent;
@@ -44,6 +47,7 @@ import com.thewizardsjourney.game.ecs.component.RenderComponent;
 import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
 import com.thewizardsjourney.game.ecs.component.TransformComponent;
 import com.thewizardsjourney.game.helper.GameInfo;
+import com.thewizardsjourney.game.helper.JointInfo;
 import com.thewizardsjourney.game.helper.MapInfo;
 import com.thewizardsjourney.game.helper.EntityTypeInfo;
 import com.thewizardsjourney.game.helper.PlayerInfo;
@@ -89,6 +93,7 @@ public class MapHandler {
 
         if (!mapInfo.setMapInfo(gameInfo.getSelectedMapGroupName()) ||
             !playerInfo.setPlayerInfo(gameInfo.getSelectedPlayerGroupName())) {
+            System.out.println("TEST");
             // TODO сменить экран на меню, то есть выдать ошибку
         }
 
@@ -284,6 +289,12 @@ public class MapHandler {
             case "prismatic":
                 createPrismaticJoint(groupObject, objectsData);
                 break;
+            case "distance":
+                createDistanceJoint(groupObject, objectsData);
+                break;
+            case "rope":
+                createRopeJoint(groupObject, objectsData);
+                break;
             default:
                 System.err.println("Joint type " + jointType + " is not recognized.");
                 break;
@@ -314,7 +325,6 @@ public class MapHandler {
                 objectData.getObject().getName());
         body.getFixtureList().get(0).setUserData(entityTypeInfo);
 
-
         float[] vertices = objectData.getVerticesStaticObject();
         createEntityForPuzzleSensorObject(body, puzzleGroupObject, new Vector2(vertices[0], vertices[1]), new Vector2(vertices[4], vertices[5]));
 
@@ -335,7 +345,7 @@ public class MapHandler {
         entity.add(entityTypeComponent);
 
         PuzzleSensorComponent puzzleSensorComponent = engine.createComponent(PuzzleSensorComponent.class);
-        puzzleSensorComponent.targetObjectName = puzzleGroupObject.getSensor().getObject().getProperties().get("target_object", String.class);
+        puzzleSensorComponent.targetObjectName = puzzleGroupObject.getSensor().getObject().getProperties().get("target_object", "", String.class);
         puzzleSensorComponent.lowerBound = lowerBound;
         puzzleSensorComponent.upperBound = upperBound;
         puzzleSensorComponent.joints = puzzleGroupObject.getJoints();
@@ -349,6 +359,8 @@ public class MapHandler {
         Body movingBody = null;
         Vector2 fixedBodySize = null;
         Vector2 movingBodySize = null;
+        String direction = null;
+        String movementDirection = null;
         for (MapObjectData objectData : objectsData) {
             if (objectData.getObject().getName().equals("fixed")) {
                 Shape shape = objectData.getShapeOtherObject();
@@ -374,6 +386,9 @@ public class MapHandler {
                         ECSConstants.EntityType.PRISMATIC_FIXED,
                         objectData.getObject().getName());
                 fixedBody.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+                direction = objectData.getObject().getProperties().get("direction", "", String.class);
+                movementDirection = objectData.getObject().getProperties().get("movement_direction", "", String.class);
 
                 fixtureDef.shape = null;
                 shape.dispose();
@@ -407,30 +422,52 @@ public class MapHandler {
             }
         }
         if (fixedBody == null || movingBody == null ||
-            fixedBodySize == null || movingBodySize == null) {
-            System.out.println("NULLLL");
+            fixedBodySize == null || movingBodySize == null ||
+            direction == null) {
             return;
         }
         PrismaticJointDef prismaticJointDef = new PrismaticJointDef();
+
+        if (direction.equals("vertical")) {
+            prismaticJointDef.localAxisA.set(0, 1);
+            if (movementDirection.equals("up")) {
+                prismaticJointDef.motorSpeed = 5;
+            } else if (movementDirection.equals("down")) {
+                prismaticJointDef.motorSpeed = -5;
+            }
+            prismaticJointDef.lowerTranslation = -(fixedBodySize.y * 0.5f + movingBodySize.y * 0.5f);
+            prismaticJointDef.upperTranslation = 0;
+        } else if (direction.equals("horizontal")) {
+            prismaticJointDef.localAxisA.set(1, 0);
+            if (movementDirection.equals("right")) {
+                prismaticJointDef.motorSpeed = 5;
+            } else if (movementDirection.equals("left")) {
+                prismaticJointDef.motorSpeed = -5;
+            }
+            prismaticJointDef.lowerTranslation = -(fixedBodySize.x * 0.5f + movingBodySize.x * 0.5f);
+            prismaticJointDef.upperTranslation = 0;
+        } else {
+            return;
+        }
+
         prismaticJointDef.enableMotor = true;
-        prismaticJointDef.motorSpeed = 10;
         prismaticJointDef.maxMotorForce = 500;
         prismaticJointDef.bodyA = fixedBody;
         prismaticJointDef.bodyB = movingBody;
         prismaticJointDef.enableLimit = true;
-        prismaticJointDef.lowerTranslation = 1;
-        prismaticJointDef.upperTranslation = 1;
-        prismaticJointDef.localAnchorB.set(0, fixedBodySize.y);
         prismaticJointDef.collideConnected = false;
 
         Joint joint = world.createJoint(prismaticJointDef);
-        puzzleGroupObject.getJoints().add(joint);
+        JointInfo jointInfo = new JointInfo();
+        jointInfo.setJoint(joint);
+        jointInfo.setMotorSpeed(prismaticJointDef.motorSpeed);
+        puzzleGroupObject.getJoints().add(jointInfo);
 
-        createEntityForPrismaticObject(fixedBody, joint);
-        createEntityForPrismaticObject(movingBody, joint);
+        createEntityForJointObjects(fixedBody, joint);
+        createEntityForJointObjects(movingBody, joint);
     }
 
-    private void createEntityForPrismaticObject(Body body, Joint joint) { // TODO
+    private void createEntityForJointObjects(Body body, Joint joint) { // TODO
         Entity entity = engine.createEntity();
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
@@ -442,13 +479,149 @@ public class MapHandler {
         entityTypeComponent.type = ((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getEntityType();
         entity.add(entityTypeComponent);
 
-        JointComponent jointComponent = engine.createComponent(JointComponent.class);
-        jointComponent.joint = joint;
-        entity.add(jointComponent);
-
         engine.addEntity(entity);
     }
 
+    private void createDistanceJoint(PuzzleGroupObject puzzleGroupObject, Array<MapObjectData> objectsData) {
+        Body fixedBody = null;
+        Body movingBody = null;
+
+        for (MapObjectData objectData : objectsData) {
+            if (objectData.getObject().getName().equals("fixed")) {
+                Shape shape = objectData.getShapeOtherObject();
+                if (shape == null) {
+                    return;
+                }
+                FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+                if (fixtureDef == null) {
+                    logger.error("material does not exist, using default");
+                    fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+                }
+                fixtureDef.shape = shape;
+
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.position.set(objectData.getCenterPositionOtherObject());
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                bodyDef.fixedRotation = true;
+
+                fixedBody = world.createBody(bodyDef);
+                fixedBody.createFixture(fixtureDef);
+                EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                        ECSConstants.EntityType.DISTANCE_FIXED,
+                        objectData.getObject().getName());
+                fixedBody.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+                fixtureDef.shape = null;
+                shape.dispose();
+            } else if (objectData.getObject().getName().equals("moving")) {
+                Shape shape = objectData.getShapeOtherObject();
+                if (shape == null) {
+                    return;
+                }
+                FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+                if (fixtureDef == null) {
+                    logger.error("material does not exist, using default");
+                    fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+                }
+                fixtureDef.shape = shape;
+
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.position.set(objectData.getCenterPositionOtherObject());
+                bodyDef.type = BodyDef.BodyType.DynamicBody;
+                bodyDef.fixedRotation = true;
+
+                movingBody = world.createBody(bodyDef);
+                movingBody.createFixture(fixtureDef);
+                EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                        ECSConstants.EntityType.DISTANCE_MOVING,
+                        objectData.getObject().getName());
+                movingBody.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+                fixtureDef.shape = null;
+                shape.dispose();
+            }
+        }
+
+        if (fixedBody == null || movingBody == null) {
+            return;
+        }
+        DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.bodyA = fixedBody;
+        distanceJointDef.bodyB = movingBody;
+        distanceJointDef.length = movingBody.getPosition().dst(fixedBody.getPosition());
+        distanceJointDef.dampingRatio = 0.5f;
+        distanceJointDef.frequencyHz = 1.5f;
+        Joint joint = world.createJoint(distanceJointDef);
+        JointInfo jointInfo = new JointInfo();
+        jointInfo.setJoint(joint);
+        puzzleGroupObject.getJoints().add(jointInfo);
+        createEntityForJointObjects(fixedBody, joint);
+        createEntityForJointObjects(movingBody, joint);
+    }
+
+    private void createRopeJoint(PuzzleGroupObject puzzleGroupObject, Array<MapObjectData> objectsData) {
+        if (objectsData.size < 2) {
+            System.out.println("At least two objects are required to create a rope joint.");
+            return;
+        }
+
+        Array<Body> bodies = new Array<>();
+
+        for (MapObjectData objectData : objectsData) {
+            Shape shape = objectData.getShapeOtherObject();
+            if (shape == null) {
+                return;
+            }
+            FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+            if (fixtureDef == null) {
+                logger.error("material does not exist, using default");
+                fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+            }
+            fixtureDef.shape = shape;
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(objectData.getCenterPositionOtherObject());
+            bodyDef.type = objectData.getObject().getName().equals("fixed") ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody;
+            System.out.println("body name: " + objectData.getObject().getName());
+            System.out.println("body type: " + bodyDef.type);
+            bodyDef.fixedRotation = true;
+
+            Body body = world.createBody(bodyDef);
+            body.createFixture(fixtureDef);
+            EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                    ECSConstants.EntityType.ROPE,
+                    objectData.getObject().getName());
+            body.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+            bodies.add(body);
+
+            fixtureDef.shape = null;
+            shape.dispose();
+        }
+
+        for (int i = 0; i < bodies.size - 1; i++) {
+            Body bodyA = bodies.get(i);
+            Body bodyB = bodies.get(i + 1);
+
+            RopeJointDef ropeJointDef = new RopeJointDef();
+            ropeJointDef.bodyA = bodyA;
+            ropeJointDef.bodyB = bodyB;
+            ropeJointDef.localAnchorA.set(0, 0);
+            ropeJointDef.localAnchorB.set(0, 0);
+
+            Vector2 anchorA = bodyA.getWorldCenter();
+            Vector2 anchorB = bodyB.getWorldCenter();
+            ropeJointDef.maxLength = anchorA.dst(anchorB);
+
+            Joint joint = world.createJoint(ropeJointDef);
+            JointInfo jointInfo = new JointInfo();
+            jointInfo.setJoint(joint);
+            puzzleGroupObject.getJoints().add(jointInfo);
+
+            createEntityForJointObjects(bodyA, joint);
+            createEntityForJointObjects(bodyB, joint);
+        }
+    }
 
     private void createEntityForPlayerObject(Body body) { // TODO
         player = engine.createEntity();

@@ -3,11 +3,12 @@ package com.thewizardsjourney.game.map;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.thewizardsjourney.game.helper.JointInfo;
 
 public class PuzzleGroupObject {
     private MapObjectData sensor;
     private ObjectMap<String, Array<MapObjectData>> mapObjectsForJoints;
-    private Array<Joint> joints;
+    private Array<JointInfo> joints;
 
     public PuzzleGroupObject(MapObjectData sensor, ObjectMap<String, Array<MapObjectData>> mapObjectsForJoints) {
         this.sensor = sensor;
@@ -31,11 +32,11 @@ public class PuzzleGroupObject {
         this.mapObjectsForJoints = mapObjectsForJoints;
     }
 
-    public Array<Joint> getJoints() {
+    public Array<JointInfo> getJoints() {
         return joints;
     }
 
-    public void setJoints(Array<Joint> joints) {
+    public void setJoints(Array<JointInfo> joints) {
         this.joints = joints;
     }
 }

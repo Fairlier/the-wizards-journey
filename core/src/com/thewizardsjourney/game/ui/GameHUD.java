@@ -42,19 +42,19 @@ public class GameHUD extends Table {
     private void setupUI() {
         add().expand().align(Align.topLeft).pad(10);
         add().expand().fill();
-        add(pauseButton).expand().align(Align.topRight).pad(10);
+        add(pauseButton).size(150, 150).expand().align(Align.topRight).pad(20);
         row();
-        add(touchpad).size(150, 150).bottom().left().pad(10);
+        add(touchpad).size(175, 175).bottom().left().pad(100);
         add(castButton).expand().bottom().pad(10);
         Table bottomRight = new Table();
-        bottomRight.add(reactionButton).size(100, 50).padRight(10);
-        bottomRight.add(castButton).size(200, 50).padLeft(10);
+        bottomRight.add(reactionButton).size(75, 75);
+        bottomRight.add(castButton).size(150, 150).padLeft(10).padBottom(10).padRight(20);
         bottomRight.row();
-        bottomRight.add(switchButton).size(100, 50).padRight(10).padTop(10);
-        bottomRight.add(jumpButton).size(200, 50).padLeft(10).padTop(10);
-        add(bottomRight).bottom().right().pad(10);
+        bottomRight.add(switchButton).size(75, 75).padTop(10);
+        bottomRight.add(jumpButton).size(150, 150).padLeft(10).padRight(100).padTop(10);
+        add(bottomRight).bottom().right().padBottom(100);
 
-        //debug();
+//        debug();
 
         reactionButton.setVisible(false);
         castButton.setVisible(false);

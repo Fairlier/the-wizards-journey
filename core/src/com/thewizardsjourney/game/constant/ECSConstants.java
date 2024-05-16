@@ -29,6 +29,9 @@ public class ECSConstants {
         PUZZLE_SENSOR,
         PRISMATIC_FIXED,
         PRISMATIC_MOVING,
+        DISTANCE_FIXED,
+        DISTANCE_MOVING,
+        ROPE,
         NONE
     }
 }

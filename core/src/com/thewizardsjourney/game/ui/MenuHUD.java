@@ -13,7 +13,7 @@ public class MenuHUD extends Table {
     public MenuHUD(Skin skin) {
         super(skin);
 
-        achievementsButton = new TextButton("Achievements", skin);
+        achievementsButton = new TextButton("ACHIEVEMENTS", skin);
         settingsButton = new TextButton("Settings", skin);
         shopButton = new TextButton("SHOP", skin);
         playButton = new TextButton("PLAY", skin);

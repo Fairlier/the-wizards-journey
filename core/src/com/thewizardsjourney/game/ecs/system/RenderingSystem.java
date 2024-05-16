@@ -52,12 +52,12 @@ public class RenderingSystem extends SortedIteratingSystem {
             MapLayer layer = layers.get(i);
             if (layer instanceof TiledMapTileLayer && layer.isVisible()) {
                 TiledMapTileLayer tiledLayer = (TiledMapTileLayer) layer; // TODO фор ич
-                if (tiledLayer.getName().startsWith("bgd")) {
+                if (tiledLayer.getName().startsWith("background")) {
                     mapBackgroundLayers.add(tiledLayer);
                 } else {
                     mapForegroundLayers.add(tiledLayer);
                 }
-                mapParallaxValues.add(tiledLayer.getProperties().get("ParallaxValue", 0.0f, Float.class));
+                mapParallaxValues.add(tiledLayer.getProperties().get("parallax_value", 0.0f, Float.class));
             }
         }
     }

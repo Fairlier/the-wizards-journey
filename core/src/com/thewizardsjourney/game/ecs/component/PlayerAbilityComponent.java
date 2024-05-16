@@ -6,4 +6,5 @@ public class PlayerAbilityComponent implements Component {
     public boolean isCasting;
     public boolean isInAbilityMode;
     public boolean isInAbilityModeChanged;
+
 }
