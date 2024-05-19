@@ -119,7 +119,7 @@ public class GameScreen extends ScreenAdapter { // TODO
 
         engine = new Engine();
 
-        Skin skin = new Skin(Gdx.files.internal("data/scene2D/glassy-ui.json"));
+        Skin skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
         gameHUD = new GameHUD(skin);
         stage.addActor(gameHUD);
         uiListeners();

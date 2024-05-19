@@ -84,13 +84,17 @@ public class MenuScreen extends ScreenAdapter {
 
         batch = new SpriteBatch();
         stage = new Stage(new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT), batch);
-        skin = new Skin(Gdx.files.internal("data/scene2D/glassy-ui.json"));
-        menuHUD = new MenuHUD(skin);
+        skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
+        menuHUD = new MenuHUD(skin, main.getGameInfo());
         Gdx.input.setInputProcessor(stage);
 
         stage.addActor(menuHUD);
 
-        menuHUD.getPlayButton().addListener(new ChangeListener() {
+        buttonProcessing(menuHUD);
+    }
+
+    private void buttonProcessing(MenuHUD menuHUD) {
+        menuHUD.getSelectLevelWidget().getPlayButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 main.setIntermediateScreen(main.getMenuScreen().getClass(), main.getGameScreen().getClass());

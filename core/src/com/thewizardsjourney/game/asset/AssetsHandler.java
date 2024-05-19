@@ -144,6 +144,7 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
                 }
             }
         }
+        groupNames.sort();
         return groupNames;
     }
 
@@ -187,6 +188,7 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
                 }
             }
         }
+        groupNames.sort();
         return groupNames;
     }
 

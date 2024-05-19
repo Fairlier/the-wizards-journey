@@ -7,6 +7,7 @@ public class GameInfo {
     private Array<String> playerGroupNames;
     private String selectedMapGroupName = "maps_map_4";
     private String selectedPlayerGroupName = "players_player_0";
+    private final String menuMapGroupName = "maps_menu_map";
 
     public GameInfo() {}
 
@@ -40,5 +41,16 @@ public class GameInfo {
 
     public void setSelectedPlayerGroupName(String selectedPlayerGroupName) {
         this.selectedPlayerGroupName = selectedPlayerGroupName;
+    }
+
+    public String getMenuMapGroupName() {
+        return menuMapGroupName;
+    }
+
+    public Array<String> getMapGroupNamesForLevelSelection() {
+        Array<String> sortedMapGroupNames = new Array<>(mapGroupNames);
+        sortedMapGroupNames.removeValue(menuMapGroupName, false);
+        sortedMapGroupNames.sort();
+        return sortedMapGroupNames;
     }
 }

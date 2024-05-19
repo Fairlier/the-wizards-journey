@@ -3,6 +3,8 @@ package com.thewizardsjourney.game.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -12,27 +14,24 @@ import com.badlogic.gdx.utils.Align;
 
 public class GameHUD extends Table {
     private final Touchpad touchpad;
-    private final TextButton pauseButton;
-    private final TextButton jumpButton;
-    private final TextButton castButton;
-    private final TextButton reactionButton;
-    private final TextButton switchButton;
+    private final Button pauseButton;
+    private final Button jumpButton;
+    private final Button castButton;
+    private final Button reactionButton;
+    private final Button switchButton;
+    private final Image a;
 
 
     public GameHUD(Skin skin) {
         super(skin);
+        pauseButton = new Button(skin, "game-pause-button");
+        jumpButton = new Button(skin, "game-jump-button");
+        castButton = new Button(skin, "game-cast-button");
+        reactionButton = new Button(skin, "game-info-button");
+        switchButton = new Button(skin, "game-button");
+        touchpad = new Touchpad(5.0f, skin, "game-touchpad");
 
-        Texture touchpad_background = new Texture(Gdx.files.internal("data/scene2D/touchpad_background.png"));
-        Texture touchpad_knob = new Texture(Gdx.files.internal("data/scene2D/touchpad_knob.png"));
-        Touchpad.TouchpadStyle ts = new Touchpad.TouchpadStyle();
-        ts.background = new TextureRegionDrawable(new TextureRegion(touchpad_background));
-        ts.knob = new TextureRegionDrawable(new TextureRegion(touchpad_knob));
-        touchpad = new Touchpad(5.0f, ts);
-        pauseButton = new TextButton("Pause", skin);
-        jumpButton = new TextButton("Jump", skin);
-        castButton = new TextButton("Ability", skin);
-        switchButton = new TextButton("Change", skin);
-        reactionButton = new TextButton("Reaction", skin);
+        a = new Image(skin, "game-health-bar");
 
 
         setupUI();
@@ -50,8 +49,8 @@ public class GameHUD extends Table {
         bottomRight.add(reactionButton).size(75, 75);
         bottomRight.add(castButton).size(150, 150).padLeft(10).padBottom(10).padRight(20);
         bottomRight.row();
-        bottomRight.add(switchButton).size(75, 75).padTop(10);
-        bottomRight.add(jumpButton).size(150, 150).padLeft(10).padRight(100).padTop(10);
+        bottomRight.add(switchButton).padTop(10);
+        bottomRight.add(jumpButton).padLeft(10).padRight(100).padTop(10);
         add(bottomRight).bottom().right().padBottom(100);
 
 //        debug();
@@ -64,23 +63,23 @@ public class GameHUD extends Table {
         return touchpad;
     }
 
-    public TextButton getPauseButton() {
+    public Button getPauseButton() {
         return pauseButton;
     }
 
-    public TextButton getJumpButton() {
+    public Button getJumpButton() {
         return jumpButton;
     }
 
-    public TextButton getCastButton() {
+    public Button getCastButton() {
         return castButton;
     }
 
-    public TextButton getReactionButton() {
+    public Button getReactionButton() {
         return reactionButton;
     }
 
-    public TextButton getSwitchButton() {
+    public Button getSwitchButton() {
         return switchButton;
     }
 }

@@ -1,0 +1,618 @@
+
+ui-skin.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+button
+  rotate: false
+  xy: 714, 1863
+  size: 297, 106
+  split: 49, 48, 52, 51
+  pad: 28, 27, 7, 7
+  orig: 297, 106
+  offset: 0, 0
+  index: -1
+button-down
+  rotate: false
+  xy: 1, 1043
+  size: 297, 106
+  split: 49, 48, 52, 51
+  pad: 28, 27, 7, 7
+  orig: 297, 106
+  offset: 0, 0
+  index: -1
+button-small
+  rotate: false
+  xy: 1044, 1993
+  size: 130, 46
+  split: 21, 21, 22, 20
+  orig: 130, 46
+  offset: 0, 0
+  index: -1
+button-small-down
+  rotate: false
+  xy: 714, 1815
+  size: 130, 46
+  split: 21, 21, 22, 20
+  orig: 130, 46
+  offset: 0, 0
+  index: -1
+checkbox
+  rotate: false
+  xy: 1013, 1949
+  size: 25, 20
+  orig: 25, 20
+  offset: 0, 0
+  index: -1
+checkbox-off
+  rotate: false
+  xy: 1044, 1971
+  size: 25, 20
+  orig: 25, 20
+  offset: 0, 0
+  index: -1
+font-big-export
+  rotate: false
+  xy: 371, 1689
+  size: 341, 350
+  orig: 341, 350
+  offset: 0, 0
+  index: -1
+font-export
+  rotate: false
+  xy: 1, 924
+  size: 116, 117
+  orig: 116, 117
+  offset: 0, 0
+  index: -1
+horizontal-scroll-bar
+  rotate: false
+  xy: 846, 1840
+  size: 52, 21
+  split: 14, 14, 9, 9
+  pad: 8, 8, 5, 5
+  orig: 52, 21
+  offset: 0, 0
+  index: -1
+horizontal-scroll-knob
+  rotate: false
+  xy: 1, 35
+  size: 52, 21
+  split: 14, 14, 10, 9
+  pad: 0, 0, 0, 0
+  orig: 52, 21
+  offset: 0, 0
+  index: -1
+horizontal-split-pane
+  rotate: false
+  xy: 412, 1388
+  size: 5, 5
+  split: 2, 2, 1, 1
+  pad: 0, 0, 0, 0
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+list
+  rotate: false
+  xy: 828, 1798
+  size: 16, 15
+  split: 4, 4, 4, 4
+  pad: 4, 4, 2, 2
+  orig: 16, 15
+  offset: 0, 0
+  index: -1
+minus
+  rotate: false
+  xy: 900, 1841
+  size: 25, 20
+  orig: 25, 20
+  offset: 0, 0
+  index: -1
+plus
+  rotate: false
+  xy: 55, 36
+  size: 25, 20
+  orig: 25, 20
+  offset: 0, 0
+  index: -1
+progress-bar
+  rotate: false
+  xy: 300, 1085
+  size: 22, 32
+  split: 7, 6, 6, 6
+  pad: 3, 3, 3, 3
+  orig: 22, 32
+  offset: 0, 0
+  index: -1
+progress-bar-knob
+  rotate: false
+  xy: 35, 11
+  size: 1, 22
+  split: 0, 0, 0, 21
+  pad: 0, 0, 0, 0
+  orig: 1, 22
+  offset: 0, 0
+  index: -1
+progress-bar-knob-vertical
+  rotate: false
+  xy: 229, 52
+  size: 22, 1
+  split: 0, 21, 0, 0
+  pad: 0, 0, 0, 0
+  orig: 22, 1
+  offset: 0, 0
+  index: -1
+progress-bar-vertical
+  rotate: false
+  xy: 846, 1816
+  size: 32, 22
+  split: 6, 6, 7, 6
+  pad: 3, 3, 3, 3
+  orig: 32, 22
+  offset: 0, 0
+  index: -1
+radio-button
+  rotate: false
+  xy: 1681, 2019
+  size: 25, 20
+  orig: 25, 20
+  offset: 0, 0
+  index: -1
+radio-button-off
+  rotate: false
+  xy: 363, 1339
+  size: 25, 20
+  orig: 25, 20
+  offset: 0, 0
+  index: -1
+select-box
+  rotate: false
+  xy: 1632, 2007
+  size: 47, 32
+  split: 4, 35, 28, 3
+  pad: 7, 36, 3, 3
+  orig: 47, 32
+  offset: 0, 0
+  index: -1
+select-box-down
+  rotate: false
+  xy: 363, 1361
+  size: 47, 32
+  split: 4, 35, 28, 3
+  pad: 3, 36, 3, 3
+  orig: 47, 32
+  offset: 0, 0
+  index: -1
+slider
+  rotate: false
+  xy: 1632, 1939
+  size: 25, 32
+  split: 5, 5, 15, 14
+  pad: 0, 0, 0, 0
+  orig: 25, 32
+  offset: 0, 0
+  index: -1
+slider-knob
+  rotate: false
+  xy: 1, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+slider-vertical
+  rotate: false
+  xy: 331, 1224
+  size: 25, 32
+  split: 11, 11, 9, 7
+  pad: 0, 0, 1, 0
+  orig: 25, 32
+  offset: 0, 0
+  index: -1
+textfield
+  rotate: false
+  xy: 300, 1043
+  size: 22, 40
+  split: 6, 6, 5, 5
+  pad: 8, 8, 7, 7
+  orig: 22, 40
+  offset: 0, 0
+  index: -1
+vertical-scroll-bar
+  rotate: false
+  xy: 1013, 1895
+  size: 21, 52
+  split: 9, 9, 14, 14
+  pad: 5, 5, 8, 8
+  orig: 21, 52
+  offset: 0, 0
+  index: -1
+vertical-scroll-knob
+  rotate: false
+  xy: 331, 1170
+  size: 21, 52
+  split: 10, 9, 14, 14
+  pad: 0, 0, 0, 0
+  orig: 21, 52
+  offset: 0, 0
+  index: -1
+vertical-split-pane
+  rotate: false
+  xy: 880, 1833
+  size: 5, 5
+  split: 1, 1, 2, 2
+  pad: 0, 0, 0, 0
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 115, 921
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+window
+  rotate: false
+  xy: 363, 1395
+  size: 63, 272
+  split: 10, 10, 30, 0
+  pad: 5, 5, 32, 24
+  orig: 63, 272
+  offset: 0, 0
+  index: -1
+game-achievements-button-down
+  rotate: false
+  xy: 1, 680
+  size: 112, 120
+  split: 13, 9, 13, 21
+  pad: 28, 28, 16, 21
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-achievements-button-up
+  rotate: false
+  xy: 1, 554
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 28, 28, 16, 25
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-button-down
+  rotate: false
+  xy: 1, 802
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 14, 14, 14, 22
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-button-small-down
+  rotate: false
+  xy: 300, 1119
+  size: 28, 30
+  split: 4, 4, 4, 6
+  pad: 5, 5, 5, 7
+  orig: 28, 30
+  offset: 0, 0
+  index: -1
+game-button-small-up
+  rotate: false
+  xy: 331, 1258
+  size: 28, 31
+  split: 4, 4, 4, 7
+  pad: 5, 5, 5, 8
+  orig: 28, 31
+  offset: 0, 0
+  index: -1
+game-button-up
+  rotate: false
+  xy: 714, 1689
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 14, 14, 14, 26
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-cast-button-down
+  rotate: false
+  xy: 1, 306
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 24, 24, 20, 24
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-cast-button-up
+  rotate: false
+  xy: 1, 428
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 24, 24, 20, 28
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-close-button-down
+  rotate: false
+  xy: 1, 58
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 24, 28, 20, 24
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-close-button-up
+  rotate: false
+  xy: 1, 180
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 24, 28, 20, 28
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-energy-bar
+  rotate: false
+  xy: 714, 1971
+  size: 328, 68
+  split: 1, 1, 1, 1
+  orig: 328, 68
+  offset: 0, 0
+  index: -1
+game-health-bar
+  rotate: false
+  xy: 1, 1151
+  size: 328, 68
+  split: 1, 1, 1, 1
+  orig: 328, 68
+  offset: 0, 0
+  index: -1
+game-home-button-down
+  rotate: false
+  xy: 119, 921
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 28, 28, 24, 28
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-home-button-up
+  rotate: false
+  xy: 115, 795
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 28, 28, 24, 32
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-info-button-down
+  rotate: false
+  xy: 115, 547
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 20, 24, 16, 21
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-info-button-up
+  rotate: false
+  xy: 115, 669
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 20, 24, 16, 24
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-jump-button-down
+  rotate: false
+  xy: 115, 299
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 20, 20, 16, 28
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-jump-button-up
+  rotate: false
+  xy: 115, 421
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 20, 19, 16, 32
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-next-button-down
+  rotate: false
+  xy: 115, 177
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 28, 12, 20, 24
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-next-button-up
+  rotate: false
+  xy: 115, 51
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 28, 12, 20, 28
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-pause-button-down
+  rotate: false
+  xy: 233, 921
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 32, 32, 20, 28
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-pause-button-up
+  rotate: false
+  xy: 1518, 1915
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 32, 32, 20, 32
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-play-button-down
+  rotate: false
+  xy: 229, 673
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 20, 24, 28, 32
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-play-button-up
+  rotate: false
+  xy: 229, 795
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 20, 24, 28, 36
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-player-bar
+  rotate: false
+  xy: 1, 1669
+  size: 368, 240
+  split: 20, 20, 36, 32
+  pad: 21, 21, 37, 33
+  orig: 368, 240
+  offset: 0, 0
+  index: -1
+game-prev-button-down
+  rotate: false
+  xy: 229, 551
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 12, 28, 20, 24
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-prev-button-up
+  rotate: false
+  xy: 229, 425
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 12, 28, 20, 28
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-progress-bar-background
+  rotate: false
+  xy: 1, 1911
+  size: 368, 128
+  split: 20, 20, 36, 32
+  pad: 20, 20, 44, 32
+  orig: 368, 128
+  offset: 0, 0
+  index: -1
+game-progress-bar-konb
+  rotate: false
+  xy: 1, 1221
+  size: 328, 68
+  split: 1, 1, 8, 1
+  pad: 1, 1, 16, 1
+  orig: 328, 68
+  offset: 0, 0
+  index: -1
+game-resume-button-down
+  rotate: false
+  xy: 229, 303
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 16, 12, 12, 20
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-resume-button-up
+  rotate: false
+  xy: 229, 177
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 16, 12, 12, 24
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-scroll-background
+  rotate: false
+  xy: 343, 735
+  size: 12, 184
+  split: 1, 1, 1, 1
+  orig: 12, 184
+  offset: 0, 0
+  index: -1
+game-scroll-knob-1
+  rotate: false
+  xy: 1632, 1973
+  size: 32, 32
+  split: 1, 1, 1, 1
+  pad: 5, 5, 5, 5
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+game-scroll-knob-2
+  rotate: false
+  xy: 371, 1671
+  size: 16, 16
+  split: 1, 1, 1, 1
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+game-scroll-knob-3
+  rotate: false
+  xy: 846, 1806
+  size: 16, 8
+  split: 1, 1, 1, 1
+  orig: 16, 8
+  offset: 0, 0
+  index: -1
+game-settings-button-down
+  rotate: false
+  xy: 229, 55
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 16, 16, 16, 16
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-settings-button-up
+  rotate: false
+  xy: 1176, 1915
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 16, 16, 16, 20
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-shop-button-down
+  rotate: false
+  xy: 1290, 1919
+  size: 112, 120
+  split: 13, 13, 13, 21
+  pad: 32, 32, 12, 20
+  orig: 112, 120
+  offset: 0, 0
+  index: -1
+game-shop-button-up
+  rotate: false
+  xy: 1404, 1915
+  size: 112, 124
+  split: 13, 13, 13, 25
+  pad: 32, 32, 13, 24
+  orig: 112, 124
+  offset: 0, 0
+  index: -1
+game-window-background
+  rotate: false
+  xy: 1, 1291
+  size: 360, 376
+  split: 37, 37, 53, 53
+  pad: 38, 38, 54, 54
+  orig: 360, 376
+  offset: 0, 0
+  index: -1
