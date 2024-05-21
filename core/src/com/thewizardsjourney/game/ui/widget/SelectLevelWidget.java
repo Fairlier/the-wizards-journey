@@ -25,7 +25,6 @@ public class SelectLevelWidget extends Table {
     private final TextButton levelButton1;
     private final TextButton playButton;
     private final GameInfo gameInfo;
-
     private int currentPage = 0;
     private int totalPages = 0;
     private final Array<String> mapGroupNames;
@@ -82,7 +81,6 @@ public class SelectLevelWidget extends Table {
         playButton.setVisible(false);
 
         pack();
-        debug();
     }
 
     private void buttonProcessing() {

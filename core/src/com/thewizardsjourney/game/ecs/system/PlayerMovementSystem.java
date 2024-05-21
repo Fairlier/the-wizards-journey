@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.thewizardsjourney.game.constant.ECSConstants;
+import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent;
 import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
@@ -28,12 +29,15 @@ public class PlayerMovementSystem extends IteratingSystem {
             ComponentMapper.getFor(AnimationComponent.class);
     private final ComponentMapper<PlayerAbilityComponent> abilityComponentCM =
             ComponentMapper.getFor(PlayerAbilityComponent.class);
+    private final ComponentMapper<CollisionComponent> collisionComponentCM =
+            ComponentMapper.getFor(CollisionComponent.class);
 
     public PlayerMovementSystem(World world) {
         super(Family.all(
                 BodyComponent.class,
                 PlayerMovementComponent.class,
                 PlayerAbilityComponent.class,
+                CollisionComponent.class,
                 AnimationComponent.class
         ).get());
         this.world = world;
@@ -45,8 +49,10 @@ public class PlayerMovementSystem extends IteratingSystem {
         PlayerMovementComponent playerMovementComponent  = playerMovementComponentCM.get(entity);
         AnimationComponent animationComponent = animationComponentCM.get(entity);
         PlayerAbilityComponent playerAbilityComponent = abilityComponentCM.get(entity);
+        CollisionComponent collisionComponent = collisionComponentCM.get(entity);
         isColliding = false;
         collisionCheck(bodyComponent.body);
+        playerMovementComponent.isColliding = isColliding;
         ECSConstants.AnimationState previousState = animationComponent.state;
         if (!isColliding) {
             if (bodyComponent.body.getLinearVelocity().y <= 0) {
@@ -95,7 +101,14 @@ public class PlayerMovementSystem extends IteratingSystem {
     private final QueryCallback callback = new QueryCallback() {
         @Override
         public boolean reportFixture(Fixture fixture) {
-            if (((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.PLAYER) { // TODO
+            if (((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.PLAYER &&
+                    ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.SENSOR_SAVE_POINT &&
+                    ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.SENSOR_INFO &&
+                    ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.SENSOR_EXIT &&
+                    ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.SENSOR_HARM &&
+                    ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.SENSOR_PUZZLE &&
+                    ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.COIN
+            ) { // TODO
                 isColliding = true;
             }
             return true;

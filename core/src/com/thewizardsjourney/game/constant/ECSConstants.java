@@ -28,6 +28,8 @@ public class ECSConstants {
         DYNAMIC_OBJECT,
         SENSOR_SAVE_POINT,
         SENSOR_INFO,
+        SENSOR_EXIT,
+        SENSOR_HARM,
         COIN,
         SENSOR_PUZZLE,
         PRISMATIC,

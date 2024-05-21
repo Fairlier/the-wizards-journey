@@ -33,11 +33,13 @@ import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerMovementSystem;
+import com.thewizardsjourney.game.ecs.system.PlayerStatisticsSystem;
 import com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem;
 import com.thewizardsjourney.game.ecs.system.RenderingSystem;
-import com.thewizardsjourney.game.event.GameEventHandler;
+import com.thewizardsjourney.game.helper.GameplayInfo;
 import com.thewizardsjourney.game.map.MapHandler;
 import com.thewizardsjourney.game.ui.GameHUD;
+import com.thewizardsjourney.game.ui.widget.PlayerStatisticsWidget;
 
 public class GameScreen extends ScreenAdapter { // TODO
     private final TheWizardsJourney main;
@@ -50,7 +52,7 @@ public class GameScreen extends ScreenAdapter { // TODO
     private Stage stage;
     private GameHUD gameHUD;
     private InputMultiplexer inputMultiplexer;
-    private GameEventHandler gameEventHandler;
+    private GameplayInfo gameplayInfo;
 
     public GameScreen(TheWizardsJourney main) {
         this.main = main;
@@ -108,25 +110,17 @@ public class GameScreen extends ScreenAdapter { // TODO
         batch = new SpriteBatch();
         stage = new Stage(new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT), batch);
 
-        gameEventHandler = new GameEventHandler();
-
+        gameplayInfo = new GameplayInfo();
 
         inputMultiplexer = new InputMultiplexer();
         controller = new InputHandler();
         inputMultiplexer.addProcessor(stage);
         inputMultiplexer.addProcessor(controller);
-
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         engine = new Engine();
 
-        Skin skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
-        gameHUD = new GameHUD(skin);
-        stage.addActor(gameHUD);
-        uiListeners();
-
         mapHandler = new MapHandler(engine, this.main.getAssetHandler(), main.getGameInfo());
-
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(mapHandler.getWorld(), viewport);
         PhysicsSystem physicsSystem = new PhysicsSystem(mapHandler.getWorld());
         LightSystem lightSystem = new LightSystem(mapHandler.getRayHandler(), camera);
@@ -134,17 +128,23 @@ public class GameScreen extends ScreenAdapter { // TODO
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
         PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem();
         PlayerAbilitySystem playerAbilitySystem = new PlayerAbilitySystem(mapHandler.getWorld(), controller, viewport, main.getAssetHandler());
-
         CameraSystem cameraSystem = new CameraSystem(camera, mapHandler.getMap());
         cameraSystem.setTargetEntity(mapHandler.getPlayer());
-
         RenderingSystem renderingSystem = new RenderingSystem(batch, viewport, mapHandler.getMap());
-
         AnimationSystem animationSystem = new AnimationSystem();
-
         PuzzleSensorSystem puzzleSensorSystem = new PuzzleSensorSystem(mapHandler.getWorld());
-
         OutOfBoundsSystem outOfBoundsSystem = new OutOfBoundsSystem(mapHandler.getMap());
+        PlayerStatisticsSystem playerStatisticsSystem = new PlayerStatisticsSystem(gameplayInfo);
+
+
+        Skin skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
+        gameHUD = new GameHUD(skin, gameplayInfo);
+        gameplayInfo.getPlayerStatisticsWidget().setHealth(mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth(),
+                mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth());
+        gameplayInfo.getPlayerStatisticsWidget().setEnergy(mapHandler.getPlayerInfo().getPlayerSettingsData().getEnergy(),
+                mapHandler.getPlayerInfo().getPlayerSettingsData().getEnergy());
+        stage.addActor(gameHUD);
+        buttonProcessing();
 
         engine.addSystem(physicsSystem);
         engine.addSystem(lightSystem);
@@ -154,13 +154,14 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.addSystem(cameraSystem);
         engine.addSystem(animationSystem);
         engine.addSystem(renderingSystem);
-        engine.addSystem(physicsDebugSystem);
+//        engine.addSystem(physicsDebugSystem);
         engine.addSystem(playerAbilitySystem);
         engine.addSystem(puzzleSensorSystem);
         engine.addSystem(outOfBoundsSystem);
+        engine.addSystem(playerStatisticsSystem);
     }
 
-    private void uiListeners() {
+    private void buttonProcessing() {
         gameHUD.getTouchpad().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -176,12 +177,6 @@ public class GameScreen extends ScreenAdapter { // TODO
                     controller.setRight(false);
                     controller.setLeft(false);
                 }
-            }
-        });
-
-        gameHUD.getReactionButton().addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
             }
         });
 
@@ -226,6 +221,13 @@ public class GameScreen extends ScreenAdapter { // TODO
                     gameHUD.getJumpButton().setVisible(true);
                     gameHUD.getTouchpad().setVisible(true);
                 }
+            }
+        });
+
+        gameHUD.getPauseButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
             }
         });
     }

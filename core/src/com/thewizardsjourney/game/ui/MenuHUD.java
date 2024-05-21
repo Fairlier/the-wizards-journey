@@ -58,7 +58,6 @@ public class MenuHUD extends Table {
                 shopButton.setVisible(false);
                 playButton.setVisible(false);
                 selectLevelWidget.setVisible(true);
-                //main.setIntermediateScreen(main.getMenuScreen().getClass(), main.getGameScreen().getClass());
             }
         });
 

@@ -11,7 +11,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.thewizardsjourney.game.constant.ECSConstants;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.EntityTypeComponent;
+import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.SavePointComponent;
+import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
 
 public class OutOfBoundsSystem extends IteratingSystem {
     private final Rectangle boundaries;
@@ -47,9 +49,13 @@ public class OutOfBoundsSystem extends IteratingSystem {
 
         if (!boundaries.contains(bodyComponent.body.getTransform().getPosition())) {
             if (entityTypeComponent.type == ECSConstants.EntityType.PLAYER) {
-                bodyComponent.body.setTransform(savePointComponent.position, 0);
-                bodyComponent.body.setLinearVelocity(0, 0);
+                StatisticsComponent statisticsComponent = entity.getComponent(StatisticsComponent.class);
+                if (statisticsComponent != null) {
+                    statisticsComponent.health--;
+                }
             }
+            bodyComponent.body.setTransform(savePointComponent.position, 0);
+            bodyComponent.body.setLinearVelocity(0, 0);
         }
     }
 }

@@ -22,9 +22,19 @@ public class AssetConstants {
     public static class TiledMapDefinitions {
         public static final String LN_STATIC_OBJECTS = "static_objects";
         public static final String LN_OTHER_OBJECTS = "other_objects";
+        public static final String LN_PUZZLE_OBJECTS = "puzzle_objects";
         public static final String MP_MATERIAL = "material";
         public static final String MP_MATERIAL_DEFAULT = "default";
         public static final String OB_PLAYER = "player";
+        public static final String OB_BOX = "box";
+        public static final String OB_COIN = "coin";
+        public static final String OB_SENSOR_HARM = "sensor_harm";
+        public static final String OB_SENSOR_EXIT = "sensor_exit";
+        public static final String OB_SENSOR_INFO = "sensor_info";
+        public static final String OB_SENSOR_SAVE_POINT = "sensor_save_point";
+        public static final String PO_SENSOR_PUZZLE = "sensor_puzzle";
+        public static final String PO_FIXED = "fixed";
+        public static final String PO_MOVING = "moving";
     }
 
     public static class CustomAsset {

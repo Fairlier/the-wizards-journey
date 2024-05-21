@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.ecs.EntityComparator;
-import com.thewizardsjourney.game.ecs.component.RenderComponent;
+import com.thewizardsjourney.game.ecs.component.RenderingComponent;
 import com.thewizardsjourney.game.ecs.component.TransformComponent;
 
 public class RenderingSystem extends SortedIteratingSystem {
@@ -31,14 +31,15 @@ public class RenderingSystem extends SortedIteratingSystem {
     private final Array<TiledMapTileLayer> mapBackgroundLayers = new Array<>();
     private final Array<TiledMapTileLayer> mapForegroundLayers = new Array<>();
     private final FloatArray mapParallaxValues = new FloatArray();
-    private final ComponentMapper<RenderComponent> renderComponentCM =
-            ComponentMapper.getFor(RenderComponent.class);
+    private final ComponentMapper<RenderingComponent> renderComponentCM =
+            ComponentMapper.getFor(RenderingComponent.class);
     private final ComponentMapper<TransformComponent> transformComponentCM =
             ComponentMapper.getFor(TransformComponent.class);
 
+
     public RenderingSystem(SpriteBatch batch, Viewport viewport, TiledMap map) { // TODO
         super(Family.all(
-                RenderComponent.class,
+                RenderingComponent.class,
                 TransformComponent.class
         ).get(), new EntityComparator());
         this.batch = batch;
@@ -81,17 +82,17 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) { // TODO
-        RenderComponent renderComponent = renderComponentCM.get(entity);
+        RenderingComponent renderingComponent = renderComponentCM.get(entity);
         TransformComponent transformComponent = transformComponentCM.get(entity);
-        if (renderComponent.sprite.getTexture() == null) {
+        if (renderingComponent.sprite.getTexture() == null) {
             return;
         }
-        float width = renderComponent.sprite.getWidth();
-        float height = renderComponent.sprite.getHeight();
-        renderComponent.sprite.setPosition(transformComponent.position.x - width * 0.5f,
-                transformComponent.position.y - height * 0.25f);
+        float width = renderingComponent.sprite.getWidth();
+        float height = renderingComponent.sprite.getHeight();
+        renderingComponent.sprite.setPosition(transformComponent.position.x - width * 0.5f,
+                transformComponent.position.y - height * 0.5f);
         batch.begin();
-        renderComponent.sprite.draw(batch);
+        renderingComponent.sprite.draw(batch);
         batch.end();
     }
 

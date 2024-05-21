@@ -4,6 +4,11 @@
 			"name" : "ability",
 			"type" : "com.badlogic.gdx.graphics.g2d.ParticleEffect",
 			"path" : "data/particles/Particle Park Trail.p"
+		},
+		{
+			"name" : "game_objects",
+			"type" : "com.badlogic.gdx.graphics.g2d.TextureAtlas",
+			"path" : "data/box2D/graphic/game_objects.atlas"
 		}
 	]
 }

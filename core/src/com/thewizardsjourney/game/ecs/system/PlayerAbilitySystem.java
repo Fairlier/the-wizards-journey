@@ -1,6 +1,7 @@
 package com.thewizardsjourney.game.ecs.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -33,15 +34,17 @@ import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
 
 public class PlayerAbilitySystem extends IteratingSystem {
     private boolean isCasting;
-    private float time;
+    private boolean isEnergy;
     private MouseJointDef mouseJointDef;
     private MouseJoint mouseJoint;
     private boolean previousIsInAbilityMode;
-    private Vector2 touchPoint;
+    private final Vector2 touchPoint;
     private final World world;
     private final InputHandler controller;
     private final Viewport viewport;
     private final ShapeRenderer renderer;
+    private float energyRecoveryAccumulator = 0f;
+    private float energyExpenditureAccumulator = 0f;
     private final ComponentMapper<BodyComponent> bodyComponentCM
             = ComponentMapper.getFor(BodyComponent.class);
     private final ComponentMapper<PlayerAbilityComponent> abilityComponentCM
@@ -72,13 +75,39 @@ public class PlayerAbilitySystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) { // TODO
         PlayerAbilityComponent playerAbilityComponent = abilityComponentCM.get(entity);
+        StatisticsComponent statisticsComponent = statisticsComponentCM.get(entity);
         playerAbilityComponent.isInAbilityModeChanged = (playerAbilityComponent.isInAbilityMode != previousIsInAbilityMode);
         isCasting = playerAbilityComponent.isInAbilityMode && playerAbilityComponent.isCasting;
-        time = deltaTime;
+        if (isCasting && isEnergy) {
+            if (statisticsComponent.energy > 0) {
+                energyExpenditureAccumulator += deltaTime;
+                if (energyExpenditureAccumulator >= statisticsComponent.maxEnergy) {
+                    statisticsComponent.energy -= 1;
+                    energyExpenditureAccumulator -= statisticsComponent.maxEnergy;
+                }
+            }
+            if (statisticsComponent.energy <= 0) {
+                statisticsComponent.energy = 0;
+                energyExpenditureAccumulator = 0f;
+                isEnergy = false;
+            }
+        } else {
+            if (statisticsComponent.energy < statisticsComponent.maxEnergy) {
+                energyRecoveryAccumulator += deltaTime;
+                if (energyRecoveryAccumulator >= statisticsComponent.maxEnergy * 0.5f) {
+                    statisticsComponent.energy += 1;
+                    energyRecoveryAccumulator -= statisticsComponent.maxEnergy * 0.5f;
+                }
+            }
+            if (statisticsComponent.energy >= statisticsComponent.maxEnergy) {
+                statisticsComponent.energy = statisticsComponent.maxEnergy;
+                energyRecoveryAccumulator = 0f;
+                isEnergy = true;
+            }
+        }
         if (playerAbilityComponent.isInAbilityMode) {
             BodyComponent bodyComponent = bodyComponentCM.get(entity);
             FacingComponent facingComponent = facingComponentCM.get(entity);
-            StatisticsComponent statisticsComponent = statisticsComponentCM.get(entity);
             renderer.setProjectionMatrix(viewport.getCamera().combined);
             Shape shape = bodyComponent.body.getFixtureList().get(0).getShape();
             if (shape instanceof PolygonShape) {
@@ -119,7 +148,6 @@ public class PlayerAbilitySystem extends IteratingSystem {
                     }
                 }
                 drawTouchPoint();
-                drawLineToTouchPoint(bodyComponent.body.getTransform().getPosition());
                 world.rayCast(callback, bodyComponent.body.getTransform().getPosition(), touchPoint);
                 if (mouseJoint != null) {
                     mouseJoint.setTarget(touchPoint);
@@ -133,10 +161,9 @@ public class PlayerAbilitySystem extends IteratingSystem {
         @Override
         public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
             Shape shape = fixture.getShape();
-            if (isCasting) {
+            if (isCasting && isEnergy) {
                 if (mouseJoint == null) {
-                    Body body = fixture.getBody();
-                    mouseJointDef.bodyB = body;
+                    mouseJointDef.bodyB = fixture.getBody();
                     mouseJointDef.collideConnected = true;
                     mouseJointDef.maxForce = 500.0f;
                     mouseJointDef.target.set(touchPoint);
@@ -148,56 +175,7 @@ public class PlayerAbilitySystem extends IteratingSystem {
                     mouseJoint = null;
                 }
             }
-            renderer.begin(ShapeRenderer.ShapeType.Line);
-            renderer.setColor(Color.BLACK);
-            switch (shape.getType()) {
-                case Circle:
-                    CircleShape circleShape = (CircleShape) shape;
-                    Vector2 center = fixture.getBody().getWorldPoint(circleShape.getPosition());
-                    float radius = circleShape.getRadius();
-                    renderer.circle(center.x, center.y, radius);
-                    break;
-                case Edge:
-                    EdgeShape edgeShape = (EdgeShape) shape;
-                    Vector2 vertex1 = new Vector2();
-                    Vector2 vertex2 = new Vector2();
-                    edgeShape.getVertex1(vertex1);
-                    edgeShape.getVertex2(vertex2);
-                    renderer.line(vertex1, vertex2);
-                    break;
-                case Polygon:
-                    PolygonShape polygonShape = (PolygonShape) shape;
-                    int vertexCount = polygonShape.getVertexCount();
-                    float[] verticesArray = new float[vertexCount * 2];
-                    for (int i = 0; i < vertexCount; i++) {
-                        Vector2 vertex = new Vector2();
-                        polygonShape.getVertex(i, vertex);
-                        verticesArray[i * 2] = vertex.x;
-                        verticesArray[i * 2 + 1] = vertex.y;
-                    }
-                    renderer.polygon(verticesArray);
-                    break;
-                case Chain:
-                    ChainShape chainShape = (ChainShape) shape;
-                    int count = chainShape.getVertexCount();
-                    Vector2 prevVertex = new Vector2();
-                    Vector2 curVertex = new Vector2();
-                    for (int i = 0; i < count; i++) {
-                        chainShape.getVertex(i, curVertex);
-                        if (i > 0) {
-                            renderer.line(prevVertex, curVertex);
-                        }
-                        prevVertex.set(curVertex);
-                    }
-                    if (chainShape.isLooped()) {
-                        chainShape.getVertex(0, curVertex);
-                        renderer.line(prevVertex, curVertex);
-                    }
-                    break;
-                default:
-                    break;
-            }
-            renderer.end();
+            drawShapeOutline(fixture, shape);
             return 0;
         }
     };
@@ -209,10 +187,62 @@ public class PlayerAbilitySystem extends IteratingSystem {
         renderer.end();
     }
 
-    private void drawLineToTouchPoint(Vector2 position) {
+    private void drawShapeOutline(Fixture fixture, Shape shape) {
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.WHITE);
-        renderer.line(position.x, position.y, touchPoint.x, touchPoint.y);
+        renderer.setColor(Color.RED);
+        switch (shape.getType()) {
+            case Circle:
+                CircleShape circleShape = (CircleShape) shape;
+                Vector2 center = fixture.getBody().getWorldPoint(circleShape.getPosition());
+                float radius = circleShape.getRadius();
+                renderer.circle(center.x, center.y, radius);
+                break;
+            case Edge:
+                EdgeShape edgeShape = (EdgeShape) shape;
+                Vector2 vertex1 = new Vector2();
+                Vector2 vertex2 = new Vector2();
+                edgeShape.getVertex1(vertex1);
+                edgeShape.getVertex2(vertex2);
+                renderer.line(vertex1, vertex2);
+                break;
+            case Polygon:
+                PolygonShape polygonShape = (PolygonShape) shape;
+                int vertexCount = polygonShape.getVertexCount();
+                float[] verticesArray = new float[vertexCount * 2];
+                for (int i = 0; i < vertexCount; i++) {
+                    Vector2 vertex = new Vector2();
+                    polygonShape.getVertex(i, vertex);
+                    verticesArray[i * 2] = vertex.x;
+                    verticesArray[i * 2 + 1] = vertex.y;
+                }
+                renderer.polygon(verticesArray);
+                break;
+            case Chain:
+                ChainShape chainShape = (ChainShape) shape;
+                int count = chainShape.getVertexCount();
+                Vector2 prevVertex = new Vector2();
+                Vector2 curVertex = new Vector2();
+                for (int i = 0; i < count; i++) {
+                    chainShape.getVertex(i, curVertex);
+                    if (i > 0) {
+                        renderer.line(prevVertex, curVertex);
+                    }
+                    prevVertex.set(curVertex);
+                }
+                if (chainShape.isLooped()) {
+                    chainShape.getVertex(0, curVertex);
+                    renderer.line(prevVertex, curVertex);
+                }
+                break;
+            default:
+                break;
+        }
         renderer.end();
+    }
+
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        renderer.dispose();
     }
 }

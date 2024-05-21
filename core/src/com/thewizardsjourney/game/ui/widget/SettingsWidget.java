@@ -38,9 +38,6 @@ public class SettingsWidget extends Table {
         soundLabel = new Label("Sound", skin, "big");
         languageLabel = new Label("Language", skin, "big");
 
-        settingsWindow.setMovable(false);
-
-
         setFillParent(true);
         setupUI();
     }
@@ -48,6 +45,7 @@ public class SettingsWidget extends Table {
     private void setupUI() {
         languageSelectBox.setItems("English", "Русский");
 
+        settingsWindow.setMovable(false);
         settingsWindow.add(musicLabel).pad(10);
         settingsWindow.add(musicSlider).width(200).pad(10).row();
         settingsWindow.add(soundLabel).pad(10);
@@ -68,7 +66,6 @@ public class SettingsWidget extends Table {
         add().expandX().fill();
 
         pack();
-        debug();
     }
 
     public Label getTitleLabel() {

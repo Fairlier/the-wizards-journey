@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlayerMovementComponent implements Component {
+    public boolean isColliding;
     public boolean isRunning;
     public boolean isJumping;
     public float runSpeed;

@@ -11,13 +11,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.thewizardsjourney.game.constant.ECSConstants;
 import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
-import com.thewizardsjourney.game.ecs.component.RenderComponent;
+import com.thewizardsjourney.game.ecs.component.RenderingComponent;
 
 public class AnimationSystem extends IteratingSystem {
     private final ComponentMapper<AnimationComponent> animationComponentCM =
             ComponentMapper.getFor(AnimationComponent.class);
-    private final ComponentMapper<RenderComponent> renderComponentCM =
-            ComponentMapper.getFor(RenderComponent.class);
+    private final ComponentMapper<RenderingComponent> renderComponentCM =
+            ComponentMapper.getFor(RenderingComponent.class);
     private final ComponentMapper<FacingComponent> facingComponentCM =
             ComponentMapper.getFor(FacingComponent.class);
 
@@ -25,7 +25,7 @@ public class AnimationSystem extends IteratingSystem {
     public AnimationSystem() {
         super(Family.all(
                 AnimationComponent.class,
-                RenderComponent.class,
+                RenderingComponent.class,
                 FacingComponent.class
         ).get());
     }
@@ -33,7 +33,7 @@ public class AnimationSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         AnimationComponent animationComponent = animationComponentCM.get(entity);
-        RenderComponent renderComponent = renderComponentCM.get(entity);
+        RenderingComponent renderingComponent = renderComponentCM.get(entity);
         FacingComponent facingComponent = facingComponentCM.get(entity);
 
         if (animationComponent.isStateChanged) {
@@ -54,7 +54,7 @@ public class AnimationSystem extends IteratingSystem {
             } else {
                 sprite.flip(false, false);
             }
-            renderComponent.sprite = sprite;
+            renderingComponent.sprite = sprite;
 
         }
     }
