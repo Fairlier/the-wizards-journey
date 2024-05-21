@@ -1,9 +1,9 @@
 {
-	"general" : [
+	"default" : [
 		{
-			"name" : "materials",
-			"type" : "com.thewizardsjourney.game.asset.material.MaterialsData",
-			"path" : "data/box2D/general/materials.json"
+			"name" : "ability",
+			"type" : "com.badlogic.gdx.graphics.g2d.ParticleEffect",
+			"path" : "data/particles/Particle Park Trail.p"
 		}
 	]
 }

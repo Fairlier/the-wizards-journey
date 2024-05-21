@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
 import com.thewizardsjourney.game.controller.InputHandler;
+import com.thewizardsjourney.game.ecs.system.OutOfBoundsSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem;
 import com.thewizardsjourney.game.ecs.system.AnimationSystem;
 import com.thewizardsjourney.game.ecs.system.CameraSystem;
@@ -132,9 +133,9 @@ public class GameScreen extends ScreenAdapter { // TODO
         PlayerMovementSystem playerMovementSystem = new PlayerMovementSystem(mapHandler.getWorld());
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
         PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem();
-        PlayerAbilitySystem playerAbilitySystem = new PlayerAbilitySystem(mapHandler.getWorld(), controller, viewport);
+        PlayerAbilitySystem playerAbilitySystem = new PlayerAbilitySystem(mapHandler.getWorld(), controller, viewport, main.getAssetHandler());
 
-        CameraSystem cameraSystem = new CameraSystem(camera);
+        CameraSystem cameraSystem = new CameraSystem(camera, mapHandler.getMap());
         cameraSystem.setTargetEntity(mapHandler.getPlayer());
 
         RenderingSystem renderingSystem = new RenderingSystem(batch, viewport, mapHandler.getMap());
@@ -142,6 +143,8 @@ public class GameScreen extends ScreenAdapter { // TODO
         AnimationSystem animationSystem = new AnimationSystem();
 
         PuzzleSensorSystem puzzleSensorSystem = new PuzzleSensorSystem(mapHandler.getWorld());
+
+        OutOfBoundsSystem outOfBoundsSystem = new OutOfBoundsSystem(mapHandler.getMap());
 
         engine.addSystem(physicsSystem);
         engine.addSystem(lightSystem);
@@ -154,6 +157,7 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(playerAbilitySystem);
         engine.addSystem(puzzleSensorSystem);
+        engine.addSystem(outOfBoundsSystem);
     }
 
     private void uiListeners() {

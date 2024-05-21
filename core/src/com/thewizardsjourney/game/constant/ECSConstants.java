@@ -26,11 +26,12 @@ public class ECSConstants {
         PLAYER,
         STATIC_OBJECT,
         DYNAMIC_OBJECT,
-        PUZZLE_SENSOR,
-        PRISMATIC_FIXED,
-        PRISMATIC_MOVING,
-        DISTANCE_FIXED,
-        DISTANCE_MOVING,
+        SENSOR_SAVE_POINT,
+        SENSOR_INFO,
+        COIN,
+        SENSOR_PUZZLE,
+        PRISMATIC,
+        DISTANCE,
         ROPE,
         NONE
     }

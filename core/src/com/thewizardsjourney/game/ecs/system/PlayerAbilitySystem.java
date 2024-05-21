@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.constant.ECSConstants;
 import com.thewizardsjourney.game.controller.InputHandler;
 import com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent;
@@ -50,7 +51,7 @@ public class PlayerAbilitySystem extends IteratingSystem {
     private final ComponentMapper<StatisticsComponent> statisticsComponentCM =
             ComponentMapper.getFor(StatisticsComponent.class);
 
-    public PlayerAbilitySystem(World world, InputHandler controller, Viewport viewport) {
+    public PlayerAbilitySystem(World world, InputHandler controller, Viewport viewport, AssetsHandler assetsHandler) {
         super(Family.all(
                 BodyComponent.class,
                 PlayerAbilityComponent.class,

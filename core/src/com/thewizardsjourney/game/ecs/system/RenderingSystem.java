@@ -36,7 +36,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     private final ComponentMapper<TransformComponent> transformComponentCM =
             ComponentMapper.getFor(TransformComponent.class);
 
-
     public RenderingSystem(SpriteBatch batch, Viewport viewport, TiledMap map) { // TODO
         super(Family.all(
                 RenderComponent.class,
@@ -73,6 +72,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         for (int i = 0; i < mapBackgroundLayers.size; i++) {
             renderTileLayer(mapBackgroundLayers.get(i), i, parallaxMinWidth);
         }
+
         super.update(deltaTime);
         for (int i = 0; i < mapForegroundLayers.size; ++i) {
             renderTileLayer(mapForegroundLayers.get(i), i + mapBackgroundLayers.size, parallaxMinWidth);

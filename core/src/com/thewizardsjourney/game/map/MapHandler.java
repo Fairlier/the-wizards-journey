@@ -17,7 +17,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -27,7 +27,6 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
@@ -44,6 +43,7 @@ import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerMovementComponent;
 import com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent;
 import com.thewizardsjourney.game.ecs.component.RenderComponent;
+import com.thewizardsjourney.game.ecs.component.SavePointComponent;
 import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
 import com.thewizardsjourney.game.ecs.component.TransformComponent;
 import com.thewizardsjourney.game.helper.GameInfo;
@@ -168,6 +168,21 @@ public class MapHandler {
         }
     }
 
+    private void createEntityForStaticObject(Body body) {
+        Entity entity = engine.createEntity();
+
+        BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
+        bodyComponent.body = body;
+        bodyComponent.body.setUserData(entity);
+        entity.add(bodyComponent);
+
+        EntityTypeComponent entityTypeComponent = engine.createComponent(EntityTypeComponent.class);
+        entityTypeComponent.type = ((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getEntityType();
+        entity.add(entityTypeComponent);
+
+        engine.addEntity(entity);
+    }
+
     private void createOtherObjects(Array<MapObjectData> objectsData) {
         for (MapObjectData objectData : objectsData) {
             switch (objectData.getObject().getName()) {
@@ -199,13 +214,44 @@ public class MapHandler {
 
                     fixtureDef.shape = null;
                     shape.dispose();
+                case "sensor_save_point":
+                    createSensorSavePointObject(objectData);
                 default:
                     break;
             }
         }
     }
 
-    private void createEntityForStaticObject(Body body) {
+    private void createSensorSavePointObject(MapObjectData objectData) {
+        Shape shape = objectData.getShapeOtherObject();
+        if (shape == null) {
+            return;
+        }
+        FixtureDef fixtureDef = mapInfo.getMaterialsData().getMaterials().get(objectData.getMaterial());
+        if (fixtureDef == null) {
+            logger.error("material does not exist, using default");
+            fixtureDef = mapInfo.getMaterialsData().getMaterials().get(MP_MATERIAL_DEFAULT);
+        }
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(objectData.getCenterPositionOtherObject());
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.fixedRotation = true;
+
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
+                ECSConstants.EntityType.SENSOR_SAVE_POINT,
+                objectData.getObject().getName());
+        body.getFixtureList().get(0).setUserData(entityTypeInfo);
+
+        createEntityForSensorSavePointObject(body);
+        fixtureDef.shape = null;
+        shape.dispose();
+    }
+
+    private void createEntityForSensorSavePointObject(Body body) {
         Entity entity = engine.createEntity();
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
@@ -321,7 +367,7 @@ public class MapHandler {
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
-                ECSConstants.EntityType.PUZZLE_SENSOR,
+                ECSConstants.EntityType.SENSOR_PUZZLE,
                 objectData.getObject().getName());
         body.getFixtureList().get(0).setUserData(entityTypeInfo);
 
@@ -383,7 +429,7 @@ public class MapHandler {
                 fixedBody = world.createBody(bodyDef);
                 fixedBody.createFixture(fixtureDef);
                 EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
-                        ECSConstants.EntityType.PRISMATIC_FIXED,
+                        ECSConstants.EntityType.PRISMATIC,
                         objectData.getObject().getName());
                 fixedBody.getFixtureList().get(0).setUserData(entityTypeInfo);
 
@@ -413,7 +459,7 @@ public class MapHandler {
                 movingBody = world.createBody(bodyDef);
                 movingBody.createFixture(fixtureDef);
                 EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
-                        ECSConstants.EntityType.PRISMATIC_MOVING,
+                        ECSConstants.EntityType.PRISMATIC,
                         objectData.getObject().getName());
                 movingBody.getFixtureList().get(0).setUserData(entityTypeInfo);
 
@@ -507,7 +553,7 @@ public class MapHandler {
                 fixedBody = world.createBody(bodyDef);
                 fixedBody.createFixture(fixtureDef);
                 EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
-                        ECSConstants.EntityType.DISTANCE_FIXED,
+                        ECSConstants.EntityType.DISTANCE,
                         objectData.getObject().getName());
                 fixedBody.getFixtureList().get(0).setUserData(entityTypeInfo);
 
@@ -533,7 +579,7 @@ public class MapHandler {
                 movingBody = world.createBody(bodyDef);
                 movingBody.createFixture(fixtureDef);
                 EntityTypeInfo entityTypeInfo = new EntityTypeInfo(
-                        ECSConstants.EntityType.DISTANCE_MOVING,
+                        ECSConstants.EntityType.DISTANCE,
                         objectData.getObject().getName());
                 movingBody.getFixtureList().get(0).setUserData(entityTypeInfo);
 
@@ -582,8 +628,6 @@ public class MapHandler {
             BodyDef bodyDef = new BodyDef();
             bodyDef.position.set(objectData.getCenterPositionOtherObject());
             bodyDef.type = objectData.getObject().getName().equals("fixed") ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody;
-            System.out.println("body name: " + objectData.getObject().getName());
-            System.out.println("body type: " + bodyDef.type);
             bodyDef.fixedRotation = true;
 
             Body body = world.createBody(bodyDef);
@@ -636,7 +680,7 @@ public class MapHandler {
         player.add(entityTypeComponent);
 
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
-        transformComponent.position.set(body.getPosition());
+        transformComponent.position.set(body.getTransform().getPosition());
         player.add(transformComponent);
 
         FacingComponent facingComponent = engine.createComponent(FacingComponent.class);
@@ -662,6 +706,10 @@ public class MapHandler {
 
         PlayerMovementComponent playerMovementComponent = engine.createComponent(PlayerMovementComponent.class);
         player.add(playerMovementComponent);
+
+        SavePointComponent savePointComponent = engine.createComponent(SavePointComponent.class);
+        savePointComponent.position.set(body.getTransform().getPosition());
+        player.add(savePointComponent);
 
         setPlayerComponentValues();
 

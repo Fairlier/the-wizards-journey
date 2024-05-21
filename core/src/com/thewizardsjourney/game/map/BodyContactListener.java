@@ -14,30 +14,26 @@ public class BodyContactListener implements ContactListener {
     @Override
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
-        short categoryA = fixtureA.getFilterData().categoryBits;
         Entity entityA = (Entity) fixtureA.getBody().getUserData();
         Fixture fixtureB = contact.getFixtureB();
-        short categoryB = fixtureB.getFilterData().categoryBits;
         Entity entityB = (Entity) fixtureB.getBody().getUserData();
 
         if (entityA != null && entityB != null) {
-            addCollisionData(categoryA, entityA, entityB);
-            addCollisionData(categoryB, entityB, entityA);
+            addCollisionData(entityA, entityB);
+            addCollisionData(entityB, entityA);
         }
     }
 
     @Override
     public void endContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
-        short categoryA = fixtureA.getFilterData().categoryBits;
         Entity entityA = (Entity) fixtureA.getBody().getUserData();
         Fixture fixtureB = contact.getFixtureB();
-        short categoryB = fixtureB.getFilterData().categoryBits;
         Entity entityB = (Entity) fixtureB.getBody().getUserData();
 
         if (entityA != null && entityB != null) {
-            removeCollisionData(categoryA, entityA, entityB);
-            removeCollisionData(categoryB, entityB, entityA);
+            removeCollisionData(entityA, entityB);
+            removeCollisionData(entityB, entityA);
         }
     }
 
@@ -47,25 +43,23 @@ public class BodyContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
 
-    private void addCollisionData(short sourceCategory, Entity sourceEntity, Entity collidedEntity) {
+    private void addCollisionData(Entity sourceEntity, Entity collidedEntity) {
         EntityTypeComponent entityTypeComponent = sourceEntity.getComponent(EntityTypeComponent.class);
         CollisionComponent collisionComponent = sourceEntity.getComponent(CollisionComponent.class);
         BodyComponent bodyComponent = sourceEntity.getComponent(BodyComponent.class);
 
         if (entityTypeComponent != null && collisionComponent != null && bodyComponent != null) {
-            collisionComponent.category = sourceCategory;
             collisionComponent.firstCollidedEntity = collidedEntity;
             collisionComponent.lastCollidedEntity = null;
         }
     }
 
-    private void removeCollisionData(short sourceCategory, Entity sourceEntity, Entity collidedEntity) {
+    private void removeCollisionData(Entity sourceEntity, Entity collidedEntity) {
         EntityTypeComponent entityTypeComponent = sourceEntity.getComponent(EntityTypeComponent.class);
         CollisionComponent collisionComponent = sourceEntity.getComponent(CollisionComponent.class);
         BodyComponent bodyComponent = sourceEntity.getComponent(BodyComponent.class);
 
         if (entityTypeComponent != null && collisionComponent != null && bodyComponent != null) {
-            collisionComponent.category = sourceCategory;
             collisionComponent.firstCollidedEntity = null;
             collisionComponent.lastCollidedEntity = collidedEntity;
         }
