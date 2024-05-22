@@ -27,6 +27,7 @@ public class LoadingScreen extends ScreenAdapter {
             main.getAssetHandler().loadGroup(playerGroupName);
         }
         main.getAssetHandler().finishLoading();
+        main.getGameInfo().setSelectedMapGroupName(main.getGameInfo().getMenuMapGroupName());
     }
 
     @Override
@@ -79,7 +80,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (main.getAssetHandler().update()) {
             if (nextScreen != null) {

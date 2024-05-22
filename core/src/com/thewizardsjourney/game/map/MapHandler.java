@@ -704,20 +704,24 @@ public class MapHandler {
             prismaticJointDef.localAxisA.set(0, 1);
             if (movementDirection.equals("up")) {
                 prismaticJointDef.motorSpeed = 5;
+                prismaticJointDef.lowerTranslation = 0;
+                prismaticJointDef.upperTranslation = (fixedBodySize.y * 0.5f + movingBodySize.y * 0.5f);
             } else if (movementDirection.equals("down")) {
                 prismaticJointDef.motorSpeed = -5;
-            } // TODO
-            prismaticJointDef.lowerTranslation = -(fixedBodySize.y * 0.5f + movingBodySize.y * 0.5f);
-            prismaticJointDef.upperTranslation = 0;
+                prismaticJointDef.lowerTranslation = -(fixedBodySize.y * 0.5f + movingBodySize.y * 0.5f);
+                prismaticJointDef.upperTranslation = 0;
+            }
         } else if (direction.equals("horizontal")) {
             prismaticJointDef.localAxisA.set(1, 0);
             if (movementDirection.equals("right")) {
                 prismaticJointDef.motorSpeed = 5;
+                prismaticJointDef.lowerTranslation = 0;
+                prismaticJointDef.upperTranslation = (fixedBodySize.x * 0.5f + movingBodySize.x * 0.5f);
             } else if (movementDirection.equals("left")) {
                 prismaticJointDef.motorSpeed = -5;
+                prismaticJointDef.lowerTranslation = -(fixedBodySize.x * 0.5f + movingBodySize.x * 0.5f);
+                prismaticJointDef.upperTranslation = 0;
             }
-            prismaticJointDef.lowerTranslation = -(fixedBodySize.x * 0.5f + movingBodySize.x * 0.5f);
-            prismaticJointDef.upperTranslation = 0;
         } else {
             return;
         }
@@ -856,6 +860,7 @@ public class MapHandler {
             return;
         }
         DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.collideConnected = true;
         distanceJointDef.bodyA = fixedBody;
         distanceJointDef.bodyB = movingBody;
         distanceJointDef.length = movingBody.getPosition().dst(fixedBody.getPosition());

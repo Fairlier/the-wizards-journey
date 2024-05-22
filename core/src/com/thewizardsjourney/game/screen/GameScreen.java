@@ -50,6 +50,7 @@ public class GameScreen extends ScreenAdapter { // TODO
     private InputHandler controller;
     private SpriteBatch batch;
     private Stage stage;
+    private Skin skin;
     private GameHUD gameHUD;
     private InputMultiplexer inputMultiplexer;
     private GameplayInfo gameplayInfo;
@@ -95,10 +96,11 @@ public class GameScreen extends ScreenAdapter { // TODO
         mapHandler.dispose();
         batch.dispose();
         stage.dispose();
+        skin.dispose();
     }
 
     private void initialization() {
-        camera = new OrthographicCamera(); // TODO
+        camera = new OrthographicCamera();
         viewport = new FitViewport(GAME_SCENE_WIDTH, GAME_SCENE_HEIGHT, camera);
         viewport.getCamera().position.set(
                 viewport.getCamera().position.x + GAME_SCENE_WIDTH * 0.5f,
@@ -126,19 +128,19 @@ public class GameScreen extends ScreenAdapter { // TODO
         LightSystem lightSystem = new LightSystem(mapHandler.getRayHandler(), camera);
         PlayerMovementSystem playerMovementSystem = new PlayerMovementSystem(mapHandler.getWorld());
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
-        PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem();
+        PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem(gameplayInfo);
         PlayerAbilitySystem playerAbilitySystem = new PlayerAbilitySystem(mapHandler.getWorld(), controller, viewport, main.getAssetHandler());
         CameraSystem cameraSystem = new CameraSystem(camera, mapHandler.getMap());
         cameraSystem.setTargetEntity(mapHandler.getPlayer());
         RenderingSystem renderingSystem = new RenderingSystem(batch, viewport, mapHandler.getMap());
         AnimationSystem animationSystem = new AnimationSystem();
-        PuzzleSensorSystem puzzleSensorSystem = new PuzzleSensorSystem(mapHandler.getWorld());
+        PuzzleSensorSystem puzzleSensorSystem = new PuzzleSensorSystem(mapHandler.getWorld(), viewport);
         OutOfBoundsSystem outOfBoundsSystem = new OutOfBoundsSystem(mapHandler.getMap());
         PlayerStatisticsSystem playerStatisticsSystem = new PlayerStatisticsSystem(gameplayInfo);
 
 
-        Skin skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
-        gameHUD = new GameHUD(skin, gameplayInfo);
+        skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
+        gameHUD = new GameHUD(skin, main.getGameInfo(), gameplayInfo);
         gameplayInfo.getPlayerStatisticsWidget().setHealth(mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth(),
                 mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth());
         gameplayInfo.getPlayerStatisticsWidget().setEnergy(mapHandler.getPlayerInfo().getPlayerSettingsData().getEnergy(),
@@ -213,21 +215,45 @@ public class GameScreen extends ScreenAdapter { // TODO
                     gameHUD.getJumpButton().setVisible(false);
                     gameHUD.getTouchpad().setVisible(false);
                     gameHUD.getCastButton().setVisible(true);
+                    gameHUD.setJumpButtonVisible(false);
                     controller.setAbility(true);
+
                 } else if (gameHUD.getCastButton().isVisible()) {
                     gameHUD.getCastButton().setVisible(false);
                     controller.setAbility(false);
                     controller.getFingerLocation().setZero();
                     gameHUD.getJumpButton().setVisible(true);
+                    gameHUD.setJumpButtonVisible(true);
                     gameHUD.getTouchpad().setVisible(true);
                 }
             }
         });
 
-        gameHUD.getPauseButton().addListener(new ChangeListener() {
+        gameHUD.getPauseWidget().getResumeButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                main.setIntermediateScreen(main.getGameScreen().getClass(), main.getGameScreen().getClass());
+            }
+        });
 
+        gameHUD.getPauseWidget().getHomeButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                main.setIntermediateScreen(main.getGameScreen().getClass(), main.getMenuScreen().getClass());
+            }
+        });
+
+        gameHUD.getGameExitWidget().getResumeButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                main.setIntermediateScreen(main.getGameScreen().getClass(), main.getGameScreen().getClass());
+            }
+        });
+
+        gameHUD.getGameExitWidget().getHomeButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                main.setIntermediateScreen(main.getGameScreen().getClass(), main.getMenuScreen().getClass());
             }
         });
     }

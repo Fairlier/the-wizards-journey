@@ -7,20 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
 
-public class PauseWidget extends Table {
+public class InformationWidget extends Table {
     private final Label titleLabel;
-    private final Button resumeButton;
-    private final Button homeButton;
     private final Button closeButton;
     private final Window pauseWindow;
 
-    public PauseWidget(Skin skin) {
+    public InformationWidget(Skin skin) {
         super(skin);
 
-        titleLabel = new Label("Pause", skin, "game-label");
+        titleLabel = new Label("Info", skin, "game-label");
         closeButton = new Button(skin, "game-close-button");
-        resumeButton = new Button(skin, "game-resume-button");
-        homeButton = new Button(skin, "game-home-button");
         pauseWindow = new Window("", skin, "game-window");
 
         setFillParent(true);
@@ -29,8 +25,6 @@ public class PauseWidget extends Table {
 
     private void setupUI() {
         pauseWindow.setMovable(false);
-        pauseWindow.add(resumeButton).top().left().pad(20).uniform();
-        pauseWindow.add(homeButton).top().right().pad(20).uniform();
         pauseWindow.pack();
 
         titleLabel.setAlignment(Align.center);
@@ -44,14 +38,6 @@ public class PauseWidget extends Table {
         add(pauseWindow).center().padTop(20).padBottom(20);
         add().expandX().fill();
         pack();
-    }
-
-    public Button getResumeButton() {
-        return resumeButton;
-    }
-
-    public Button getHomeButton() {
-        return homeButton;
     }
 
     public Button getCloseButton() {

@@ -7,7 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.thewizardsjourney.game.helper.GameInfo;
 import com.thewizardsjourney.game.helper.GameplayInfo;
+import com.thewizardsjourney.game.ui.widget.GameExitWidget;
+import com.thewizardsjourney.game.ui.widget.InformationWidget;
 import com.thewizardsjourney.game.ui.widget.PauseWidget;
 import com.thewizardsjourney.game.ui.widget.PlayerStatisticsWidget;
 
@@ -20,10 +23,14 @@ public class GameHUD extends Table {
     private final Button switchButton;
     private final PlayerStatisticsWidget playerStatisticsWidget;
     private final PauseWidget pauseWidget;
+    private final InformationWidget informationWidget;
+    private final GameExitWidget gameExitWidget;
     private boolean jumpButtonVisible;
+    private final GameplayInfo gameplayInfo;
 
-    public GameHUD(Skin skin, GameplayInfo gameplayInfo) {
+    public GameHUD(Skin skin, GameInfo gameInfo, GameplayInfo gameplayInfo) {
         super(skin);
+        this.gameplayInfo = gameplayInfo;
 
         pauseButton = new Button(skin, "game-pause-button");
         jumpButton = new Button(skin, "game-jump-button");
@@ -33,11 +40,19 @@ public class GameHUD extends Table {
         touchpad = new Touchpad(5.0f, skin, "game-touchpad");
         playerStatisticsWidget = new PlayerStatisticsWidget(skin);
         pauseWidget = new PauseWidget(skin);
+        informationWidget = new InformationWidget(skin);
+        gameExitWidget = new GameExitWidget(skin, gameInfo);
         gameplayInfo.setPlayerStatisticsWidget(playerStatisticsWidget);
+        gameplayInfo.setInfoButton(infoButton);
 
         playerStatisticsWidget.setVisible(false);
         pauseWidget.setVisible(false);
+        informationWidget.setVisible(false);
+        gameExitWidget.setVisible(false);
+//        addActor(playerStatisticsWidget);
         addActor(pauseWidget);
+        addActor(informationWidget);
+        addActor(gameExitWidget);
 
         setupUI();
         setFillParent(true);
@@ -83,9 +98,65 @@ public class GameHUD extends Table {
             public void changed(ChangeEvent event, Actor actor) {
                 pauseWidget.setVisible(false);
                 touchpad.setVisible(true);
-                jumpButton.setVisible(true);
                 switchButton.setVisible(true);
-                castButton.setVisible(true);
+                if (jumpButtonVisible) {
+                    jumpButton.setVisible(true);
+                    castButton.setVisible(false);
+                } else {
+                    castButton.setVisible(true);
+                    jumpButton.setVisible(false);
+                }
+                pauseButton.setVisible(true);
+            }
+        });
+
+        infoButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                touchpad.setVisible(false);
+                jumpButton.setVisible(false);
+                switchButton.setVisible(false);
+                castButton.setVisible(false);
+                infoButton.setVisible(false);
+                pauseButton.setVisible(false);
+                if (gameplayInfo.isGameIsExit()) {
+                    gameExitWidget.setVisible(true);
+                } else {
+                    informationWidget.setVisible(true);
+                }
+            }
+        });
+
+        informationWidget.getCloseButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                informationWidget.setVisible(false);
+                touchpad.setVisible(true);
+                switchButton.setVisible(true);
+                if (jumpButtonVisible) {
+                    jumpButton.setVisible(true);
+                    castButton.setVisible(false);
+                } else {
+                    castButton.setVisible(true);
+                    jumpButton.setVisible(false);
+                }
+                pauseButton.setVisible(true);
+            }
+        });
+
+        gameExitWidget.getCloseButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameExitWidget.setVisible(false);
+                touchpad.setVisible(true);
+                switchButton.setVisible(true);
+                if (jumpButtonVisible) {
+                    jumpButton.setVisible(true);
+                    castButton.setVisible(false);
+                } else {
+                    castButton.setVisible(true);
+                    jumpButton.setVisible(false);
+                }
                 pauseButton.setVisible(true);
             }
         });
@@ -125,5 +196,13 @@ public class GameHUD extends Table {
 
     public boolean isJumpButtonVisible() {
         return jumpButtonVisible;
+    }
+
+    public void setJumpButtonVisible(boolean jumpButtonVisible) {
+        this.jumpButtonVisible = jumpButtonVisible;
+    }
+
+    public GameExitWidget getGameExitWidget() {
+        return gameExitWidget;
     }
 }

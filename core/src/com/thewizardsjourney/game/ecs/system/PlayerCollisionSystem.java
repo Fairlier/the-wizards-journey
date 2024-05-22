@@ -14,8 +14,10 @@ import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerMovementComponent;
 import com.thewizardsjourney.game.ecs.component.SavePointComponent;
 import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
+import com.thewizardsjourney.game.helper.GameplayInfo;
 
 public class PlayerCollisionSystem extends IteratingSystem {
+    private final GameplayInfo gameplayInfo;
     private final ComponentMapper<BodyComponent> bodyComponentCM =
             ComponentMapper.getFor(BodyComponent.class);
     private final ComponentMapper<CollisionComponent> collisionComponentCM =
@@ -31,7 +33,7 @@ public class PlayerCollisionSystem extends IteratingSystem {
     private final ComponentMapper<PlayerMovementComponent> playerMovementComponentCM =
             ComponentMapper.getFor(PlayerMovementComponent.class);
 
-    public PlayerCollisionSystem() {
+    public PlayerCollisionSystem(GameplayInfo gameplayInfo) {
         super(Family.all(
                 BodyComponent.class,
                 CollisionComponent.class,
@@ -41,6 +43,7 @@ public class PlayerCollisionSystem extends IteratingSystem {
                 PlayerMovementComponent.class,
                 PlayerComponent.class
         ).get());
+        this.gameplayInfo = gameplayInfo;
     }
 
     @Override
@@ -74,11 +77,12 @@ public class PlayerCollisionSystem extends IteratingSystem {
                 statisticsComponent.health = statisticsComponent.health == 0 ? 0 : statisticsComponent.health - 1;
                 bodyComponent.body.setTransform(savePointComponent.position, 0);
             } else if (entityTypeComponent.type == ECSConstants.EntityType.SENSOR_INFO) {
-                // TODO
+                gameplayInfo.getInfoButton().setVisible(true);
+                gameplayInfo.setGameIsExit(false);
             } else if (entityTypeComponent.type == ECSConstants.EntityType.SENSOR_EXIT) {
-                // TODO
+                gameplayInfo.getInfoButton().setVisible(true);
+                gameplayInfo.setGameIsExit(true);
             } else if (entityTypeComponent.type == ECSConstants.EntityType.ROPE) {
-                // TODO
                 statisticsComponent.health = statisticsComponent.health == 0 ? 0 : statisticsComponent.health - 1;
                 bodyComponent.body.setTransform(savePointComponent.position, 0);
             }
@@ -86,6 +90,13 @@ public class PlayerCollisionSystem extends IteratingSystem {
     }
 
     private void endCollision(CollisionComponent collisionComponent, Entity entity) {
-
+        if (collisionComponent.lastCollidedEntity.getComponent(EntityTypeComponent.class) != null)  {
+            EntityTypeComponent entityTypeComponent = collisionComponent.lastCollidedEntity.getComponent(EntityTypeComponent.class);
+            if(entityTypeComponent.type == ECSConstants.EntityType.SENSOR_INFO) {
+                gameplayInfo.getInfoButton().setVisible(false);
+            } else if (entityTypeComponent.type == ECSConstants.EntityType.SENSOR_EXIT) {
+                gameplayInfo.getInfoButton().setVisible(false);
+            }
+        }
     }
 }

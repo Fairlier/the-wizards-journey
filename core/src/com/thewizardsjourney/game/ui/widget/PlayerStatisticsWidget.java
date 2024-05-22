@@ -3,7 +3,6 @@ package com.thewizardsjourney.game.ui.widget;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class PlayerStatisticsWidget extends WidgetGroup {
     private final Image background;
@@ -15,24 +14,13 @@ public class PlayerStatisticsWidget extends WidgetGroup {
     private float maxEnergy;
 
     public PlayerStatisticsWidget(Skin skin) {
-//        background = new Image(skin, "game-player-bar");
-//        healthBar = new Image(skin, "game-health-bar");
-//        energyBar = new Image(skin, "game-energy-bar");
-
-        Drawable backgroundDrawable = skin.getDrawable("game-player-bar");
-        Drawable healthDrawable = skin.getDrawable("game-health-bar");
-        Drawable energyDrawable = skin.getDrawable("game-energy-bar");
-
-        background = new Image(backgroundDrawable);
-        healthBar = new Image(healthDrawable);
-        energyBar = new Image(energyDrawable);
+        background = new Image(skin, "game-player-bar");
+        healthBar = new Image(skin, "game-health-bar");
+        energyBar = new Image(skin, "game-energy-bar");
 
         addActor(background);
         addActor(healthBar);
         addActor(energyBar);
-
-
-        setPosition(-100, 0);
 
         updateBars();
         debug();
@@ -58,20 +46,6 @@ public class PlayerStatisticsWidget extends WidgetGroup {
     public void setEnergy(float currentEnergy, float maxEnergy) {
         this.currentEnergy = currentEnergy;
         this.maxEnergy = maxEnergy;
-        updateBars();
-    }
-
-    @Override
-    protected void sizeChanged() {
-        super.sizeChanged();
-//        background.setSize(getWidth(), getHeight());
-        updateBars();
-    }
-
-    @Override
-    protected void positionChanged() {
-        super.positionChanged();
-//        background.setPosition(getX(), getY());
         updateBars();
     }
 }

@@ -101,7 +101,7 @@
   <object id="141" x="1296" y="256" width="48" height="16"/>
  </objectgroup>
  <objectgroup color="#00aa00" id="10" name="other_objects">
-  <object id="64" name="player" x="48" y="64" width="16" height="32"/>
+  <object id="64" name="player" x="48.0606" y="64" width="16" height="32"/>
   <object id="68" name="light" x="64" y="64"/>
   <object id="70" name="light" x="352" y="64"/>
   <object id="71" name="light" x="880" y="64"/>
@@ -145,6 +145,64 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup color="#0000ff" id="12" name="puzzle_objects_1">
+  <object id="108" name="fixed" x="1328" y="128" width="80" height="16">
+   <properties>
+    <property name="direction" value="horizontal"/>
+    <property name="group" value="1"/>
+    <property name="joint_type" value="prismatic"/>
+    <property name="movement_direction" value="left"/>
+   </properties>
+  </object>
+  <object id="109" name="moving" x="1248.19" y="132.19" width="80" height="8">
+   <properties>
+    <property name="group" value="1"/>
+    <property name="joint_type" value="prismatic"/>
+   </properties>
+  </object>
+  <object id="110" name="moving" x="739.88" y="176" width="8" height="80">
+   <properties>
+    <property name="group" value="2"/>
+    <property name="joint_type" value="prismatic"/>
+   </properties>
+  </object>
+  <object id="113" name="moving" x="817.091" y="256.182" width="45.2727" height="16">
+   <properties>
+    <property name="color" type="color" value="#ffff5500"/>
+    <property name="group" value="3"/>
+    <property name="joint_type" value="distance"/>
+   </properties>
+  </object>
+  <object id="114" name="sensor" x="815.909" y="280.364" width="48" height="16">
+   <properties>
+    <property name="group" value="2"/>
+    <property name="number_of_targtes" type="int" value="1"/>
+    <property name="target_object" value="moving"/>
+   </properties>
+  </object>
+  <object id="126" name="fixed" x="800" y="304" width="80" height="16">
+   <properties>
+    <property name="group" value="3"/>
+    <property name="joint_type" value="distance"/>
+   </properties>
+  </object>
+  <object id="132" name="sensor" x="944" y="32" width="192" height="80">
+   <properties>
+    <property name="color" type="color" value="#ffffff00"/>
+    <property name="group" value="1"/>
+    <property name="number_of_targets" type="int" value="2"/>
+    <property name="target_object" value="box"/>
+   </properties>
+  </object>
+  <object id="146" name="fixed" x="736" y="256" width="16" height="96">
+   <properties>
+    <property name="direction" value="vertical"/>
+    <property name="group" value="2"/>
+    <property name="joint_type" value="prismatic"/>
+    <property name="movement_direction" value="up"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup color="#aa557f" id="13" name="puzzle_objects_2">
   <object id="119" name="fixed" x="544" y="288" width="32" height="16">
    <properties>
@@ -174,64 +232,6 @@
    <properties>
     <property name="group" value="1"/>
     <property name="joint_type" value="rope"/>
-   </properties>
-  </object>
- </objectgroup>
- <objectgroup color="#0000ff" id="12" name="puzzle_objects_1">
-  <object id="108" name="fixed" x="1328" y="128" width="80" height="16">
-   <properties>
-    <property name="direction" value="horizontal"/>
-    <property name="group" value="1"/>
-    <property name="joint_type" value="prismatic"/>
-    <property name="movement_direction" value="left"/>
-   </properties>
-  </object>
-  <object id="109" name="moving" x="1248.19" y="132.19" width="80" height="8">
-   <properties>
-    <property name="group" value="1"/>
-    <property name="joint_type" value="prismatic"/>
-   </properties>
-  </object>
-  <object id="110" name="moving" x="739.88" y="176" width="8" height="80">
-   <properties>
-    <property name="group" value="2"/>
-    <property name="joint_type" value="prismatic"/>
-   </properties>
-  </object>
-  <object id="113" name="moving" x="816" y="256" width="48" height="16">
-   <properties>
-    <property name="color" type="color" value="#ffff5500"/>
-    <property name="group" value="3"/>
-    <property name="joint_type" value="distance"/>
-   </properties>
-  </object>
-  <object id="114" name="sensor" x="816" y="288" width="48" height="16">
-   <properties>
-    <property name="group" value="2"/>
-    <property name="number_of_targtes" type="int" value="1"/>
-    <property name="target_objetcs" value="moving"/>
-   </properties>
-  </object>
-  <object id="126" name="fixed" x="800" y="304" width="80" height="16">
-   <properties>
-    <property name="group" value="3"/>
-    <property name="joint_type" value="distance"/>
-   </properties>
-  </object>
-  <object id="132" name="sensor" x="944" y="32" width="192" height="80">
-   <properties>
-    <property name="color" type="color" value="#ffffff00"/>
-    <property name="group" value="1"/>
-    <property name="number_of_targets" type="int" value="2"/>
-    <property name="target_object" value="box"/>
-   </properties>
-  </object>
-  <object id="146" name="fixed" x="736" y="256" width="16" height="96">
-   <properties>
-    <property name="direction" value="vertical"/>
-    <property name="group" value="2"/>
-    <property name="joint_type" value="prismatic"/>
-    <property name="movement_direction" value="up"/>
    </properties>
   </object>
  </objectgroup>

@@ -1,10 +1,13 @@
 package com.thewizardsjourney.game.screen;
 
+import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.GAME_SCENE_HEIGHT;
+import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.GAME_SCENE_WIDTH;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.MENU_SCENE_HEIGHT;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.MENU_SCENE_WIDTH;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_HEIGHT;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_WIDTH;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,15 +23,29 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
+import com.thewizardsjourney.game.ecs.system.AnimationSystem;
+import com.thewizardsjourney.game.ecs.system.CameraSystem;
+import com.thewizardsjourney.game.ecs.system.LightSystem;
+import com.thewizardsjourney.game.ecs.system.OutOfBoundsSystem;
+import com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem;
+import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
+import com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem;
+import com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem;
+import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
+import com.thewizardsjourney.game.ecs.system.PlayerMovementSystem;
+import com.thewizardsjourney.game.ecs.system.PlayerStatisticsSystem;
+import com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem;
+import com.thewizardsjourney.game.ecs.system.RenderingSystem;
+import com.thewizardsjourney.game.map.MapHandler;
 import com.thewizardsjourney.game.ui.MenuHUD;
 
 public class MenuScreen extends ScreenAdapter {
     private final TheWizardsJourney main;
     private Viewport viewport;
     private OrthographicCamera camera;
+    private SpriteBatch batch;
     private Stage stage;
     private Skin skin;
-    private SpriteBatch batch;
     private MenuHUD menuHUD;
 
     public MenuScreen(TheWizardsJourney main) {
@@ -66,9 +83,9 @@ public class MenuScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         Gdx.input.setInputProcessor(null);
+        batch.dispose();
         stage.dispose();
         skin.dispose();
-        batch.dispose();
     }
 
     private void initialization() {
@@ -84,12 +101,11 @@ public class MenuScreen extends ScreenAdapter {
 
         batch = new SpriteBatch();
         stage = new Stage(new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT), batch);
-        skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
-        menuHUD = new MenuHUD(skin, main.getGameInfo());
         Gdx.input.setInputProcessor(stage);
 
+        skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
+        menuHUD = new MenuHUD(skin, main.getGameInfo());
         stage.addActor(menuHUD);
-
         buttonProcessing(menuHUD);
     }
 

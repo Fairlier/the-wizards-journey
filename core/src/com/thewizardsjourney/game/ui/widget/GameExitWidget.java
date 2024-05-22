@@ -6,18 +6,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
+import com.thewizardsjourney.game.helper.GameInfo;
 
-public class PauseWidget extends Table {
+public class GameExitWidget extends Table {
     private final Label titleLabel;
     private final Button resumeButton;
     private final Button homeButton;
     private final Button closeButton;
     private final Window pauseWindow;
 
-    public PauseWidget(Skin skin) {
+    public GameExitWidget(Skin skin, GameInfo gameInfo) {
         super(skin);
 
-        titleLabel = new Label("Pause", skin, "game-label");
+        titleLabel = new Label("The end", skin, "game-label");
         closeButton = new Button(skin, "game-close-button");
         resumeButton = new Button(skin, "game-resume-button");
         homeButton = new Button(skin, "game-home-button");

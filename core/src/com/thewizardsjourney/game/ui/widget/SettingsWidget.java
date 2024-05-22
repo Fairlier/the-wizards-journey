@@ -44,7 +44,6 @@ public class SettingsWidget extends Table {
 
     private void setupUI() {
         languageSelectBox.setItems("English", "Русский");
-
         settingsWindow.setMovable(false);
         settingsWindow.add(musicLabel).pad(10);
         settingsWindow.add(musicSlider).width(200).pad(10).row();
@@ -64,7 +63,6 @@ public class SettingsWidget extends Table {
         add().expandX().fill();
         add(settingsWindow).center().padTop(20).padBottom(20);
         add().expandX().fill();
-
         pack();
     }
 

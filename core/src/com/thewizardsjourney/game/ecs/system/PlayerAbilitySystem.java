@@ -160,7 +160,6 @@ public class PlayerAbilitySystem extends IteratingSystem {
     private final RayCastCallback callback = new RayCastCallback() { // TODO
         @Override
         public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-            Shape shape = fixture.getShape();
             if (isCasting && isEnergy) {
                 if (mouseJoint == null) {
                     mouseJointDef.bodyB = fixture.getBody();
@@ -175,68 +174,14 @@ public class PlayerAbilitySystem extends IteratingSystem {
                     mouseJoint = null;
                 }
             }
-            drawShapeOutline(fixture, shape);
             return 0;
         }
     };
 
     private void drawTouchPoint() {
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.WHITE);
-        renderer.circle(touchPoint.x, touchPoint.y, 0.1f, 100);
-        renderer.end();
-    }
-
-    private void drawShapeOutline(Fixture fixture, Shape shape) {
-        renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(Color.RED);
-        switch (shape.getType()) {
-            case Circle:
-                CircleShape circleShape = (CircleShape) shape;
-                Vector2 center = fixture.getBody().getWorldPoint(circleShape.getPosition());
-                float radius = circleShape.getRadius();
-                renderer.circle(center.x, center.y, radius);
-                break;
-            case Edge:
-                EdgeShape edgeShape = (EdgeShape) shape;
-                Vector2 vertex1 = new Vector2();
-                Vector2 vertex2 = new Vector2();
-                edgeShape.getVertex1(vertex1);
-                edgeShape.getVertex2(vertex2);
-                renderer.line(vertex1, vertex2);
-                break;
-            case Polygon:
-                PolygonShape polygonShape = (PolygonShape) shape;
-                int vertexCount = polygonShape.getVertexCount();
-                float[] verticesArray = new float[vertexCount * 2];
-                for (int i = 0; i < vertexCount; i++) {
-                    Vector2 vertex = new Vector2();
-                    polygonShape.getVertex(i, vertex);
-                    verticesArray[i * 2] = vertex.x;
-                    verticesArray[i * 2 + 1] = vertex.y;
-                }
-                renderer.polygon(verticesArray);
-                break;
-            case Chain:
-                ChainShape chainShape = (ChainShape) shape;
-                int count = chainShape.getVertexCount();
-                Vector2 prevVertex = new Vector2();
-                Vector2 curVertex = new Vector2();
-                for (int i = 0; i < count; i++) {
-                    chainShape.getVertex(i, curVertex);
-                    if (i > 0) {
-                        renderer.line(prevVertex, curVertex);
-                    }
-                    prevVertex.set(curVertex);
-                }
-                if (chainShape.isLooped()) {
-                    chainShape.getVertex(0, curVertex);
-                    renderer.line(prevVertex, curVertex);
-                }
-                break;
-            default:
-                break;
-        }
+        renderer.circle(touchPoint.x, touchPoint.y, 0.1f, 100);
         renderer.end();
     }
 
