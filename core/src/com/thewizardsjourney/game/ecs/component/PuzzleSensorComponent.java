@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.thewizardsjourney.game.helper.JointInfo;
 
 public class PuzzleSensorComponent implements Component {
+    public boolean drawShape;
     public int numberOfTargets;
     public String targetObjectName;
     public Color color;

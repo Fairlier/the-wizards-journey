@@ -12,11 +12,18 @@ public class PlayerStatisticsWidget extends WidgetGroup {
     private float maxHealth;
     private float currentEnergy;
     private float maxEnergy;
+    private final float scale = 0.7f;
 
     public PlayerStatisticsWidget(Skin skin) {
         background = new Image(skin, "game-player-bar");
         healthBar = new Image(skin, "game-health-bar");
         energyBar = new Image(skin, "game-energy-bar");
+
+        background.setScale(scale);
+        healthBar.setScale(scale);
+        energyBar.setScale(scale);
+
+        background.setPosition(0, -45);
 
         addActor(background);
         addActor(healthBar);
@@ -33,8 +40,8 @@ public class PlayerStatisticsWidget extends WidgetGroup {
         healthBar.setSize(healthBar.getDrawable().getMinWidth() * healthRatio, healthBar.getDrawable().getMinHeight());
         energyBar.setSize(energyBar.getDrawable().getMinWidth() * energyRatio, energyBar.getDrawable().getMinHeight());
 
-        healthBar.setPosition(background.getX() + 20, background.getY() + 144);
-        energyBar.setPosition(background.getX() + 20, background.getY() + 31);
+        healthBar.setPosition(background.getX() + 20 * scale, background.getY() + 144 * scale);
+        energyBar.setPosition(background.getX() + 20 * scale, background.getY() + 31 * scale);
     }
 
     public void setHealth(float currentHealth, float maxHealth) {
@@ -47,5 +54,17 @@ public class PlayerStatisticsWidget extends WidgetGroup {
         this.currentEnergy = currentEnergy;
         this.maxEnergy = maxEnergy;
         updateBars();
+    }
+
+    public Image getBackground() {
+        return background;
+    }
+
+    public Image getHealthBar() {
+        return healthBar;
+    }
+
+    public Image getEnergyBar() {
+        return energyBar;
     }
 }

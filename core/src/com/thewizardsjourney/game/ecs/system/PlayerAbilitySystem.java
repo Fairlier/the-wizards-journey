@@ -31,6 +31,7 @@ import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
+import com.thewizardsjourney.game.helper.MapInfo;
 
 public class PlayerAbilitySystem extends IteratingSystem {
     private boolean isCasting;
@@ -54,7 +55,7 @@ public class PlayerAbilitySystem extends IteratingSystem {
     private final ComponentMapper<StatisticsComponent> statisticsComponentCM =
             ComponentMapper.getFor(StatisticsComponent.class);
 
-    public PlayerAbilitySystem(World world, InputHandler controller, Viewport viewport, AssetsHandler assetsHandler) {
+    public PlayerAbilitySystem(World world, InputHandler controller, Viewport viewport) {
         super(Family.all(
                 BodyComponent.class,
                 PlayerAbilityComponent.class,
@@ -157,7 +158,7 @@ public class PlayerAbilitySystem extends IteratingSystem {
         previousIsInAbilityMode = playerAbilityComponent.isInAbilityMode;
     }
 
-    private final RayCastCallback callback = new RayCastCallback() { // TODO
+    private final RayCastCallback callback = new RayCastCallback() {
         @Override
         public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
             if (isCasting && isEnergy) {
@@ -181,7 +182,7 @@ public class PlayerAbilitySystem extends IteratingSystem {
     private void drawTouchPoint() {
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(Color.RED);
-        renderer.circle(touchPoint.x, touchPoint.y, 0.1f, 100);
+        renderer.circle(touchPoint.x, touchPoint.y, 0.1f, 200);
         renderer.end();
     }
 

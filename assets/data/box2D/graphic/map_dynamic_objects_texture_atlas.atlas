@@ -1,4 +1,4 @@
-game_objects.png
+map_dynamic_objects_texture_atlas.png
 size: 50, 129
 format: RGBA8888
 filter: Linear,Linear

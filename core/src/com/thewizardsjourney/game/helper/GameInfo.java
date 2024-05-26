@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 public class GameInfo {
     private Array<String> mapGroupNames;
     private Array<String> playerGroupNames;
-    private String selectedMapGroupName = "maps_map_4";
+    private String selectedMapGroupName = "";
     private String selectedPlayerGroupName = "players_player_0";
     private final String menuMapGroupName = "maps_menu_map";
 

@@ -7,6 +7,7 @@ public class EntityTypeInfo {
     private ECSConstants.EntityType entityType;
     private String objectCategoryName;
     private Color color = null;
+    private String atlasRegionName = null;
 
     public EntityTypeInfo(ECSConstants.EntityType entityType, String objectCategoryName) {
         this.entityType = entityType;
@@ -35,5 +36,13 @@ public class EntityTypeInfo {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public String getAtlasRegionName() {
+        return atlasRegionName;
+    }
+
+    public void setAtlasRegionName(String atlasRegionName) {
+        this.atlasRegionName = atlasRegionName;
     }
 }

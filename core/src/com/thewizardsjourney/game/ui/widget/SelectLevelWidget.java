@@ -35,14 +35,14 @@ public class SelectLevelWidget extends Table {
         mapGroupNames = gameInfo.getMapGroupNamesForLevelSelection();
         totalPages = (mapGroupNames.size + 1) / 2;
 
-        titleLabel = new Label("Select level", skin, "game-label");
+        titleLabel = new Label("Выбор уровня", skin, "game-label");
         selectLevelWindow = new Window("", skin, "game-window");
         closeButton = new Button(skin, "game-close-button");
         prevButton = new Button(skin, "game-prev-button");
         nextButton = new Button(skin, "game-next-button");
         levelButton0 = new TextButton("", skin, "game-text-button");
         levelButton1 = new TextButton("", skin, "game-text-button");
-        playButton = new TextButton("Play", skin, "game-text-button");
+        playButton = new TextButton("Играть", skin, "game-text-button");
 
         setFillParent(true);
         setupUI();
@@ -58,10 +58,9 @@ public class SelectLevelWidget extends Table {
 
         titleLabel.setAlignment(Align.center);
 
-        top();
         add().expand().fill();
         add().expand().fill();
-        add(titleLabel).height(200).center().padTop(20);
+        add(titleLabel).height(200).top().padTop(20);
         add().expandX().fill();
         add().expandX().fill();
         add(closeButton).top().right().padTop(20).padRight(20);

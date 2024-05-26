@@ -1,0 +1,40 @@
+map_dynamic_objects_texture_atlas.png
+size: 50, 129
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+box
+  rotate: false
+  xy: 0, 47
+  size: 37, 37
+  orig: 37, 37
+  offset: 0, 0
+  index: -1
+button
+  rotate: false
+  xy: 0, 0
+  size: 50, 18
+  orig: 50, 18
+  offset: 0, 0
+  index: -1
+coin
+  rotate: false
+  xy: 0, 18
+  size: 19, 20
+  orig: 19, 20
+  offset: 0, 0
+  index: -1
+door
+  rotate: false
+  xy: 37, 47
+  size: 10, 82
+  orig: 10, 82
+  offset: 0, 0
+  index: -1
+spiked_ball
+  rotate: false
+  xy: 19, 18
+  size: 29, 29
+  orig: 29, 29
+  offset: 0, 0
+  index: -1

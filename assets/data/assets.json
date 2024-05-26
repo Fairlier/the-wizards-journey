@@ -1,14 +1,9 @@
 {
 	"default" : [
 		{
-			"name" : "ability",
-			"type" : "com.badlogic.gdx.graphics.g2d.ParticleEffect",
-			"path" : "data/particles/Particle Park Trail.p"
-		},
-		{
-			"name" : "game_objects",
+			"name" : "map_dynamic_objects_texture_atlas",
 			"type" : "com.badlogic.gdx.graphics.g2d.TextureAtlas",
-			"path" : "data/box2D/graphic/game_objects.atlas"
+			"path" : "data/box2D/graphic/map_dynamic_objects_texture_atlas.atlas"
 		}
 	]
 }

@@ -9,6 +9,7 @@ public class AssetConstants {
             public static final String TEXTURE_ATLAS = "player_texture_atlas.atlas";
             public static final String ANIMATIONS = "player_animations.json";
             public static final String SETTINGS = "player_settings.json";
+            public static final String SOUNDS = "player_sounds.json";
         }
 
         public static class Map {
@@ -16,6 +17,8 @@ public class AssetConstants {
             public static final String TILED_MAP = "map_tiled_map.tmx";
             public static final String SETTINGS = "map_settings.json";
             public static final String MATERIALS = "map_materials.json";
+            public static final String DYNAMIC_OBJECTS_TEXTURE_ATLAS = "map_dynamic_objects_texture_atlas.atlas";
+            public static final String PUZZLES_TEXTURE_ATLAS = "map_puzzles_texture_atlas.atlas";
         }
     }
 

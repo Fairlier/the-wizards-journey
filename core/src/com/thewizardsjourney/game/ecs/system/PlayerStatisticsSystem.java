@@ -36,5 +36,9 @@ public class PlayerStatisticsSystem extends IteratingSystem {
             gameplayInfo.getPlayerStatisticsWidget().setEnergy(statisticsComponent.energy, statisticsComponent.maxEnergy);
             previousEnergy = statisticsComponent.energy;
         }
+
+        if (statisticsComponent.health <= 0) {
+            gameplayInfo.getGameHUD().gameOver();
+        }
     }
 }

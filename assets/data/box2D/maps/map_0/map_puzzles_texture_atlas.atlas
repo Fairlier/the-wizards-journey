@@ -1,0 +1,19 @@
+map_puzzles_texture_atlas.png
+size: 288, 476
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+puzzle-1
+  rotate: false
+  xy: 0, 0
+  size: 252, 212
+  orig: 252, 212
+  offset: 0, 0
+  index: -1
+puzzle-2
+  rotate: false
+  xy: 0, 212
+  size: 288, 264
+  orig: 288, 264
+  offset: 0, 0
+  index: -1

@@ -11,6 +11,12 @@
 		"scaledSize": -1,
 		"markupEnabled": false,
 		"flip": false
+	},
+	"MultiroundPro": {
+		"file": "MultiroundPro.fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
 	}
 },
 "com.badlogic.gdx.graphics.Color": {
@@ -176,8 +182,11 @@
 		"fontColor": "black"
 	},
 	"game-label": {
-		"font": "font-big",
+		"font": "MultiroundPro",
 		"background": "game-window-background"
+	},
+	"game-label-without-window": {
+		"font": "MultiroundPro"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
@@ -195,7 +204,7 @@
 		"selection": "pale-blue"
 	},
 	"game-list": {
-		"font": "font-big",
+		"font": "MultiroundPro",
 		"fontColorSelected": "white",
 		"fontColorUnselected": "white",
 		"selection": "game-button-down",
@@ -239,11 +248,10 @@
 		"listStyle": "plain"
 	},
 	"game-select-box": {
-		"font": "font-big",
+		"font": "MultiroundPro",
 		"fontColor": "white",
 		"scrollStyle": "default",
-		"listStyle": "game-list",
-		"backgroundOpen": "game-button-down"
+		"listStyle": "game-list"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
@@ -280,12 +288,12 @@
 		"down": "button-small-down"
 	},
 	"game-text-button": {
-		"font": "font-big",
+		"font": "MultiroundPro",
 		"up": "game-button-up",
 		"down": "game-button-down"
 	},
 	"game-text-button-small": {
-		"font": "font-big",
+		"font": "MultiroundPro",
 		"up": "game-button-small-up",
 		"down": "game-button-small-down"
 	}
@@ -326,7 +334,7 @@
 	},
 	"game-window": {
 		"background": "game-window-background",
-		"titleFont": "font-big"
+		"titleFont": "MultiroundPro"
 	}
 }
 }

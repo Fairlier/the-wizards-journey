@@ -1,5 +1,6 @@
 package com.thewizardsjourney.game.helper;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.asset.map.MapSettingsData;
@@ -8,6 +9,8 @@ import com.thewizardsjourney.game.constant.AssetConstants;
 
 public class MapInfo {
     private TiledMap map;
+    private TextureAtlas dynamicObjectsAtlas;
+    private TextureAtlas puzzlesAtlas;
     private MapSettingsData mapSettingsData;
     private MaterialsData materialsData;
     private final AssetsHandler assetsHandler;
@@ -30,14 +33,25 @@ public class MapInfo {
         String materialsFileName = AssetConstants.AssetPath.Map.MATERIALS;
         materialsFileName = materialsFileName.substring(0, materialsFileName.lastIndexOf("."));
 
+        String dynamicObjectsAtlasFileName = AssetConstants.AssetPath.Map.DYNAMIC_OBJECTS_TEXTURE_ATLAS;
+        dynamicObjectsAtlasFileName = dynamicObjectsAtlasFileName.substring(0, dynamicObjectsAtlasFileName.lastIndexOf("."));
+
+        String puzzlesAtlasFileName = AssetConstants.AssetPath.Map.PUZZLES_TEXTURE_ATLAS;
+        puzzlesAtlasFileName = puzzlesAtlasFileName.substring(0, puzzlesAtlasFileName.lastIndexOf("."));
+
         if (assetsHandler.isLoaded(mapGroupName, mapFileName) && 
                 assetsHandler.isLoaded(mapGroupName, settingsFileName) && 
                 assetsHandler.isLoaded(mapGroupName, materialsFileName)) {
             map = assetsHandler.get(mapGroupName, mapFileName);
             mapSettingsData = assetsHandler.get(mapGroupName, settingsFileName);
             materialsData = assetsHandler.get(mapGroupName, materialsFileName);
-        }
 
+            if (assetsHandler.isLoaded(mapGroupName, dynamicObjectsAtlasFileName) &&
+                    assetsHandler.isLoaded(mapGroupName, puzzlesAtlasFileName)) {
+                dynamicObjectsAtlas = assetsHandler.get(mapGroupName, dynamicObjectsAtlasFileName);
+                puzzlesAtlas = assetsHandler.get(mapGroupName, puzzlesAtlasFileName);
+            }
+        }
         return areAllVariablesInitialized();
     }
 
@@ -55,5 +69,13 @@ public class MapInfo {
 
     public MaterialsData getMaterialsData() {
         return materialsData;
+    }
+
+    public TextureAtlas getDynamicObjectsAtlas() {
+        return dynamicObjectsAtlas;
+    }
+
+    public TextureAtlas getPuzzlesAtlas() {
+        return puzzlesAtlas;
     }
 }

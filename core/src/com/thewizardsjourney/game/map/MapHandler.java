@@ -5,15 +5,12 @@ import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinit
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.LN_STATIC_OBJECTS;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.MP_MATERIAL_DEFAULT;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_BOX;
-import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_COIN;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_PLAYER;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_SENSOR_EXIT;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_SENSOR_HARM;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_SENSOR_INFO;
 import static com.thewizardsjourney.game.constant.AssetConstants.TiledMapDefinitions.OB_SENSOR_SAVE_POINT;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.UNIT_SCALE;
-import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_HEIGHT;
-import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_WIDTH;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Physics.GRAVITY;
 
 import com.badlogic.ashley.core.Engine;
@@ -62,8 +59,6 @@ import com.thewizardsjourney.game.helper.MapInfo;
 import com.thewizardsjourney.game.helper.EntityTypeInfo;
 import com.thewizardsjourney.game.helper.PlayerInfo;
 
-import box2dLight.ConeLight;
-import box2dLight.Light;
 import box2dLight.RayHandler;
 
 public class MapHandler {
@@ -244,6 +239,8 @@ public class MapHandler {
                 ECSConstants.EntityType.SENSOR_INFO,
                 objectData.getObject().getName());
         body.getFixtureList().get(0).setUserData(entityTypeInfo);
+        String atlasRegionName = objectData.getObject().getProperties().get("atlas_region_name", null, String.class);
+        entityTypeInfo.setAtlasRegionName(atlasRegionName);
 
         createEntityForStaticObject(body);
 
@@ -336,13 +333,13 @@ public class MapHandler {
                 objectData.getObject().getName());
         body.getFixtureList().get(0).setUserData(entityTypeInfo);
 
-        createEntityForCoin(body);
+        createEntityForCoinObject(body);
 
         fixtureDef.shape = null;
         shape.dispose();
     }
 
-    private void createEntityForCoin(Body body) {
+    private void createEntityForCoinObject(Body body) {
         Entity entity = engine.createEntity();
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
@@ -359,7 +356,7 @@ public class MapHandler {
         entity.add(transformComponent);
 
         RenderingComponent renderingComponent = engine.createComponent(RenderingComponent.class);
-        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "game_objects")).findRegion("coin");
+        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "map_dynamic_objects_texture_atlas")).findRegion("coin");
         renderingComponent.sprite = new Sprite(textureRegion);
         renderingComponent.sprite.setSize(textureRegion.getRegionWidth() * UNIT_SCALE * 0.9f, textureRegion.getRegionHeight() * UNIT_SCALE * 0.9f);
         renderingComponent.sprite.setOriginCenter();
@@ -423,12 +420,13 @@ public class MapHandler {
         entity.add(transformComponent);
 
         RenderingComponent renderingComponent = engine.createComponent(RenderingComponent.class);
-        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "game_objects")).findRegion("box");
+        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "map_dynamic_objects_texture_atlas")).findRegion("box");
         renderingComponent.sprite = new Sprite(textureRegion);
         renderingComponent.sprite.setSize(textureRegion.getRegionWidth() * UNIT_SCALE * 0.9f, textureRegion.getRegionHeight() * UNIT_SCALE * 0.9f);
         renderingComponent.sprite.setOriginCenter();
         renderingComponent.sprite.setPosition(transformComponent.position.x, transformComponent.position.y);
         if (((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getColor() != null) {
+
             renderingComponent.sprite.setColor(((EntityTypeInfo) body.getFixtureList().get(0).getUserData()).getColor());
         }
         entity.add(renderingComponent);
@@ -590,7 +588,7 @@ public class MapHandler {
                 ECSConstants.EntityType.SENSOR_PUZZLE,
                 objectData.getObject().getName());
         body.getFixtureList().get(0).setUserData(entityTypeInfo);
-        float[] vertices = objectData.getVerticesStaticObject();
+        float[] vertices = objectData.getVerticesStaticObject(); // TODO
         createEntityForPuzzleSensorObject(body, puzzleGroupObject, new Vector2(vertices[0], vertices[1]), new Vector2(vertices[4], vertices[5]));
 
         fixtureDef.shape = null;
@@ -616,6 +614,7 @@ public class MapHandler {
         puzzleSensorComponent.lowerBound = lowerBound;
         puzzleSensorComponent.upperBound = upperBound;
         puzzleSensorComponent.joints = puzzleGroupObject.getJoints();
+        puzzleSensorComponent.drawShape = puzzleGroupObject.getSensor().getObject().getProperties().get("draw_shape", false, boolean.class);
         entity.add(puzzleSensorComponent);
 
         engine.addEntity(entity);
@@ -760,7 +759,7 @@ public class MapHandler {
         entity.add(transformComponent);
 
         RenderingComponent renderingComponent = engine.createComponent(RenderingComponent.class);
-        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "game_objects")).findRegion("door");
+        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "map_dynamic_objects_texture_atlas")).findRegion("door");
         renderingComponent.sprite = new Sprite(textureRegion);
         renderingComponent.sprite.setSize(textureRegion.getRegionWidth() * UNIT_SCALE, textureRegion.getRegionHeight() * UNIT_SCALE);
         renderingComponent.sprite.setOriginCenter();
@@ -891,7 +890,7 @@ public class MapHandler {
         entity.add(entityTypeComponent);
 
         RenderingComponent renderingComponent = engine.createComponent(RenderingComponent.class);
-        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "game_objects")).findRegion("button");
+        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "map_dynamic_objects_texture_atlas")).findRegion("button");
         renderingComponent.sprite = new Sprite(textureRegion);
         renderingComponent.sprite.setSize(textureRegion.getRegionWidth() * UNIT_SCALE, textureRegion.getRegionHeight() * UNIT_SCALE);
         renderingComponent.sprite.setOriginCenter();
@@ -997,7 +996,7 @@ public class MapHandler {
         entity.add(transformComponent);
 
         RenderingComponent renderingComponent = engine.createComponent(RenderingComponent.class);
-        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "game_objects")).findRegion("spiked_ball");
+        TextureRegion textureRegion = ((TextureAtlas) assetsHandler.get("default", "map_dynamic_objects_texture_atlas")).findRegion("spiked_ball");
         renderingComponent.sprite = new Sprite(textureRegion);
         renderingComponent.sprite.setSize(textureRegion.getRegionWidth() * UNIT_SCALE, textureRegion.getRegionHeight() * UNIT_SCALE);
         renderingComponent.sprite.setOriginCenter();
@@ -1109,5 +1108,9 @@ public class MapHandler {
 
     public PlayerInfo getPlayerInfo() {
         return playerInfo;
+    }
+
+    public MapInfo getMapInfo() {
+        return mapInfo;
     }
 }

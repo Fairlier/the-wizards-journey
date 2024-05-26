@@ -7,41 +7,38 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
 
-public class PauseWidget extends Table {
+public class GameOverWidget extends Table {
     private final Label titleLabel;
     private final Button resumeButton;
     private final Button homeButton;
-    private final Button closeButton;
-    private final Window pauseWindow;
+    private final Window gameOverWindow;
 
-    public PauseWidget(Skin skin) {
+    public GameOverWidget(Skin skin) {
         super(skin);
 
-        titleLabel = new Label("Пауза", skin, "game-label");
-        closeButton = new Button(skin, "game-close-button");
+        titleLabel = new Label("ВЫ ПРОИГРАЛИ!", skin, "game-label");
         resumeButton = new Button(skin, "game-resume-button");
         homeButton = new Button(skin, "game-home-button");
-        pauseWindow = new Window("", skin, "game-window");
+        gameOverWindow = new Window("", skin, "game-window");
 
         setFillParent(true);
         setupUI();
     }
 
     private void setupUI() {
-        pauseWindow.setMovable(false);
-        pauseWindow.add(resumeButton).top().left().pad(20).uniform();
-        pauseWindow.add(homeButton).top().right().pad(20).uniform();
-        pauseWindow.pack();
+        gameOverWindow.setMovable(false);
+        gameOverWindow.add(resumeButton).top().left().pad(20).uniform();
+        gameOverWindow.add(homeButton).top().right().pad(20).uniform();
+        gameOverWindow.pack();
 
         titleLabel.setAlignment(Align.center);
 
-        top();
         add().expand().fill();
         add(titleLabel).height(200).top().padTop(20);
         add().expandX().fill();
-        add(closeButton).top().right().padTop(20).padRight(20).row();
+        row();
         add().expandX().fill();
-        add(pauseWindow).center().padTop(20).padBottom(20);
+        add(gameOverWindow).center().padTop(20).padBottom(20);
         add().expandX().fill();
         pack();
     }
@@ -52,9 +49,5 @@ public class PauseWidget extends Table {
 
     public Button getHomeButton() {
         return homeButton;
-    }
-
-    public Button getCloseButton() {
-        return closeButton;
     }
 }

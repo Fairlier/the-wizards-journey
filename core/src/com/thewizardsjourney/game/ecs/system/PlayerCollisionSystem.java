@@ -4,8 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.thewizardsjourney.game.constant.ECSConstants;
-import com.thewizardsjourney.game.controller.InputHandler;
 import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.CollisionComponent;
@@ -14,10 +14,13 @@ import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerMovementComponent;
 import com.thewizardsjourney.game.ecs.component.SavePointComponent;
 import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
+import com.thewizardsjourney.game.helper.EntityTypeInfo;
 import com.thewizardsjourney.game.helper.GameplayInfo;
+import com.thewizardsjourney.game.helper.MapInfo;
 
 public class PlayerCollisionSystem extends IteratingSystem {
     private final GameplayInfo gameplayInfo;
+    private final MapInfo mapInfo;
     private final ComponentMapper<BodyComponent> bodyComponentCM =
             ComponentMapper.getFor(BodyComponent.class);
     private final ComponentMapper<CollisionComponent> collisionComponentCM =
@@ -33,7 +36,7 @@ public class PlayerCollisionSystem extends IteratingSystem {
     private final ComponentMapper<PlayerMovementComponent> playerMovementComponentCM =
             ComponentMapper.getFor(PlayerMovementComponent.class);
 
-    public PlayerCollisionSystem(GameplayInfo gameplayInfo) {
+    public PlayerCollisionSystem(GameplayInfo gameplayInfo, MapInfo mapInfo) {
         super(Family.all(
                 BodyComponent.class,
                 CollisionComponent.class,
@@ -44,6 +47,7 @@ public class PlayerCollisionSystem extends IteratingSystem {
                 PlayerComponent.class
         ).get());
         this.gameplayInfo = gameplayInfo;
+        this.mapInfo = mapInfo;
     }
 
     @Override
@@ -77,10 +81,12 @@ public class PlayerCollisionSystem extends IteratingSystem {
                 statisticsComponent.health = statisticsComponent.health == 0 ? 0 : statisticsComponent.health - 1;
                 bodyComponent.body.setTransform(savePointComponent.position, 0);
             } else if (entityTypeComponent.type == ECSConstants.EntityType.SENSOR_INFO) {
-                gameplayInfo.getInfoButton().setVisible(true);
+                gameplayInfo.getInformationButton().setVisible(true);
                 gameplayInfo.setGameIsExit(false);
+                gameplayInfo.getInformationWidget().setImage(new Image(mapInfo.getPuzzlesAtlas().findRegion(
+                        ((EntityTypeInfo) collisionComponent.firstCollidedEntity.getComponent(BodyComponent.class).body.getFixtureList().get(0).getUserData()).getAtlasRegionName())));
             } else if (entityTypeComponent.type == ECSConstants.EntityType.SENSOR_EXIT) {
-                gameplayInfo.getInfoButton().setVisible(true);
+                gameplayInfo.getInformationButton().setVisible(true);
                 gameplayInfo.setGameIsExit(true);
             } else if (entityTypeComponent.type == ECSConstants.EntityType.ROPE) {
                 statisticsComponent.health = statisticsComponent.health == 0 ? 0 : statisticsComponent.health - 1;
@@ -93,9 +99,9 @@ public class PlayerCollisionSystem extends IteratingSystem {
         if (collisionComponent.lastCollidedEntity.getComponent(EntityTypeComponent.class) != null)  {
             EntityTypeComponent entityTypeComponent = collisionComponent.lastCollidedEntity.getComponent(EntityTypeComponent.class);
             if(entityTypeComponent.type == ECSConstants.EntityType.SENSOR_INFO) {
-                gameplayInfo.getInfoButton().setVisible(false);
+                gameplayInfo.getInformationButton().setVisible(false);
             } else if (entityTypeComponent.type == ECSConstants.EntityType.SENSOR_EXIT) {
-                gameplayInfo.getInfoButton().setVisible(false);
+                gameplayInfo.getInformationButton().setVisible(false);
             }
         }
     }

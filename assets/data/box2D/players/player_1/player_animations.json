@@ -4,7 +4,7 @@
     "frame_duration": 0.025,
     "animation_speed": 0.3,
     "play_mode": "LOOP",
-    "frames": ["idle-0-0", "idle-1-0", "idle-2-0", "idle-3-0", "idle-4-0", "idle-5-0", "idle-6-0", "idle-7-0"]
+    "frames": ["idle-0-0", "idle-1-0", "idle-2-0", "idle-3-0", "idle-4-0", "idle-5-0", "idle-6-0"]
   },
   {
     "state": "RUN",
@@ -18,7 +18,7 @@
     "frame_duration": 0.025,
     "animation_speed": 1.0,
     "play_mode": "NORMAL",
-    "frames": ["jump-3-3", "jump-4-3"]
+    "frames": ["jump-2-3", "jump-3-3"]
   },
   {
     "state": "FALL",

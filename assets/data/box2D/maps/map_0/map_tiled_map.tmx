@@ -100,8 +100,16 @@
   <object id="63" name="sensor_harm" x="880" y="240" width="96" height="16"/>
   <object id="64" name="sensor_harm" x="688" y="288" width="48" height="16"/>
   <object id="72" name="sensor_save_point" x="656" y="208" width="16" height="32"/>
-  <object id="74" name="sensor_info" x="432" y="224" width="32" height="32"/>
-  <object id="77" name="sensor_info" x="976" y="176" width="32" height="32"/>
+  <object id="74" name="sensor_info" x="432" y="224" width="32" height="32">
+   <properties>
+    <property name="atlas_region_name" value="puzzle-1"/>
+   </properties>
+  </object>
+  <object id="77" name="sensor_info" x="976" y="176" width="32" height="32">
+   <properties>
+    <property name="atlas_region_name" value="puzzle-2"/>
+   </properties>
+  </object>
   <object id="78" name="sensor_save_point" x="1120" y="208" width="16" height="32"/>
   <object id="81" name="box" x="416.167" y="297" width="32" height="32"/>
   <object id="82" name="box" x="694.333" y="233.167" width="32" height="32"/>
@@ -113,12 +121,13 @@
  <objectgroup color="#0000ff" id="11" name="puzzle_objects_1">
   <object id="50" name="sensor" x="496" y="192" width="96" height="64">
    <properties>
+    <property name="draw_shape" type="bool" value="true"/>
     <property name="group" value="1"/>
     <property name="number_of_targets" type="int" value="1"/>
     <property name="target_object" value="box"/>
    </properties>
   </object>
-  <object id="51" name="sensor" x="1039.82" y="282" width="48" height="16">
+  <object id="51" name="sensor" x="1040" y="282" width="48" height="16">
    <properties>
     <property name="group" value="2"/>
     <property name="number_of_targtes" type="int" value="0"/>
@@ -131,7 +140,7 @@
     <property name="joint_type" value="distance"/>
    </properties>
   </object>
-  <object id="53" name="moving" x="1041.45" y="256" width="45.2727" height="16">
+  <object id="53" name="moving" x="1041.45" y="256" width="45" height="16">
    <properties>
     <property name="group" value="3"/>
     <property name="joint_type" value="distance"/>

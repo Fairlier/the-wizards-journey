@@ -136,7 +136,23 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
                         assetData.setPath(materialsFile.path());
                         assets.put(assetData.getName(), assetData);
                     }
-                    if (mapFile.exists() && settingsFile.exists()) {
+                    FileHandle objectsFile = mapDirectory.child(Map.DYNAMIC_OBJECTS_TEXTURE_ATLAS);
+                    if (materialsFile.exists()) {
+                        AssetData assetData = new AssetData();
+                        assetData.setName(objectsFile.nameWithoutExtension());
+                        assetData.setType(TextureAtlas.class);
+                        assetData.setPath(objectsFile.path());
+                        assets.put(assetData.getName(), assetData);
+                    }
+                    FileHandle puzzlesFile = mapDirectory.child(Map.PUZZLES_TEXTURE_ATLAS);
+                    if (materialsFile.exists()) {
+                        AssetData assetData = new AssetData();
+                        assetData.setName(puzzlesFile.nameWithoutExtension());
+                        assetData.setType(TextureAtlas.class);
+                        assetData.setPath(puzzlesFile.path());
+                        assets.put(assetData.getName(), assetData);
+                    }
+                    if (mapFile.exists() && settingsFile.exists() && materialsFile.exists()) {
                         String groupName = String.join("_", mapDirectory.parent().name(), mapDirectory.name());
                         groupNames.add(groupName);
                         groups.put(groupName, assets);
@@ -148,7 +164,7 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
         return groupNames;
     }
 
-    public Array<String> parsePlayersFromDirectory(String directoryPath) {
+    public Array<String> parsePlayersFromDirectory(String directoryPath) { // TODO sounds
         Array<String> groupNames = new Array<>();
         FileHandle mapsDirectory = Gdx.files.internal(directoryPath);
         if (mapsDirectory.exists() && mapsDirectory.isDirectory()) {

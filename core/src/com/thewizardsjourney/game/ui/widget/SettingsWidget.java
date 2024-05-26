@@ -27,23 +27,23 @@ public class SettingsWidget extends Table {
     public SettingsWidget(Skin skin) {
         super(skin);
 
-        titleLabel = new Label("Settings", skin, "game-label");
+        titleLabel = new Label("Настройки", skin, "game-label");
         settingsWindow = new Window("", skin, "game-window");
         musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "game-slider");
         soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "game-slider");
         languageSelectBox = new SelectBox<>(skin, "game-select-box");
         closeButton = new Button(skin, "game-close-button");
 
-        musicLabel = new Label("Music", skin, "big");
-        soundLabel = new Label("Sound", skin, "big");
-        languageLabel = new Label("Language", skin, "big");
+        musicLabel = new Label("Громкость музыки", skin, "game-label-without-window");
+        soundLabel = new Label("Громкость звуков", skin, "game-label-without-window");
+        languageLabel = new Label("Язык", skin, "game-label-without-window");
 
         setFillParent(true);
         setupUI();
     }
 
     private void setupUI() {
-        languageSelectBox.setItems("English", "Русский");
+        languageSelectBox.setItems("Русский", "English");
         settingsWindow.setMovable(false);
         settingsWindow.add(musicLabel).pad(10);
         settingsWindow.add(musicSlider).width(200).pad(10).row();
@@ -55,9 +55,8 @@ public class SettingsWidget extends Table {
 
         titleLabel.setAlignment(Align.center);
 
-        top();
         add().expand().fill();
-        add(titleLabel).height(200).center().padTop(20);
+        add(titleLabel).height(200).top().padTop(20);
         add().expandX().fill();
         add(closeButton).top().right().padTop(20).padRight(20).row();
         add().expandX().fill();

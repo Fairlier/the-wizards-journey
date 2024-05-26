@@ -128,8 +128,8 @@ public class GameScreen extends ScreenAdapter { // TODO
         LightSystem lightSystem = new LightSystem(mapHandler.getRayHandler(), camera);
         PlayerMovementSystem playerMovementSystem = new PlayerMovementSystem(mapHandler.getWorld());
         PlayerControlSystem playerControlSystem = new PlayerControlSystem(controller);
-        PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem(gameplayInfo);
-        PlayerAbilitySystem playerAbilitySystem = new PlayerAbilitySystem(mapHandler.getWorld(), controller, viewport, main.getAssetHandler());
+        PlayerCollisionSystem playerCollisionSystem = new PlayerCollisionSystem(gameplayInfo, mapHandler.getMapInfo());
+        PlayerAbilitySystem playerAbilitySystem = new PlayerAbilitySystem(mapHandler.getWorld(), controller, viewport);
         CameraSystem cameraSystem = new CameraSystem(camera, mapHandler.getMap());
         cameraSystem.setTargetEntity(mapHandler.getPlayer());
         RenderingSystem renderingSystem = new RenderingSystem(batch, viewport, mapHandler.getMap());
@@ -140,7 +140,7 @@ public class GameScreen extends ScreenAdapter { // TODO
 
 
         skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
-        gameHUD = new GameHUD(skin, main.getGameInfo(), gameplayInfo);
+        gameHUD = new GameHUD(skin, gameplayInfo);
         gameplayInfo.getPlayerStatisticsWidget().setHealth(mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth(),
                 mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth());
         gameplayInfo.getPlayerStatisticsWidget().setEnergy(mapHandler.getPlayerInfo().getPlayerSettingsData().getEnergy(),
@@ -251,6 +251,20 @@ public class GameScreen extends ScreenAdapter { // TODO
         });
 
         gameHUD.getGameExitWidget().getHomeButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                main.setIntermediateScreen(main.getGameScreen().getClass(), main.getMenuScreen().getClass());
+            }
+        });
+
+        gameHUD.getGameOverWidget().getResumeButton().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                main.setIntermediateScreen(main.getGameScreen().getClass(), main.getGameScreen().getClass());
+            }
+        });
+
+        gameHUD.getGameOverWidget().getHomeButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 main.setIntermediateScreen(main.getGameScreen().getClass(), main.getMenuScreen().getClass());
