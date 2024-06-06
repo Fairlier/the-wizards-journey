@@ -9,7 +9,6 @@ public class InputHandler extends InputAdapter {
     private boolean jump;
     private boolean ability;
     private boolean cast;
-
     private Vector2 fingerLocation = new Vector2(0,0);
 
     @Override

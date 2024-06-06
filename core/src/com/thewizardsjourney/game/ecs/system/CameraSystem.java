@@ -16,7 +16,7 @@ public class CameraSystem extends EntitySystem {
     private final OrthographicCamera camera;
     private final Vector2 maxCameraPosition = new Vector2();
 
-    public CameraSystem(OrthographicCamera camera, TiledMap map) { // TODO
+    public CameraSystem(OrthographicCamera camera, TiledMap map) {
         this.camera = camera;
 
         float mapWidth = map.getProperties().get("width", Integer.class);

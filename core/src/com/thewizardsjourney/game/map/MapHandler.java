@@ -62,8 +62,7 @@ import com.thewizardsjourney.game.helper.PlayerInfo;
 import box2dLight.RayHandler;
 
 public class MapHandler {
-    // TODO
-    private Logger logger; // ?
+    private Logger logger;
     private Engine engine;
     private World world;
     private RayHandler rayHandler;
@@ -84,7 +83,6 @@ public class MapHandler {
         world.setContactListener(bodyContactListener);
 
         rayHandler = new RayHandler(world);
-        // TODO
         rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 0.25f);
 
         this.assetsHandler = assetsHandler;
@@ -94,16 +92,15 @@ public class MapHandler {
 
         player = null;
 
-        if (!mapInfo.setMapInfo(gameInfo.getSelectedMapGroupName()) ||
-            !playerInfo.setPlayerInfo(gameInfo.getSelectedPlayerGroupName())) {
-        }
+        mapInfo.setMapInfo(gameInfo.getSelectedMapGroupName());
+        playerInfo.setPlayerInfo(gameInfo.getSelectedPlayerGroupName());
 
         createObjects(mapInfo.getMap(), LN_STATIC_OBJECTS, this::createStaticObjects);
         createObjects(mapInfo.getMap(), LN_OTHER_OBJECTS, this::createOtherObjects);
 
         MapLayers layers = mapInfo.getMap().getLayers();
         for (MapLayer layer : layers) {
-            if (layer.getName().startsWith(LN_PUZZLE_OBJECTS)) { // TODO
+            if (layer.getName().startsWith(LN_PUZZLE_OBJECTS)) {
                 createObjects(mapInfo.getMap(), layer.getName(), this::createPuzzleObjects);
             }
         }
@@ -171,6 +168,42 @@ public class MapHandler {
         }
     }
 
+    private void createPuzzleObjects(Array<MapObjectData> objectsData) {
+        ObjectMap<String, PuzzleGroupObject> puzzleGroupObjects = new ObjectMap<>();
+        for (MapObjectData objectData : objectsData) {
+            String group = objectData.getObject().getProperties().get("group", String.class);
+            String jointType = objectData.getObject().getProperties().get("joint_type", String.class);
+            switch (objectData.getObject().getName()) {
+                case "sensor":
+                    if (!puzzleGroupObjects.containsKey(group)) {
+                        puzzleGroupObjects.put(group, new PuzzleGroupObject(null, new ObjectMap<>()));
+                    }
+                    puzzleGroupObjects.get(group).setSensor(objectData);
+                    break;
+                default:
+                    if (!puzzleGroupObjects.containsKey(group)) {
+                        puzzleGroupObjects.put(group, new PuzzleGroupObject(null, new ObjectMap<>()));
+                    }
+                    if (!puzzleGroupObjects.get(group).getMapObjectsForJoints().containsKey(jointType)) {
+                        puzzleGroupObjects.get(group).getMapObjectsForJoints().put(jointType, new Array<>());
+                    }
+                    puzzleGroupObjects.get(group).getMapObjectsForJoints().get(jointType).add(objectData);
+                    break;
+            }
+        }
+        for (String group : puzzleGroupObjects.keys()) {
+            PuzzleGroupObject puzzleGroupObject = puzzleGroupObjects.get(group);
+            for (String jointType : puzzleGroupObject.getMapObjectsForJoints().keys()) {
+                createPuzzleJointForGroup(puzzleGroupObject, jointType, puzzleGroupObject.getMapObjectsForJoints().get(jointType));
+            }
+        }
+        for (PuzzleGroupObject puzzleGroupObject : puzzleGroupObjects.values()) {
+            if (puzzleGroupObject.getSensor() != null) {
+                createPuzzleSensorForGroup(puzzleGroupObject, puzzleGroupObject.getSensor());
+            }
+        }
+    }
+
     private void createEntityForStaticObject(Body body) {
         Entity entity = engine.createEntity();
 
@@ -208,9 +241,6 @@ public class MapHandler {
                     createSensorSavePointObject(objectData);
                     break;
                 default:
-//                    if (objectData.getObject().getName().startsWith(OB_COIN)) {
-//                        createCoinObject(objectData);
-//                    }
                     break;
             }
         }
@@ -482,7 +512,7 @@ public class MapHandler {
         engine.addEntity(entity);
     }
 
-    private void createPlayerObject(MapObjectData objectData) { // TODO
+    private void createPlayerObject(MapObjectData objectData) {
         Shape shape = objectData.getShapeOtherObject();
         if (shape == null) {
             return;
@@ -512,42 +542,6 @@ public class MapHandler {
         shape.dispose();
     }
 
-    private void createPuzzleObjects(Array<MapObjectData> objectsData) { // TODO
-        ObjectMap<String, PuzzleGroupObject> puzzleGroupObjects = new ObjectMap<>();
-        for (MapObjectData objectData : objectsData) {
-            String group = objectData.getObject().getProperties().get("group", String.class);
-            String jointType = objectData.getObject().getProperties().get("joint_type", String.class);
-            switch (objectData.getObject().getName()) {
-                case "sensor":
-                    if (!puzzleGroupObjects.containsKey(group)) {
-                        puzzleGroupObjects.put(group, new PuzzleGroupObject(null, new ObjectMap<>()));
-                    }
-                    puzzleGroupObjects.get(group).setSensor(objectData);
-                    break;
-                default:
-                    if (!puzzleGroupObjects.containsKey(group)) {
-                        puzzleGroupObjects.put(group, new PuzzleGroupObject(null, new ObjectMap<>()));
-                    }
-                    if (!puzzleGroupObjects.get(group).getMapObjectsForJoints().containsKey(jointType)) {
-                        puzzleGroupObjects.get(group).getMapObjectsForJoints().put(jointType, new Array<>());
-                    }
-                    puzzleGroupObjects.get(group).getMapObjectsForJoints().get(jointType).add(objectData);
-                    break;
-            }
-        }
-        for (String group : puzzleGroupObjects.keys()) {
-            PuzzleGroupObject puzzleGroupObject = puzzleGroupObjects.get(group);
-            for (String jointType : puzzleGroupObject.getMapObjectsForJoints().keys()) {
-                createPuzzleJointForGroup(puzzleGroupObject, jointType, puzzleGroupObject.getMapObjectsForJoints().get(jointType));
-            }
-        }
-        for (PuzzleGroupObject puzzleGroupObject : puzzleGroupObjects.values()) {
-            if (puzzleGroupObject.getSensor() != null) {
-                createPuzzleSensorForGroup(puzzleGroupObject, puzzleGroupObject.getSensor());
-            }
-        }
-    }
-
     private void createPuzzleJointForGroup(PuzzleGroupObject groupObject, String jointType, Array<MapObjectData> objectsData) {
         switch (jointType) {
             case "prismatic":
@@ -565,7 +559,7 @@ public class MapHandler {
         }
     }
 
-    private void createPuzzleSensorForGroup(PuzzleGroupObject puzzleGroupObject, MapObjectData objectData) { // TODO
+    private void createPuzzleSensorForGroup(PuzzleGroupObject puzzleGroupObject, MapObjectData objectData) {
         Shape shape = objectData.getShapeStaticObject();
         if (shape == null) {
             return;
@@ -588,7 +582,7 @@ public class MapHandler {
                 ECSConstants.EntityType.SENSOR_PUZZLE,
                 objectData.getObject().getName());
         body.getFixtureList().get(0).setUserData(entityTypeInfo);
-        float[] vertices = objectData.getVerticesStaticObject(); // TODO
+        float[] vertices = objectData.getVerticesStaticObject();
         createEntityForPuzzleSensorObject(body, puzzleGroupObject, new Vector2(vertices[0], vertices[1]), new Vector2(vertices[4], vertices[5]));
 
         fixtureDef.shape = null;
@@ -776,7 +770,7 @@ public class MapHandler {
         engine.addEntity(entity);
     }
 
-    private void createEntityForJointObjects(Body body) { // TODO
+    private void createEntityForJointObjects(Body body) {
         Entity entity = engine.createEntity();
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
@@ -1010,7 +1004,7 @@ public class MapHandler {
         engine.addEntity(entity);
     }
 
-    private void createEntityForPlayerObject(Body body) { // TODO
+    private void createEntityForPlayerObject(Body body) {
         player = engine.createEntity();
 
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);

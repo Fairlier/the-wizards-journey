@@ -44,7 +44,7 @@ public class AnimationSystem extends IteratingSystem {
             animationComponent.animationTime += deltaTime * animationComponent.animationsAttributes.get(animationComponent.state).getAnimationSpeed();
         }
 
-        if (animationComponent.animation != null) { // TODO
+        if (animationComponent.animation != null) {
             TextureRegion textureRegion = (TextureRegion) animationComponent.animation.getKeyFrame(animationComponent.animationTime);
             Sprite sprite = new Sprite(textureRegion);
             sprite.setSize(textureRegion.getRegionWidth() * UNIT_SCALE * 0.5f, textureRegion.getRegionHeight() * UNIT_SCALE * 0.5f);
@@ -55,7 +55,6 @@ public class AnimationSystem extends IteratingSystem {
                 sprite.flip(false, false);
             }
             renderingComponent.sprite = sprite;
-
         }
     }
 }

@@ -14,8 +14,6 @@ public class PlayerStatisticsSystem extends IteratingSystem {
     private final GameplayInfo gameplayInfo;
     private final ComponentMapper<StatisticsComponent> statisticsComponentCM =
             ComponentMapper.getFor(StatisticsComponent.class);
-    private final ComponentMapper<PlayerComponent> playerComponentCM =
-            ComponentMapper.getFor(PlayerComponent.class);
 
     public PlayerStatisticsSystem(GameplayInfo gameplayInfo) {
         super(Family.all(

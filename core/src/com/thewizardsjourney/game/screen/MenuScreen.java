@@ -1,13 +1,10 @@
 package com.thewizardsjourney.game.screen;
 
-import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.GAME_SCENE_HEIGHT;
-import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.GAME_SCENE_WIDTH;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.MENU_SCENE_HEIGHT;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.MENU_SCENE_WIDTH;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_HEIGHT;
 import static com.thewizardsjourney.game.constant.GlobalConstants.Screens.VIRTUAL_WIDTH;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,27 +13,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.thewizardsjourney.game.TheWizardsJourney;
-import com.thewizardsjourney.game.ecs.system.AnimationSystem;
-import com.thewizardsjourney.game.ecs.system.CameraSystem;
-import com.thewizardsjourney.game.ecs.system.LightSystem;
-import com.thewizardsjourney.game.ecs.system.OutOfBoundsSystem;
-import com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem;
-import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
-import com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem;
-import com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem;
-import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
-import com.thewizardsjourney.game.ecs.system.PlayerMovementSystem;
-import com.thewizardsjourney.game.ecs.system.PlayerStatisticsSystem;
-import com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem;
-import com.thewizardsjourney.game.ecs.system.RenderingSystem;
-import com.thewizardsjourney.game.map.MapHandler;
 import com.thewizardsjourney.game.ui.MenuHUD;
 
 public class MenuScreen extends ScreenAdapter {
@@ -59,7 +39,6 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
-        Gdx.app.log("MenuScreen", "HIDE");
         dispose();
     }
 
@@ -104,7 +83,7 @@ public class MenuScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
-        menuHUD = new MenuHUD(skin, main.getGameInfo());
+        menuHUD = new MenuHUD(skin, main.getAssetHandler(), main.getGameInfo());
         stage.addActor(menuHUD);
         buttonProcessing(menuHUD);
     }
@@ -117,5 +96,4 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
     }
-
 }

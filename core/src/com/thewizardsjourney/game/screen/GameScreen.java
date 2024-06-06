@@ -28,7 +28,6 @@ import com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem;
 import com.thewizardsjourney.game.ecs.system.AnimationSystem;
 import com.thewizardsjourney.game.ecs.system.CameraSystem;
 import com.thewizardsjourney.game.ecs.system.LightSystem;
-import com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem;
 import com.thewizardsjourney.game.ecs.system.PhysicsSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem;
 import com.thewizardsjourney.game.ecs.system.PlayerControlSystem;
@@ -39,9 +38,8 @@ import com.thewizardsjourney.game.ecs.system.RenderingSystem;
 import com.thewizardsjourney.game.helper.GameplayInfo;
 import com.thewizardsjourney.game.map.MapHandler;
 import com.thewizardsjourney.game.ui.GameHUD;
-import com.thewizardsjourney.game.ui.widget.PlayerStatisticsWidget;
 
-public class GameScreen extends ScreenAdapter { // TODO
+public class GameScreen extends ScreenAdapter {
     private final TheWizardsJourney main;
     private Viewport viewport;
     private OrthographicCamera camera;
@@ -73,11 +71,8 @@ public class GameScreen extends ScreenAdapter { // TODO
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         engine.update(delta);
-
         stage.act(Math.min(delta, 1.0f / 60.0f));
         stage.draw();
     }
@@ -123,7 +118,6 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine = new Engine();
 
         mapHandler = new MapHandler(engine, this.main.getAssetHandler(), main.getGameInfo());
-        PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(mapHandler.getWorld(), viewport);
         PhysicsSystem physicsSystem = new PhysicsSystem(mapHandler.getWorld());
         LightSystem lightSystem = new LightSystem(mapHandler.getRayHandler(), camera);
         PlayerMovementSystem playerMovementSystem = new PlayerMovementSystem(mapHandler.getWorld());
@@ -140,7 +134,7 @@ public class GameScreen extends ScreenAdapter { // TODO
 
 
         skin = new Skin(Gdx.files.internal("data/scene2D/ui-skin.json"));
-        gameHUD = new GameHUD(skin, gameplayInfo);
+        gameHUD = new GameHUD(skin, main.getGameInfo(), gameplayInfo);
         gameplayInfo.getPlayerStatisticsWidget().setHealth(mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth(),
                 mapHandler.getPlayerInfo().getPlayerSettingsData().getHealth());
         gameplayInfo.getPlayerStatisticsWidget().setEnergy(mapHandler.getPlayerInfo().getPlayerSettingsData().getEnergy(),
@@ -156,7 +150,6 @@ public class GameScreen extends ScreenAdapter { // TODO
         engine.addSystem(cameraSystem);
         engine.addSystem(animationSystem);
         engine.addSystem(renderingSystem);
-//        engine.addSystem(physicsDebugSystem);
         engine.addSystem(playerAbilitySystem);
         engine.addSystem(puzzleSensorSystem);
         engine.addSystem(outOfBoundsSystem);

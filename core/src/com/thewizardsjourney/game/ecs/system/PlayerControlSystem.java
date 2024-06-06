@@ -15,10 +15,8 @@ public class PlayerControlSystem extends IteratingSystem {
     private final InputHandler controller;
     private final ComponentMapper<PlayerMovementComponent> playerMovementComponentCM =
             ComponentMapper.getFor(PlayerMovementComponent.class);
-    private final ComponentMapper<FacingComponent> fm =
+    private final ComponentMapper<FacingComponent> facingComponentCM =
             ComponentMapper.getFor(FacingComponent.class);
-    private final ComponentMapper<PlayerComponent> pm =
-            ComponentMapper.getFor(PlayerComponent.class);
     private final ComponentMapper<PlayerAbilityComponent> abilityComponentCM =
             ComponentMapper.getFor(PlayerAbilityComponent.class);
 
@@ -33,8 +31,8 @@ public class PlayerControlSystem extends IteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) { // TODO
-        FacingComponent facingComponent = fm.get(entity);
+    protected void processEntity(Entity entity, float deltaTime) {
+        FacingComponent facingComponent = facingComponentCM.get(entity);
         PlayerMovementComponent playerMovementComponent  = playerMovementComponentCM.get(entity);
         PlayerAbilityComponent playerAbilityComponent = abilityComponentCM.get(entity);
 

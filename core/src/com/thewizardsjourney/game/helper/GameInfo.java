@@ -1,6 +1,7 @@
 package com.thewizardsjourney.game.helper;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.I18NBundle;
 
 public class GameInfo {
     private Array<String> mapGroupNames;
@@ -8,6 +9,8 @@ public class GameInfo {
     private String selectedMapGroupName = "";
     private String selectedPlayerGroupName = "players_player_0";
     private final String menuMapGroupName = "maps_menu_map";
+    private I18NBundle i18NBundle;
+    private String selectedLanguage = "";
 
     public GameInfo() {}
 
@@ -52,5 +55,21 @@ public class GameInfo {
         sortedMapGroupNames.removeValue(menuMapGroupName, false);
         sortedMapGroupNames.sort();
         return sortedMapGroupNames;
+    }
+
+    public I18NBundle getI18NBundle() {
+        return i18NBundle;
+    }
+
+    public void setI18NBundle(I18NBundle i18NBundle) {
+        this.i18NBundle = i18NBundle;
+    }
+
+    public String getSelectedLanguage() {
+        return selectedLanguage;
+    }
+
+    public void setSelectedLanguage(String selectedLanguage) {
+        this.selectedLanguage = selectedLanguage;
     }
 }

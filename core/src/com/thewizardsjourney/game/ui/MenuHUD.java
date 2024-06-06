@@ -1,13 +1,18 @@
 package com.thewizardsjourney.game.ui;
 
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetGroups.Default.ENGLISH_LANGUAGE;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetGroups.Default.RUSSIAN_LANGUAGE;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.I18NBundle;
+import com.thewizardsjourney.game.asset.AssetsHandler;
+import com.thewizardsjourney.game.constant.AssetConstants;
 import com.thewizardsjourney.game.helper.GameInfo;
 import com.thewizardsjourney.game.ui.widget.SelectLevelWidget;
 import com.thewizardsjourney.game.ui.widget.SettingsWidget;
@@ -20,16 +25,20 @@ public class MenuHUD extends Table {
     private final Button achievementsButton;
     private final SettingsWidget settingsWidget;
     private final SelectLevelWidget selectLevelWidget;
+    private final AssetsHandler assetsHandler;
+    private final GameInfo gameInfo;
 
-    public MenuHUD(Skin skin, GameInfo gameInfo) {
+    public MenuHUD(Skin skin, AssetsHandler assetsHandler, GameInfo gameInfo) {
         super(skin);
+        this.assetsHandler = assetsHandler;
+        this.gameInfo = gameInfo;
 
-        titleLabel = new Label("МЕНЮ", skin, "game-label");
+        titleLabel = new Label(gameInfo.getI18NBundle().get("menu.title"), skin, "game-label");
         achievementsButton = new Button(skin, "game-achievement-button");
         settingsButton = new Button(skin, "game-settings-button");
         shopButton = new Button(skin, "game-shop-button");
         playButton = new Button(skin, "game-play-button");
-        settingsWidget = new SettingsWidget(skin);
+        settingsWidget = new SettingsWidget(skin, gameInfo);
         selectLevelWidget = new SelectLevelWidget(skin, gameInfo);
 
         settingsWidget.setVisible(false);
@@ -45,7 +54,6 @@ public class MenuHUD extends Table {
 
     private void setupUI() {
         titleLabel.setAlignment(Align.center);
-
         add(achievementsButton).left().top().pad(20);
         add().expand().fill();
         add(titleLabel).height(200).top().padTop(20);
@@ -97,6 +105,26 @@ public class MenuHUD extends Table {
             }
         });
 
+        settingsWidget.getLanguageSelectBox().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String selectedLanguage = settingsWidget.getLanguageSelectBox().getSelected();
+                if (selectedLanguage.equals(gameInfo.getSelectedLanguage())) {
+                    return;
+                }
+                if (selectedLanguage.equals("Русский")) {
+                    selectedLanguage = RUSSIAN_LANGUAGE;
+                } else if (selectedLanguage.equals("English")) {
+                    selectedLanguage = ENGLISH_LANGUAGE;
+                }
+                gameInfo.setSelectedLanguage(selectedLanguage);
+                assetsHandler.setLanguage(selectedLanguage);
+                gameInfo.setI18NBundle(assetsHandler.get(AssetConstants.AssetGroups.Default.GROUP_NAME, selectedLanguage));
+                updateLanguage();
+
+            }
+        });
+
         selectLevelWidget.getCloseButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -108,6 +136,13 @@ public class MenuHUD extends Table {
                 playButton.setVisible(true);
             }
         });
+    }
+
+    public void updateLanguage() {
+        titleLabel.setText(gameInfo.getI18NBundle().get("menu.title"));
+        settingsWidget.updateLanguage();
+        settingsWidget.updateLanguageSelectBox();
+        selectLevelWidget.updateLanguage();
     }
 
     public Button getPlayButton() {

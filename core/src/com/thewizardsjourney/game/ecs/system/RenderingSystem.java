@@ -37,7 +37,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             ComponentMapper.getFor(TransformComponent.class);
 
 
-    public RenderingSystem(SpriteBatch batch, Viewport viewport, TiledMap map) { // TODO
+    public RenderingSystem(SpriteBatch batch, Viewport viewport, TiledMap map) {
         super(Family.all(
                 RenderingComponent.class,
                 TransformComponent.class
@@ -51,7 +51,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         for (int i = 0; i < layers.size(); i++) {
             MapLayer layer = layers.get(i);
             if (layer instanceof TiledMapTileLayer && layer.isVisible()) {
-                TiledMapTileLayer tiledLayer = (TiledMapTileLayer) layer; // TODO фор ич
+                TiledMapTileLayer tiledLayer = (TiledMapTileLayer) layer;
                 if (tiledLayer.getName().startsWith("background")) {
                     mapBackgroundLayers.add(tiledLayer);
                 } else {
@@ -81,7 +81,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) { // TODO
+    protected void processEntity(Entity entity, float deltaTime) {
         RenderingComponent renderingComponent = renderComponentCM.get(entity);
         TransformComponent transformComponent = transformComponentCM.get(entity);
         if (renderingComponent.sprite.getTexture() == null) {

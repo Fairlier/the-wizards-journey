@@ -2,7 +2,6 @@ package com.thewizardsjourney.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.audio.Music;
 import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.helper.GameInfo;
 import com.thewizardsjourney.game.screen.GameScreen;
@@ -12,7 +11,6 @@ import com.thewizardsjourney.game.screen.MenuScreen;
 public class TheWizardsJourney extends Game {
 	private AssetsHandler assetsHandler;
 	private GameInfo gameInfo;
-	private Music music;
 	private LoadingScreen loadingScreen;
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
@@ -57,9 +55,5 @@ public class TheWizardsJourney extends Game {
 			Class<? extends ScreenAdapter> nextScreen) {
 		loadingScreen.setScreens(previousScreen, nextScreen);
 		setScreen(loadingScreen);
-	}
-
-	public void updateMusicVolume() {
-		//
 	}
 }

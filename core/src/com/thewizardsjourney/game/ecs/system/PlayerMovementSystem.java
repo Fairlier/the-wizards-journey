@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.thewizardsjourney.game.constant.ECSConstants;
-import com.thewizardsjourney.game.ecs.component.CollisionComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent;
 import com.thewizardsjourney.game.ecs.component.AnimationComponent;
 import com.thewizardsjourney.game.ecs.component.BodyComponent;
@@ -29,15 +28,12 @@ public class PlayerMovementSystem extends IteratingSystem {
             ComponentMapper.getFor(AnimationComponent.class);
     private final ComponentMapper<PlayerAbilityComponent> abilityComponentCM =
             ComponentMapper.getFor(PlayerAbilityComponent.class);
-    private final ComponentMapper<CollisionComponent> collisionComponentCM =
-            ComponentMapper.getFor(CollisionComponent.class);
 
     public PlayerMovementSystem(World world) {
         super(Family.all(
                 BodyComponent.class,
                 PlayerMovementComponent.class,
                 PlayerAbilityComponent.class,
-                CollisionComponent.class,
                 AnimationComponent.class
         ).get());
         this.world = world;
@@ -49,7 +45,6 @@ public class PlayerMovementSystem extends IteratingSystem {
         PlayerMovementComponent playerMovementComponent  = playerMovementComponentCM.get(entity);
         AnimationComponent animationComponent = animationComponentCM.get(entity);
         PlayerAbilityComponent playerAbilityComponent = abilityComponentCM.get(entity);
-        CollisionComponent collisionComponent = collisionComponentCM.get(entity);
         isColliding = false;
         collisionCheck(bodyComponent.body);
         playerMovementComponent.isColliding = isColliding;
@@ -84,7 +79,7 @@ public class PlayerMovementSystem extends IteratingSystem {
         animationComponent.isStateChanged = (animationComponent.state != previousState);
     }
 
-    private void collisionCheck(Body body) { // TODO константы?
+    private void collisionCheck(Body body) {
         Vector2 bottomLeftPoint = new Vector2();
         Vector2 bottomRightPoint = new Vector2();
         ((PolygonShape) body.getFixtureList().get(0).getShape()).getVertex(0, bottomLeftPoint);
@@ -108,7 +103,7 @@ public class PlayerMovementSystem extends IteratingSystem {
                     ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.SENSOR_HARM &&
                     ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.SENSOR_PUZZLE &&
                     ((EntityTypeInfo) fixture.getUserData()).getEntityType() != ECSConstants.EntityType.COIN
-            ) { // TODO
+            ) {
                 isColliding = true;
             }
             return true;

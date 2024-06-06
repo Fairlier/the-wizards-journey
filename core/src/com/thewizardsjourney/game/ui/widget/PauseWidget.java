@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
+import com.thewizardsjourney.game.helper.GameInfo;
 
 public class PauseWidget extends Table {
     private final Label titleLabel;
@@ -13,11 +14,13 @@ public class PauseWidget extends Table {
     private final Button homeButton;
     private final Button closeButton;
     private final Window pauseWindow;
+    private final GameInfo gameInfo;
 
-    public PauseWidget(Skin skin) {
+    public PauseWidget(Skin skin, GameInfo gameInfo) {
         super(skin);
+        this.gameInfo = gameInfo;
 
-        titleLabel = new Label("Пауза", skin, "game-label");
+        titleLabel = new Label(gameInfo.getI18NBundle().get("pause.title"), skin, "game-label");
         closeButton = new Button(skin, "game-close-button");
         resumeButton = new Button(skin, "game-resume-button");
         homeButton = new Button(skin, "game-home-button");
@@ -44,6 +47,10 @@ public class PauseWidget extends Table {
         add(pauseWindow).center().padTop(20).padBottom(20);
         add().expandX().fill();
         pack();
+    }
+
+    public void updateLanguage() {
+        titleLabel.setText(gameInfo.getI18NBundle().get("pause.title"));
     }
 
     public Button getResumeButton() {

@@ -2,6 +2,10 @@ package com.thewizardsjourney.game.asset;
 
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.Map;
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.Player;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_DEFAULT_LANGUAGE;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_DEFAULT_MUSIC_VOLUME;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_MUSIC_VOLUME;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_LANGUAGE;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -27,10 +31,10 @@ import com.thewizardsjourney.game.asset.material.MaterialsLoader;
 import com.thewizardsjourney.game.asset.player.PlayerSettingsData;
 import com.thewizardsjourney.game.asset.player.PlayerSettingsLoader;
 
-public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
+public class AssetsHandler implements Disposable, AssetErrorListener {
     private static final String TAG = "AssetHandler";
-    private AssetManager manager;
-    private ObjectMap<String, ObjectMap<String, AssetData>> groups;
+    private final AssetManager manager;
+    private final ObjectMap<String, ObjectMap<String, AssetData>> groups;
 
     public AssetsHandler() {
         manager = new AssetManager();
@@ -164,7 +168,7 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
         return groupNames;
     }
 
-    public Array<String> parsePlayersFromDirectory(String directoryPath) { // TODO sounds
+    public Array<String> parsePlayersFromDirectory(String directoryPath) {
         Array<String> groupNames = new Array<>();
         FileHandle mapsDirectory = Gdx.files.internal(directoryPath);
         if (mapsDirectory.exists() && mapsDirectory.isDirectory()) {
@@ -208,6 +212,9 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
         return groupNames;
     }
 
+
+
+
     public synchronized <T> T get(String groupName, String fileAlias) {
         ObjectMap<String, AssetData> group = groups.get(groupName);
         if (group != null) {
@@ -244,5 +251,37 @@ public class AssetsHandler implements Disposable, AssetErrorListener { // TODO
 
     public ObjectMap<String, ObjectMap<String, AssetData>> getGroups() {
         return groups;
+    }
+
+    public void setMusicVolume(float volume) {
+        FileHandle file = Gdx.files.local(SETTINGS_MUSIC_VOLUME);
+        String data = String.valueOf(volume);
+        file.writeString(data, false);
+    }
+
+    public float getMusicVolume() {
+        try {
+            FileHandle file = Gdx.files.local(SETTINGS_MUSIC_VOLUME);
+            String volume = file.readString();
+            return Float.parseFloat(volume);
+        }
+        catch (Exception e) {
+            return SETTINGS_DEFAULT_MUSIC_VOLUME;
+        }
+    }
+
+    public void setLanguage(String language) {
+        FileHandle file = Gdx.files.local(SETTINGS_LANGUAGE);
+        file.writeString(language, false);
+    }
+
+    public String getLanguage() {
+        try {
+            FileHandle file = Gdx.files.local(SETTINGS_LANGUAGE);
+            return file.readString();
+        }
+        catch (Exception e) {
+            return SETTINGS_DEFAULT_LANGUAGE;
+        }
     }
 }

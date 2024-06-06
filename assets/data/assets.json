@@ -4,6 +4,16 @@
 			"name" : "map_dynamic_objects_texture_atlas",
 			"type" : "com.badlogic.gdx.graphics.g2d.TextureAtlas",
 			"path" : "data/box2D/graphic/map_dynamic_objects_texture_atlas.atlas"
+		},
+		{
+			"name" : "english_language",
+			"type" : "com.badlogic.gdx.utils.I18NBundle",
+			"path" : "data/i18n/en"
+		},
+		{
+			"name" : "russian_language",
+			"type" : "com.badlogic.gdx.utils.I18NBundle",
+			"path" : "data/i18n/ru"
 		}
 	]
 }

@@ -18,9 +18,9 @@ import com.thewizardsjourney.game.ecs.component.TransformComponent;
 public class PhysicsSystem extends IteratingSystem {
     private static float accumulator = 0.0f;
     private final World world;
-    private final ComponentMapper<BodyComponent> bm =
+    private final ComponentMapper<BodyComponent> bodyComponentCM =
             ComponentMapper.getFor(BodyComponent.class);
-    private final ComponentMapper<TransformComponent> tm =
+    private final ComponentMapper<TransformComponent> transformComponentCM =
             ComponentMapper.getFor(TransformComponent.class);
 
     public PhysicsSystem(World world) {
@@ -44,10 +44,10 @@ public class PhysicsSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        BodyComponent bodyComponent = bm.get(entity);
+        BodyComponent bodyComponent = bodyComponentCM.get(entity);
         Transform bodyTransform = bodyComponent.body.getTransform();
         Vector2 bodyPosition = bodyTransform.getPosition();
-        TransformComponent transformComponent = tm.get(entity);
+        TransformComponent transformComponent = transformComponentCM.get(entity);
         transformComponent.position.x = bodyPosition.x;
         transformComponent.position.y = bodyPosition.y;
         transformComponent.rotation = bodyTransform.getRotation();

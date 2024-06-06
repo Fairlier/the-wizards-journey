@@ -3,6 +3,10 @@ package com.thewizardsjourney.game.constant;
 public class AssetConstants {
     public static class AssetPath {
         public static final String ASSETS = "data/assets.json";
+        public static final String SETTINGS_MUSIC_VOLUME = "music_volume.txt";
+        public static final float SETTINGS_DEFAULT_MUSIC_VOLUME = 0.5f;
+        public static final String SETTINGS_LANGUAGE = "selected_language.txt";
+        public static final String SETTINGS_DEFAULT_LANGUAGE = "russian_language";
 
         public static class Player {
             public static final String PARENT_DIRECTORY = "data/box2D/players";
@@ -84,6 +88,8 @@ public class AssetConstants {
     public static class AssetGroups {
         public static class Default {
             public static final String GROUP_NAME = "default";
+            public static final String ENGLISH_LANGUAGE = "english_language";
+            public static final String RUSSIAN_LANGUAGE = "russian_language";
         }
 
         public static class LoadingScreen {

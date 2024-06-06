@@ -2,18 +2,22 @@ package com.thewizardsjourney.game.screen;
 
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath;
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetGroups;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_DEFAULT_LANGUAGE;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.thewizardsjourney.game.TheWizardsJourney;
+
+import java.util.Locale;
 
 public class LoadingScreen extends ScreenAdapter {
     private final TheWizardsJourney main;
     private Class<? extends ScreenAdapter> previousScreen;
     private Class<? extends ScreenAdapter> nextScreen;
 
-    public LoadingScreen(TheWizardsJourney main) { // TODO
+    public LoadingScreen(TheWizardsJourney main) {
         this.main = main;
         main.getAssetHandler().parseGroupsFromFile(AssetPath.ASSETS);
         main.getGameInfo().setMapGroupNames(main.getAssetHandler().parseMapsFromDirectory(AssetPath.Map.PARENT_DIRECTORY));
@@ -28,6 +32,12 @@ public class LoadingScreen extends ScreenAdapter {
         }
         main.getAssetHandler().finishLoading();
         main.getGameInfo().setSelectedMapGroupName(main.getGameInfo().getMenuMapGroupName());
+
+        I18NBundle i18NBundle;
+        String language = main.getAssetHandler().getLanguage();
+        i18NBundle = main.getAssetHandler().get(AssetGroups.Default.GROUP_NAME, language);
+        main.getGameInfo().setSelectedLanguage(language);
+        main.getGameInfo().setI18NBundle(i18NBundle);
     }
 
     @Override

@@ -10,11 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -23,7 +19,6 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.constant.ECSConstants;
 import com.thewizardsjourney.game.controller.InputHandler;
 import com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent;
@@ -31,12 +26,11 @@ import com.thewizardsjourney.game.ecs.component.BodyComponent;
 import com.thewizardsjourney.game.ecs.component.FacingComponent;
 import com.thewizardsjourney.game.ecs.component.PlayerComponent;
 import com.thewizardsjourney.game.ecs.component.StatisticsComponent;
-import com.thewizardsjourney.game.helper.MapInfo;
 
 public class PlayerAbilitySystem extends IteratingSystem {
     private boolean isCasting;
     private boolean isEnergy;
-    private MouseJointDef mouseJointDef;
+    private final MouseJointDef mouseJointDef;
     private MouseJoint mouseJoint;
     private boolean previousIsInAbilityMode;
     private final Vector2 touchPoint;
@@ -74,7 +68,7 @@ public class PlayerAbilitySystem extends IteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) { // TODO
+    protected void processEntity(Entity entity, float deltaTime) {
         PlayerAbilityComponent playerAbilityComponent = abilityComponentCM.get(entity);
         StatisticsComponent statisticsComponent = statisticsComponentCM.get(entity);
         playerAbilityComponent.isInAbilityModeChanged = (playerAbilityComponent.isInAbilityMode != previousIsInAbilityMode);

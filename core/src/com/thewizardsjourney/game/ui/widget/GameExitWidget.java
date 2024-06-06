@@ -14,11 +14,13 @@ public class GameExitWidget extends Table {
     private final Button homeButton;
     private final Button closeButton;
     private final Window gameExitWindow;
+    private final GameInfo gameInfo;
 
-    public GameExitWidget(Skin skin) {
+    public GameExitWidget(Skin skin, GameInfo gameInfo) {
         super(skin);
+        this.gameInfo = gameInfo;
 
-        titleLabel = new Label("ВЫ ПРОШЛИ!", skin, "game-label");
+        titleLabel = new Label(gameInfo.getI18NBundle().get("gameExit.title"), skin, "game-label");
         closeButton = new Button(skin, "game-close-button");
         resumeButton = new Button(skin, "game-resume-button");
         homeButton = new Button(skin, "game-home-button");
@@ -45,6 +47,10 @@ public class GameExitWidget extends Table {
         add(gameExitWindow).center().padTop(20).padBottom(20);
         add().expandX().fill();
         pack();
+    }
+
+    public void updateLanguage() {
+        titleLabel.setText(gameInfo.getI18NBundle().get("gameOver.title"));
     }
 
     public Button getResumeButton() {

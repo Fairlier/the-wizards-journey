@@ -31,10 +31,6 @@ public class PlayerCollisionSystem extends IteratingSystem {
             ComponentMapper.getFor(SavePointComponent.class);
     private final ComponentMapper<StatisticsComponent> statisticsComponentCM =
             ComponentMapper.getFor(StatisticsComponent.class);
-    private final ComponentMapper<AnimationComponent> animationComponentCM =
-            ComponentMapper.getFor(AnimationComponent.class);
-    private final ComponentMapper<PlayerMovementComponent> playerMovementComponentCM =
-            ComponentMapper.getFor(PlayerMovementComponent.class);
 
     public PlayerCollisionSystem(GameplayInfo gameplayInfo, MapInfo mapInfo) {
         super(Family.all(
@@ -51,9 +47,8 @@ public class PlayerCollisionSystem extends IteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) { // TODO
+    protected void processEntity(Entity entity, float deltaTime) {
         CollisionComponent collisionComponent = collisionComponentCM.get(entity);
-
         if (collisionComponent.firstCollidedEntity != null && collisionComponent.lastCollidedEntity == null) {
             beginCollision(collisionComponent, entity);
         }
@@ -62,13 +57,11 @@ public class PlayerCollisionSystem extends IteratingSystem {
         }
     }
 
-    private void beginCollision(CollisionComponent collisionComponent, Entity entity) { // TODO
+    private void beginCollision(CollisionComponent collisionComponent, Entity entity) {
         BodyComponent bodyComponent = bodyComponentCM.get(entity);
         PlayerComponent playerComponent = playerComponentCM.get(entity);
         SavePointComponent savePointComponent = savePointComponentCM.get(entity);
         StatisticsComponent statisticsComponent = statisticsComponentCM.get(entity);
-        AnimationComponent animationComponent = animationComponentCM.get(entity);
-        PlayerMovementComponent playerMovementComponent = playerMovementComponentCM.get(entity);
         if (collisionComponent.firstCollidedEntity.getComponent(EntityTypeComponent.class) != null)  {
             EntityTypeComponent entityTypeComponent = collisionComponent.firstCollidedEntity.getComponent(EntityTypeComponent.class);
             if (entityTypeComponent.type == ECSConstants.EntityType.SENSOR_SAVE_POINT &&

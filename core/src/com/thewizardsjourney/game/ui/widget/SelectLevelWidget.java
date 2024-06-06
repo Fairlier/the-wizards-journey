@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.thewizardsjourney.game.helper.GameInfo;
 
 public class SelectLevelWidget extends Table {
@@ -35,14 +36,14 @@ public class SelectLevelWidget extends Table {
         mapGroupNames = gameInfo.getMapGroupNamesForLevelSelection();
         totalPages = (mapGroupNames.size + 1) / 2;
 
-        titleLabel = new Label("Выбор уровня", skin, "game-label");
+        titleLabel = new Label(gameInfo.getI18NBundle().get("selectLevel.title"), skin, "game-label");
         selectLevelWindow = new Window("", skin, "game-window");
         closeButton = new Button(skin, "game-close-button");
         prevButton = new Button(skin, "game-prev-button");
         nextButton = new Button(skin, "game-next-button");
         levelButton0 = new TextButton("", skin, "game-text-button");
         levelButton1 = new TextButton("", skin, "game-text-button");
-        playButton = new TextButton("Играть", skin, "game-text-button");
+        playButton = new TextButton(gameInfo.getI18NBundle().get("selectLevel.playButton"), skin, "game-text-button");
 
         setFillParent(true);
         setupUI();
@@ -140,6 +141,11 @@ public class SelectLevelWidget extends Table {
         } else {
             levelButton1.setVisible(false);
         }
+    }
+
+    public void updateLanguage() {
+        titleLabel.setText(gameInfo.getI18NBundle().get("selectLevel.title"));
+        playButton.setText(gameInfo.getI18NBundle().get("selectLevel.playButton"));
     }
 
     public Label getTitleLabel() {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.thewizardsjourney.game.helper.GameInfo;
 import com.thewizardsjourney.game.helper.GameplayInfo;
 import com.thewizardsjourney.game.ui.widget.GameExitWidget;
@@ -29,9 +30,12 @@ public class GameHUD extends Table {
     private final GameOverWidget gameOverWidget;
     private boolean jumpButtonVisible;
     private final GameplayInfo gameplayInfo;
+    private I18NBundle i18NBundle;
+    private final GameInfo gameInfo;
 
-    public GameHUD(Skin skin, GameplayInfo gameplayInfo) {
+    public GameHUD(Skin skin, GameInfo gameInfo, GameplayInfo gameplayInfo) {
         super(skin);
+        this.gameInfo = gameInfo;
         this.gameplayInfo = gameplayInfo;
 
         pauseButton = new Button(skin, "game-pause-button");
@@ -41,10 +45,10 @@ public class GameHUD extends Table {
         switchButton = new Button(skin, "game-resume-button");
         touchpad = new Touchpad(5.0f, skin, "game-touchpad");
         playerStatisticsWidget = new PlayerStatisticsWidget(skin);
-        pauseWidget = new PauseWidget(skin);
+        pauseWidget = new PauseWidget(skin, gameInfo);
         informationWidget = new InformationWidget(skin);
-        gameExitWidget = new GameExitWidget(skin);
-        gameOverWidget = new GameOverWidget(skin);
+        gameExitWidget = new GameExitWidget(skin, gameInfo);
+        gameOverWidget = new GameOverWidget(skin, gameInfo);
 
         informationButton.setVisible(false);
         castButton.setVisible(false);
@@ -188,6 +192,12 @@ public class GameHUD extends Table {
         informationWidget.setVisible(false);
         gameExitWidget.setVisible(false);
         gameOverWidget.setVisible(true);
+    }
+
+    public void updateLanguage() {
+        pauseWidget.updateLanguage();
+        gameExitWidget.updateLanguage();
+        gameOverWidget.updateLanguage();
     }
 
     public Touchpad getTouchpad() {
