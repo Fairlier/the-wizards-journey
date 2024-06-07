@@ -5,6 +5,9 @@ public class AssetConstants {
         public static final String ASSETS = "data/assets.json";
         public static final String SETTINGS_MUSIC_VOLUME = "music_volume.txt";
         public static final float SETTINGS_DEFAULT_MUSIC_VOLUME = 0.5f;
+
+        public static final String SETTINGS_SOUNDS_VOLUME = "sounds_volume.txt";
+        public static final float SETTINGS_DEFAULT_SOUNDS_VOLUME = 0.5f;
         public static final String SETTINGS_LANGUAGE = "selected_language.txt";
         public static final String SETTINGS_DEFAULT_LANGUAGE = "russian_language";
 

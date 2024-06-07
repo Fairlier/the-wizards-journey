@@ -29,6 +29,7 @@ public class SettingsWidget extends Table {
 
         titleLabel = new Label(gameInfo.getI18NBundle().get("settings.title"), skin, "game-label");
         settingsWindow = new Window("", skin, "game-window");
+
         musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "game-slider");
         soundSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin, "game-slider");
 
@@ -81,6 +82,14 @@ public class SettingsWidget extends Table {
         } else if (gameInfo.getSelectedLanguage().equals("english_language")) {
             languageSelectBox.setSelectedIndex(1);
         }
+    }
+
+    public void updateMusicSlider(float value) {
+        musicSlider.setValue(value);
+    }
+
+    public void updateSoundsSlider(float value) {
+        soundSlider.setValue(value);
     }
 
     public Label getTitleLabel() {

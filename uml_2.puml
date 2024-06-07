@@ -1,0 +1,291 @@
+@startuml
+class EntityTypeComponent {
+}
+class InformationWidget {
+}
+class PlayerAbilityComponent {
+}
+class InputHandler {
+}
+class MenuScreen {
+}
+class RenderingComponent {
+}
+class AbilityInfo {
+}
+class AnimationsLoader {
+}
+class AnimationsLoader$AnimationsParameter {
+}
+class GlobalConstants {
+}
+class GlobalConstants$Screens {
+}
+class GlobalConstants$Physics {
+}
+class MapInfo {
+}
+class ECSConstants {
+}
+class ECSConstants$PhysicsSystem {
+}
+enum FacingDirection {
++  LEFT
++  RIGHT
+}
+
+enum AnimationState {
++  IDLE
++  JUMP
++  FALL
++  RUN
++  ABILITY
++  HURT
+}
+
+enum EntityType {
++  PLAYER
++  STATIC_OBJECT
++  DYNAMIC_OBJECT
++  SENSOR_SAVE_POINT
++  SENSOR_INFO
++  SENSOR_EXIT
++  SENSOR_HARM
++  COIN
++  SENSOR_PUZZLE
++  PRISMATIC
++  DISTANCE
++  ROPE
++  NONE
+}
+
+class PlayerSettingsData {
+}
+class PlayerStatisticsWidget {
+}
+class SavePointComponent {
+}
+class PlayerAbilitySystem {
+}
+class MapSettingsData {
+}
+class AssetConstants {
+}
+class AssetConstants$AssetPath {
+}
+class AssetConstants$AssetPath$Player {
+}
+class AssetConstants$AssetPath$Map {
+}
+class AssetConstants$TiledMapDefinitions {
+}
+class AssetConstants$CustomAsset {
+}
+class AssetConstants$CustomAsset$AssetConfig {
+}
+class AssetConstants$CustomAsset$MaterialConfig {
+}
+class AssetConstants$CustomAsset$AnimationConfig {
+}
+class AssetConstants$CustomAsset$MapConfig {
+}
+class AssetConstants$CustomAsset$PlayerConfig {
+}
+class AssetConstants$AssetGroups {
+}
+class AssetConstants$AssetGroups$Default {
+}
+class AssetConstants$AssetGroups$LoadingScreen {
+}
+class AssetConstants$AssetGroups$MenuScreen {
+}
+class AssetConstants$AssetGroups$GameScreen {
+}
+class PlayerCollisionSystem {
+}
+class MaterialsLoader {
+}
+class MaterialsLoader$MaterialsParameter {
+}
+class FacingComponent {
+}
+class AnimationsData {
+}
+class StatisticsComponent {
+}
+class GameOverWidget {
+}
+class SettingsWidget {
+}
+class MenuHUD {
+}
+class AssetData {
+}
+class PlayerMovementComponent {
+}
+class JointInfo {
+}
+class PlayerControlSystem {
+}
+class PlayerInfo {
+}
+class EntityTypeInfo {
+}
+class GameExitWidget {
+}
+class PhysicsSystem {
+}
+class EntityComparator {
+}
+class TransformComponent {
+}
+class PlayerMovementSystem {
+}
+class CameraSystem {
+}
+class AnimationComponent {
+}
+class AssetsHandler {
+}
+class PauseWidget {
+}
+class RenderingSystem {
+}
+class MapSettingsLoader {
+}
+class MapSettingsLoader$MapSettingsParameter {
+}
+class LoadingScreen {
+}
+class LightSystem {
+}
+class TheWizardsJourney {
+}
+class PhysicsDebugSystem {
+}
+class PlayerStatisticsSystem {
+}
+class SelectLevelWidget {
+}
+class MapHandler {
+}
+interface MapHandler$ObjectCreationHandler {
+}
+class BodyContactListener {
+}
+class PuzzleGroupObject {
+}
+class OutOfBoundsSystem {
+}
+class CollisionComponent {
+}
+class PlayerSettingsLoader {
+}
+class PlayerSettingsLoader$PlayerSettingsParameter {
+}
+class PuzzleSensorComponent {
+}
+class GameScreen {
+}
+class PuzzleSensorSystem {
+}
+class BodyComponent {
+}
+class GameHUD {
+}
+class MaterialsData {
+}
+class MaterialAttributes {
+}
+class GameInfo {
+}
+class AnimationSystem {
+}
+class MapObjectData {
+}
+class GameplayInfo {
+}
+class AnimationAttributes {
+}
+class PlayerComponent {
+}
+
+
+Component <|.. EntityTypeComponent
+Table <|-- InformationWidget
+Component <|.. PlayerAbilityComponent
+InputAdapter <|-- InputHandler
+ScreenAdapter <|-- MenuScreen
+Component <|.. RenderingComponent
+AsynchronousAssetLoader <|-- AnimationsLoader
+AnimationsLoader +.. AnimationsLoader$AnimationsParameter
+AssetLoaderParameters <|-- AnimationsLoader$AnimationsParameter
+GlobalConstants +.. GlobalConstants$Screens
+GlobalConstants +.. GlobalConstants$Physics
+ECSConstants +.. ECSConstants$PhysicsSystem
+WidgetGroup <|-- PlayerStatisticsWidget
+Component <|.. SavePointComponent
+IteratingSystem <|-- PlayerAbilitySystem
+AssetConstants +.. AssetConstants$AssetPath
+AssetConstants$AssetPath +.. AssetConstants$AssetPath$Player
+AssetConstants$AssetPath +.. AssetConstants$AssetPath$Map
+AssetConstants +.. AssetConstants$TiledMapDefinitions
+AssetConstants +.. AssetConstants$CustomAsset
+AssetConstants$CustomAsset +.. AssetConstants$CustomAsset$AssetConfig
+AssetConstants$CustomAsset +.. AssetConstants$CustomAsset$MaterialConfig
+AssetConstants$CustomAsset +.. AssetConstants$CustomAsset$AnimationConfig
+AssetConstants$CustomAsset +.. AssetConstants$CustomAsset$MapConfig
+AssetConstants$CustomAsset +.. AssetConstants$CustomAsset$PlayerConfig
+AssetConstants +.. AssetConstants$AssetGroups
+AssetConstants$AssetGroups +.. AssetConstants$AssetGroups$Default
+AssetConstants$AssetGroups +.. AssetConstants$AssetGroups$LoadingScreen
+AssetConstants$AssetGroups +.. AssetConstants$AssetGroups$MenuScreen
+AssetConstants$AssetGroups +.. AssetConstants$AssetGroups$GameScreen
+IteratingSystem <|-- PlayerCollisionSystem
+AsynchronousAssetLoader <|-- MaterialsLoader
+MaterialsLoader +.. MaterialsLoader$MaterialsParameter
+AssetLoaderParameters <|-- MaterialsLoader$MaterialsParameter
+Component <|.. FacingComponent
+Component <|.. StatisticsComponent
+Table <|-- GameOverWidget
+Table <|-- SettingsWidget
+Table <|-- MenuHUD
+Serializable <|.. AssetData
+Component <|.. PlayerMovementComponent
+IteratingSystem <|-- PlayerControlSystem
+Table <|-- GameExitWidget
+IteratingSystem <|-- PhysicsSystem
+Comparator <|.. EntityComparator
+Component <|.. TransformComponent
+Comparable <|.. TransformComponent
+IteratingSystem <|-- PlayerMovementSystem
+EntitySystem <|-- CameraSystem
+Component <|.. AnimationComponent
+Disposable <|.. AssetsHandler
+AssetErrorListener <|.. AssetsHandler
+Table <|-- PauseWidget
+SortedIteratingSystem <|-- RenderingSystem
+AsynchronousAssetLoader <|-- MapSettingsLoader
+MapSettingsLoader +.. MapSettingsLoader$MapSettingsParameter
+AssetLoaderParameters <|-- MapSettingsLoader$MapSettingsParameter
+ScreenAdapter <|-- LoadingScreen
+EntitySystem <|-- LightSystem
+Game <|-- TheWizardsJourney
+EntitySystem <|-- PhysicsDebugSystem
+IteratingSystem <|-- PlayerStatisticsSystem
+Table <|-- SelectLevelWidget
+MapHandler +.. MapHandler$ObjectCreationHandler
+ContactListener <|.. BodyContactListener
+IteratingSystem <|-- OutOfBoundsSystem
+Component <|.. CollisionComponent
+AsynchronousAssetLoader <|-- PlayerSettingsLoader
+PlayerSettingsLoader +.. PlayerSettingsLoader$PlayerSettingsParameter
+AssetLoaderParameters <|-- PlayerSettingsLoader$PlayerSettingsParameter
+Component <|.. PuzzleSensorComponent
+ScreenAdapter <|-- GameScreen
+IteratingSystem <|-- PuzzleSensorSystem
+Component <|.. BodyComponent
+Table <|-- GameHUD
+IteratingSystem <|-- AnimationSystem
+Component <|.. PlayerComponent
+@enduml

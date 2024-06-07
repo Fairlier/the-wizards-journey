@@ -1,0 +1,1124 @@
+@startuml
+class com.thewizardsjourney.game.ecs.component.EntityTypeComponent {
++ EntityType type
+}
+
+class com.thewizardsjourney.game.ui.widget.InformationWidget {
+- Button closeButton
+- Window pauseWindow
+- Image image
+- void setupUI()
++ Button getCloseButton()
++ Image getImage()
++ void setImage(Image)
++ void update()
+}
+
+
+class com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent {
++ boolean isCasting
++ boolean isInAbilityMode
++ boolean isInAbilityModeChanged
+}
+
+class com.thewizardsjourney.game.controller.InputHandler {
+- boolean left
+- boolean right
+- boolean jump
+- boolean ability
+- boolean cast
+- Vector2 fingerLocation
++ boolean touchDragged(int,int,int)
++ void setLeft(boolean)
++ void setRight(boolean)
++ void setJump(boolean)
++ void setAbility(boolean)
++ void setCast(boolean)
++ boolean isLeft()
++ boolean isRight()
++ boolean isJump()
++ boolean isAbility()
++ boolean isCast()
++ Vector2 getFingerLocation()
+}
+
+
+class com.thewizardsjourney.game.screen.MenuScreen {
+- TheWizardsJourney main
+- Viewport viewport
+- OrthographicCamera camera
+- SpriteBatch batch
+- Stage stage
+- Skin skin
+- MenuHUD menuHUD
+- Engine engine
+- MapHandler mapHandler
++ void show()
++ void hide()
++ void render(float)
++ void resize(int,int)
++ void dispose()
+- void initialization()
+- void buttonProcessing(MenuHUD)
+}
+
+
+class com.thewizardsjourney.game.ecs.component.RenderingComponent {
++ Sprite sprite
+}
+
+class com.thewizardsjourney.game.helper.AbilityInfo {
+- float spellEnergyCost
+- ParticleEffect spellEffect
+}
+
+class com.thewizardsjourney.game.asset.animation.AnimationsLoader {
+- AnimationsData animationsData
++ void loadAsync(AssetManager,String,FileHandle,AnimationsParameter)
++ AnimationsData loadSync(AssetManager,String,FileHandle,AnimationsLoader.AnimationsParameter)
++ Array<AssetDescriptor> getDependencies(String,FileHandle,AnimationsLoader.AnimationsParameter)
+}
+
+
+class com.thewizardsjourney.game.asset.animation.AnimationsLoader$AnimationsParameter {
+}
+class com.thewizardsjourney.game.constant.GlobalConstants {
+}
+class com.thewizardsjourney.game.constant.GlobalConstants$Screens {
++ {static} float MENU_SCENE_WIDTH
++ {static} float MENU_SCENE_HEIGHT
++ {static} float GAME_SCENE_WIDTH
++ {static} float GAME_SCENE_HEIGHT
++ {static} float VIRTUAL_WIDTH
++ {static} float VIRTUAL_HEIGHT
++ {static} float UNIT_SCALE
+}
+
+class com.thewizardsjourney.game.constant.GlobalConstants$Physics {
++ {static} Vector2 GRAVITY
+}
+
+class com.thewizardsjourney.game.helper.MapInfo {
+- TiledMap map
+- TextureAtlas dynamicObjectsAtlas
+- TextureAtlas puzzlesAtlas
+- MapSettingsData mapSettingsData
+- MaterialsData materialsData
+- AssetsHandler assetsHandler
++ boolean setMapInfo(String)
++ boolean areAllVariablesInitialized()
++ TiledMap getMap()
++ MapSettingsData getMapSettingsData()
++ MaterialsData getMaterialsData()
++ TextureAtlas getDynamicObjectsAtlas()
++ TextureAtlas getPuzzlesAtlas()
+}
+
+
+class com.thewizardsjourney.game.constant.ECSConstants {
+}
+class com.thewizardsjourney.game.constant.ECSConstants$PhysicsSystem {
++ {static} int VELOCITY_ITERATIONS
++ {static} int POSITION_ITERATIONS
++ {static} float FIXED_STEP_TIME
++ {static} float MAX_FRAME_TIME
+}
+
+enum com.thewizardsjourney.game.constant.FacingDirection {
++  LEFT
++  RIGHT
+}
+
+enum com.thewizardsjourney.game.constant.AnimationState {
++  IDLE
++  JUMP
++  FALL
++  RUN
++  ABILITY
++  HURT
+}
+
+enum com.thewizardsjourney.game.constant.EntityType {
++  PLAYER
++  STATIC_OBJECT
++  DYNAMIC_OBJECT
++  SENSOR_SAVE_POINT
++  SENSOR_INFO
++  SENSOR_EXIT
++  SENSOR_HARM
++  COIN
++  SENSOR_PUZZLE
++  PRISMATIC
++  DISTANCE
++  ROPE
++  NONE
+}
+
+class com.thewizardsjourney.game.asset.player.PlayerSettingsData {
+- String name
+- int health
+- int energy
+- int range
+- float movementSpeed
+- float jumpSpeed
+- int cost
+- boolean purchased
++ String getName()
++ void setName(String)
++ int getHealth()
++ void setHealth(int)
++ int getEnergy()
++ void setEnergy(int)
++ int getRange()
++ void setRange(int)
++ float getMovementSpeed()
++ void setMovementSpeed(float)
++ float getJumpSpeed()
++ void setJumpSpeed(float)
++ int getCost()
++ void setCost(int)
++ boolean isPurchased()
++ void setPurchased(boolean)
+}
+
+
+class com.thewizardsjourney.game.ui.widget.PlayerStatisticsWidget {
+- Image background
+- Image healthBar
+- Image energyBar
+- float currentHealth
+- float maxHealth
+- float currentEnergy
+- float maxEnergy
+- float scale
+- void updateBars()
++ void setHealth(float,float)
++ void setEnergy(float,float)
++ Image getBackground()
++ Image getHealthBar()
++ Image getEnergyBar()
+}
+
+
+class com.thewizardsjourney.game.ecs.component.SavePointComponent {
++ Vector2 position
+}
+
+class com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem {
+- boolean isCasting
+- boolean isEnergy
+- MouseJointDef mouseJointDef
+- MouseJoint mouseJoint
+- boolean previousIsInAbilityMode
+- Vector2 touchPoint
+- World world
+- InputHandler controller
+- Viewport viewport
+- ShapeRenderer renderer
+- float energyRecoveryAccumulator
+- float energyExpenditureAccumulator
+- ComponentMapper<BodyComponent> bodyComponentCM
+- ComponentMapper<PlayerAbilityComponent> abilityComponentCM
+- ComponentMapper<FacingComponent> facingComponentCM
+- ComponentMapper<StatisticsComponent> statisticsComponentCM
+- RayCastCallback callback
+# void processEntity(Entity,float)
+- void drawTouchPoint()
++ void removedFromEngine(Engine)
+}
+
+
+class com.thewizardsjourney.game.asset.map.MapSettingsData {
+- String name
+- Array<String> interactedObjects
+- boolean accessible
++ String getName()
++ void setName(String)
++ Array<String> getInteractedObjects()
++ void setInteractedObjects(Array<String>)
++ boolean isAccessible()
++ void setAccessible(boolean)
+}
+
+
+class com.thewizardsjourney.game.constant.AssetConstants {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetPath {
++ {static} String ASSETS
++ {static} String SETTINGS_MUSIC_VOLUME
++ {static} float SETTINGS_DEFAULT_MUSIC_VOLUME
++ {static} String SETTINGS_LANGUAGE
++ {static} String SETTINGS_DEFAULT_LANGUAGE
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Player {
++ {static} String PARENT_DIRECTORY
++ {static} String TEXTURE_ATLAS
++ {static} String ANIMATIONS
++ {static} String SETTINGS
++ {static} String SOUNDS
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Map {
++ {static} String PARENT_DIRECTORY
++ {static} String TILED_MAP
++ {static} String SETTINGS
++ {static} String MATERIALS
++ {static} String DYNAMIC_OBJECTS_TEXTURE_ATLAS
++ {static} String PUZZLES_TEXTURE_ATLAS
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$TiledMapDefinitions {
++ {static} String LN_STATIC_OBJECTS
++ {static} String LN_OTHER_OBJECTS
++ {static} String LN_PUZZLE_OBJECTS
++ {static} String MP_MATERIAL
++ {static} String MP_MATERIAL_DEFAULT
++ {static} String OB_PLAYER
++ {static} String OB_BOX
++ {static} String OB_COIN
++ {static} String OB_SENSOR_HARM
++ {static} String OB_SENSOR_EXIT
++ {static} String OB_SENSOR_INFO
++ {static} String OB_SENSOR_SAVE_POINT
++ {static} String PO_SENSOR_PUZZLE
++ {static} String PO_FIXED
++ {static} String PO_MOVING
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AssetConfig {
++ {static} String NAME
++ {static} String ASSET_TYPE
++ {static} String TYPE
++ {static} String PATH
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MaterialConfig {
++ {static} String NAME
++ {static} String DENSITY
++ {static} String RESTITUTION
++ {static} String FRICTION
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AnimationConfig {
++ {static} String STATE
++ {static} String FRAME_DURATION
++ {static} String PLAY_MODE
++ {static} String FRAMES
++ {static} String ANIMATION_SPEED
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MapConfig {
++ {static} String NAME
++ {static} String INTERACTED_OBJECTS
++ {static} String ACCESSIBLE
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$PlayerConfig {
++ {static} String NAME
++ {static} String HEALTH
++ {static} String ENERGY
++ {static} String RANGE
++ {static} String MOVEMENT_SPEED
++ {static} String JUMP_SPEED
++ {static} String COST
++ {static} String PURCHASED
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$Default {
++ {static} String GROUP_NAME
++ {static} String ENGLISH_LANGUAGE
++ {static} String RUSSIAN_LANGUAGE
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$LoadingScreen {
++ {static} String GROUP_NAME
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$MenuScreen {
++ {static} String GROUP_NAME
+}
+
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$GameScreen {
++ {static} String GROUP_NAME
+}
+
+class com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem {
+- GameplayInfo gameplayInfo
+- MapInfo mapInfo
+- ComponentMapper<BodyComponent> bodyComponentCM
+- ComponentMapper<CollisionComponent> collisionComponentCM
+- ComponentMapper<PlayerComponent> playerComponentCM
+- ComponentMapper<SavePointComponent> savePointComponentCM
+- ComponentMapper<StatisticsComponent> statisticsComponentCM
+# void processEntity(Entity,float)
+- void beginCollision(CollisionComponent,Entity)
+- void endCollision(CollisionComponent,Entity)
+}
+
+
+class com.thewizardsjourney.game.asset.material.MaterialsLoader {
+- MaterialsData materialsData
++ void loadAsync(AssetManager,String,FileHandle,MaterialsParameter)
++ MaterialsData loadSync(AssetManager,String,FileHandle,MaterialsParameter)
++ Array<AssetDescriptor> getDependencies(String,FileHandle,MaterialsParameter)
+}
+
+
+class com.thewizardsjourney.game.asset.material.MaterialsLoader$MaterialsParameter {
+}
+class com.thewizardsjourney.game.ecs.component.FacingComponent {
++ FacingDirection direction
+}
+
+class com.thewizardsjourney.game.asset.animation.AnimationsData {
+- ObjectMap<ECSConstants.AnimationState,AnimationAttributes> animationsAttributes
++ void putAnimation(AnimationAttributes)
++ ObjectMap<ECSConstants.AnimationState,AnimationAttributes> getAnimationsAttributes()
+}
+
+
+class com.thewizardsjourney.game.ecs.component.StatisticsComponent {
++ int maxHealth
++ int maxEnergy
++ int health
++ int energy
++ int range
+}
+
+class com.thewizardsjourney.game.ui.widget.GameOverWidget {
+- Label titleLabel
+- Button resumeButton
+- Button homeButton
+- Window gameOverWindow
+- GameInfo gameInfo
+- void setupUI()
++ void updateLanguage()
++ Button getResumeButton()
++ Button getHomeButton()
+}
+
+
+class com.thewizardsjourney.game.ui.widget.SettingsWidget {
+- Label titleLabel
+- Label musicLabel
+- Label soundsLabel
+- Label languageLabel
+- Window settingsWindow
+- Slider musicSlider
+- Slider soundSlider
+- SelectBox<String> languageSelectBox
+- Button closeButton
+- GameInfo gameInfo
+- void setupUI()
++ void updateLanguage()
++ void updateLanguageSelectBox()
++ Label getTitleLabel()
++ Window getSettingsWindow()
++ Slider getMusicSlider()
++ Slider getSoundSlider()
++ SelectBox<String> getLanguageSelectBox()
++ Button getCloseButton()
+}
+
+
+class com.thewizardsjourney.game.ui.MenuHUD {
+- Label titleLabel
+- Button playButton
+- Button shopButton
+- Button settingsButton
+- Button achievementsButton
+- SettingsWidget settingsWidget
+- SelectLevelWidget selectLevelWidget
+- AssetsHandler assetsHandler
+- GameInfo gameInfo
+- void setupUI()
+- void buttonProcessing()
++ void updateLanguage()
++ Button getPlayButton()
++ Button getShopButton()
++ Button getSettingsButton()
++ Button getAchievementsButton()
++ SettingsWidget getSettingsWidget()
++ SelectLevelWidget getSelectLevelWidget()
+}
+
+
+class com.thewizardsjourney.game.asset.AssetData {
+- String name
+- Class<?> type
+- String path
++ void write(Json)
++ void read(Json,JsonValue)
++ String getName()
++ void setName(String)
++ Class<?> getType()
++ void setType(Class<?>)
++ String getPath()
++ void setPath(String)
+}
+
+
+class com.thewizardsjourney.game.ecs.component.PlayerMovementComponent {
++ boolean isColliding
++ boolean isRunning
++ boolean isJumping
++ float runSpeed
++ float jumpSpeed
++ Vector2 runVelocity
++ Vector2 jumpVelocity
+}
+
+class com.thewizardsjourney.game.helper.JointInfo {
+- Joint joint
+- float motorSpeed
++ Joint getJoint()
++ void setJoint(Joint)
++ float getMotorSpeed()
++ void setMotorSpeed(float)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.PlayerControlSystem {
+- InputHandler controller
+- ComponentMapper<PlayerMovementComponent> playerMovementComponentCM
+- ComponentMapper<FacingComponent> facingComponentCM
+- ComponentMapper<PlayerAbilityComponent> abilityComponentCM
+# void processEntity(Entity,float)
+}
+
+
+class com.thewizardsjourney.game.helper.PlayerInfo {
+- TextureAtlas atlas
+- AnimationsData animationsData
+- PlayerSettingsData playerSettingsData
+- ObjectMap<ECSConstants.AnimationState,Animation> animations
+- ObjectMap<ECSConstants.AnimationState,AnimationAttributes> animationsAttributes
+- AssetsHandler assetsHandler
++ boolean setPlayerInfo(String)
+- void initializeAnimations(TextureAtlas,AnimationsData)
+- void initializeAnimationsAttributes(AnimationsData)
++ boolean areAllVariablesInitialized()
++ PlayerSettingsData getPlayerSettingsData()
++ ObjectMap<ECSConstants.AnimationState,Animation> getAnimations()
++ ObjectMap<ECSConstants.AnimationState,AnimationAttributes> getAnimationsAttributes()
+}
+
+
+class com.thewizardsjourney.game.helper.EntityTypeInfo {
+- ECSConstants.EntityType entityType
+- String objectCategoryName
+- Color color
+- String atlasRegionName
++ ECSConstants.EntityType getEntityType()
++ void setEntityType(ECSConstants.EntityType)
++ String getObjectCategoryName()
++ void setObjectCategoryName(String)
++ Color getColor()
++ void setColor(Color)
++ String getAtlasRegionName()
++ void setAtlasRegionName(String)
+}
+
+
+class com.thewizardsjourney.game.ui.widget.GameExitWidget {
+- Label titleLabel
+- Button resumeButton
+- Button homeButton
+- Button closeButton
+- Window gameExitWindow
+- GameInfo gameInfo
+- void setupUI()
++ void updateLanguage()
++ Button getResumeButton()
++ Button getHomeButton()
++ Button getCloseButton()
+}
+
+
+class com.thewizardsjourney.game.ecs.system.PhysicsSystem {
+- {static} float accumulator
+- World world
+- ComponentMapper<BodyComponent> bodyComponentCM
+- ComponentMapper<TransformComponent> transformComponentCM
++ void update(float)
+# void processEntity(Entity,float)
+}
+
+
+class com.thewizardsjourney.game.ecs.EntityComparator {
++ int compare(Entity,Entity)
+}
+
+class com.thewizardsjourney.game.ecs.component.TransformComponent {
++ int z
++ float rotation
++ Vector2 position
++ Vector2 scale
++ int compareTo(TransformComponent)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.PlayerMovementSystem {
+- boolean isColliding
+- World world
+- ComponentMapper<BodyComponent> bodyComponentCM
+- ComponentMapper<PlayerMovementComponent> playerMovementComponentCM
+- ComponentMapper<AnimationComponent> animationComponentCM
+- ComponentMapper<PlayerAbilityComponent> abilityComponentCM
+- QueryCallback callback
+# void processEntity(Entity,float)
+- void collisionCheck(Body)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.CameraSystem {
+- Entity entity
+- OrthographicCamera camera
+- Vector2 maxCameraPosition
++ void update(float)
++ void setTargetEntity(Entity)
+}
+
+
+class com.thewizardsjourney.game.ecs.component.AnimationComponent {
++ AnimationState state
++ boolean isStateChanged
++ float animationTime
++ Animation animation
++ ObjectMap<AnimationState,Animation> animations
++ ObjectMap<ECSConstants.AnimationState,AnimationAttributes> animationsAttributes
+}
+
+class com.thewizardsjourney.game.asset.AssetsHandler {
+- {static} String TAG
+- AssetManager manager
+- ObjectMap<String,ObjectMap<String,AssetData>> groups
++ void error(AssetDescriptor,Throwable)
++ void dispose()
++ void loadGroup(String)
++ void unloadGroup(String)
++ void parseGroupsFromFile(String)
++ Array<String> parseMapsFromDirectory(String)
++ Array<String> parsePlayersFromDirectory(String)
++ T get(String,String)
++ boolean isLoaded(String,String)
++ boolean update()
++ void finishLoading()
++ float getProgress()
++ ObjectMap<String,ObjectMap<String,AssetData>> getGroups()
++ void setMusicVolume(float)
++ float getMusicVolume()
++ void setLanguage(String)
++ String getLanguage()
+}
+
+
+class com.thewizardsjourney.game.ui.widget.PauseWidget {
+- Label titleLabel
+- Button resumeButton
+- Button homeButton
+- Button closeButton
+- Window pauseWindow
+- GameInfo gameInfo
+- void setupUI()
++ void updateLanguage()
++ Button getResumeButton()
++ Button getHomeButton()
++ Button getCloseButton()
+}
+
+
+class com.thewizardsjourney.game.ecs.system.RenderingSystem {
+- SpriteBatch batch
+- OrthographicCamera camera
+- Viewport viewport
+- OrthogonalTiledMapRenderer mapRenderer
+- Array<TiledMapTileLayer> mapBackgroundLayers
+- Array<TiledMapTileLayer> mapForegroundLayers
+- FloatArray mapParallaxValues
+- ComponentMapper<RenderingComponent> renderComponentCM
+- ComponentMapper<TransformComponent> transformComponentCM
++ void update(float)
+# void processEntity(Entity,float)
++ void removedFromEngine(Engine)
+- void renderTileLayer(TiledMapTileLayer,int,float)
+}
+
+
+class com.thewizardsjourney.game.asset.map.MapSettingsLoader {
+- MapSettingsData mapSettingsData
++ void loadAsync(AssetManager,String,FileHandle,MapSettingsParameter)
++ MapSettingsData loadSync(AssetManager,String,FileHandle,MapSettingsParameter)
++ Array<AssetDescriptor> getDependencies(String,FileHandle,MapSettingsParameter)
+}
+
+
+class com.thewizardsjourney.game.asset.map.MapSettingsLoader$MapSettingsParameter {
+}
+class com.thewizardsjourney.game.screen.LoadingScreen {
+- TheWizardsJourney main
+- Class<? extends ScreenAdapter> previousScreen
+- Class<? extends ScreenAdapter> nextScreen
++ void show()
++ void hide()
++ void render(float)
++ void resize(int,int)
++ void dispose()
++ void setScreens(Class<? extends ScreenAdapter>,Class<? extends ScreenAdapter>)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.LightSystem {
+- RayHandler rayHandler
+- OrthographicCamera camera
++ void update(float)
+}
+
+
+class com.thewizardsjourney.game.TheWizardsJourney {
+- AssetsHandler assetsHandler
+- GameInfo gameInfo
+- LoadingScreen loadingScreen
+- MenuScreen menuScreen
+- GameScreen gameScreen
++ void create()
++ void dispose()
++ AssetsHandler getAssetHandler()
++ GameInfo getGameInfo()
++ LoadingScreen getLoadingScreen()
++ MenuScreen getMenuScreen()
++ GameScreen getGameScreen()
++ void setIntermediateScreen(Class<? extends ScreenAdapter>,Class<? extends ScreenAdapter>)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem {
+- World world
+- Viewport viewport
+- Box2DDebugRenderer debugRenderer
++ void update(float)
++ void removedFromEngine(Engine)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.PlayerStatisticsSystem {
+- float previousHealth
+- float previousEnergy
+- GameplayInfo gameplayInfo
+- ComponentMapper<StatisticsComponent> statisticsComponentCM
+# void processEntity(Entity,float)
+}
+
+
+class com.thewizardsjourney.game.ui.widget.SelectLevelWidget {
+- Label titleLabel
+- Button closeButton
+- Window selectLevelWindow
+- Button prevButton
+- Button nextButton
+- TextButton levelButton0
+- TextButton levelButton1
+- TextButton playButton
+- GameInfo gameInfo
+- int currentPage
+- int totalPages
+- Array<String> mapGroupNames
+- void setupUI()
+- void buttonProcessing()
+- void updateLevelButtons()
++ void updateLanguage()
++ Label getTitleLabel()
++ Button getCloseButton()
++ Window getSelectLevelWindow()
++ Button getPrevButton()
++ Button getNextButton()
++ TextButton getLevelButton0()
++ TextButton getLevelButton1()
++ TextButton getPlayButton()
+}
+
+
+class com.thewizardsjourney.game.map.MapHandler {
+- Logger logger
+- Engine engine
+- World world
+- RayHandler rayHandler
+- MapInfo mapInfo
+- PlayerInfo playerInfo
+- Entity player
+- AssetsHandler assetsHandler
++ void dispose()
+- void createObjects(Map,String,ObjectCreationHandler)
+- void createStaticObjects(Array<MapObjectData>)
+- void createPuzzleObjects(Array<MapObjectData>)
+- void createEntityForStaticObject(Body)
+- void createOtherObjects(Array<MapObjectData>)
+- void createSensorInfoObject(MapObjectData)
+- void createSensorExitObject(MapObjectData)
+- void createSensorHarmObject(MapObjectData)
+- void createCoinObject(MapObjectData)
+- void createEntityForCoinObject(Body)
+- void crateBoxObject(MapObjectData)
+- void createEntityForBoxObject(Body)
+- void createSensorSavePointObject(MapObjectData)
+- void createEntityForSensorSavePointObject(Body)
+- void createPlayerObject(MapObjectData)
+- void createPuzzleJointForGroup(PuzzleGroupObject,String,Array<MapObjectData>)
+- void createPuzzleSensorForGroup(PuzzleGroupObject,MapObjectData)
+- void createEntityForPuzzleSensorObject(Body,PuzzleGroupObject,Vector2,Vector2)
+- void createPrismaticJoint(PuzzleGroupObject,Array<MapObjectData>)
+- void createEntityForDoor(Body,boolean)
+- void createEntityForJointObjects(Body)
+- void createDistanceJoint(PuzzleGroupObject,Array<MapObjectData>)
+- void createEntityForButton(Body)
+- void createRopeJoint(PuzzleGroupObject,Array<MapObjectData>)
+- void createEntityForSpikedBall(Body)
+- void createEntityForPlayerObject(Body)
++ void setPlayerInfo(String)
+- void setPlayerComponentValues()
++ World getWorld()
++ TiledMap getMap()
++ Entity getPlayer()
++ RayHandler getRayHandler()
++ PlayerInfo getPlayerInfo()
++ MapInfo getMapInfo()
+}
+
+
+interface com.thewizardsjourney.game.map.MapHandler$ObjectCreationHandler {
+~ void createObject(Array<MapObjectData>)
+}
+
+class com.thewizardsjourney.game.map.BodyContactListener {
++ void beginContact(Contact)
++ void endContact(Contact)
++ void preSolve(Contact,Manifold)
++ void postSolve(Contact,ContactImpulse)
+- void addCollisionData(Entity,Entity)
+- void removeCollisionData(Entity,Entity)
+}
+
+class com.thewizardsjourney.game.map.PuzzleGroupObject {
+- MapObjectData sensor
+- ObjectMap<String,Array<MapObjectData>> mapObjectsForJoints
+- Array<JointInfo> joints
++ MapObjectData getSensor()
++ void setSensor(MapObjectData)
++ ObjectMap<String,Array<MapObjectData>> getMapObjectsForJoints()
++ void setMapObjectsForJoints(ObjectMap<String,Array<MapObjectData>>)
++ Array<JointInfo> getJoints()
++ void setJoints(Array<JointInfo>)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.OutOfBoundsSystem {
+- Rectangle boundaries
+- ComponentMapper<BodyComponent> bodyComponentCM
+- ComponentMapper<EntityTypeComponent> entityTypeComponentCM
+- ComponentMapper<SavePointComponent> savePointComponentCM
+# void processEntity(Entity,float)
+}
+
+
+class com.thewizardsjourney.game.ecs.component.CollisionComponent {
++ Entity firstCollidedEntity
++ Entity lastCollidedEntity
+}
+
+class com.thewizardsjourney.game.asset.player.PlayerSettingsLoader {
+- PlayerSettingsData playerSettingsData
++ void loadAsync(AssetManager,String,FileHandle,PlayerSettingsParameter)
++ PlayerSettingsData loadSync(AssetManager,String,FileHandle,PlayerSettingsParameter)
++ Array<AssetDescriptor> getDependencies(String,FileHandle,PlayerSettingsParameter)
+}
+
+
+class com.thewizardsjourney.game.asset.player.PlayerSettingsLoader$PlayerSettingsParameter {
+}
+class com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent {
++ boolean drawShape
++ int numberOfTargets
++ String targetObjectName
++ Color color
++ Vector2 lowerBound
++ Vector2 upperBound
++ Array<JointInfo> joints
+}
+
+class com.thewizardsjourney.game.screen.GameScreen {
+- TheWizardsJourney main
+- Viewport viewport
+- OrthographicCamera camera
+- Engine engine
+- MapHandler mapHandler
+- InputHandler controller
+- SpriteBatch batch
+- Stage stage
+- Skin skin
+- GameHUD gameHUD
+- InputMultiplexer inputMultiplexer
+- GameplayInfo gameplayInfo
++ void show()
++ void hide()
++ void render(float)
++ void resize(int,int)
++ void dispose()
+- void initialization()
+- void buttonProcessing()
+}
+
+
+class com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem {
+- World world
+- int currentCount
+- String targetObjectName
+- Color targetColor
+- ShapeRenderer renderer
+- Viewport viewport
+- ComponentMapper<BodyComponent> bodyComponentCM
+- ComponentMapper<PuzzleSensorComponent> puzzleSensorComponentCM
+- QueryCallback callback
+# void processEntity(Entity,float)
+- void collisionCheck(Vector2,Vector2)
+- void activateJoints(Array<JointInfo>)
+- void deactivateJoints(Array<JointInfo>)
+- void drawShapeOutline(Fixture,boolean)
++ void removedFromEngine(Engine)
+}
+
+
+class com.thewizardsjourney.game.ecs.component.BodyComponent {
++ Body body
+}
+
+class com.thewizardsjourney.game.ui.GameHUD {
+- Touchpad touchpad
+- Button pauseButton
+- Button jumpButton
+- Button castButton
+- Button informationButton
+- Button switchButton
+- PlayerStatisticsWidget playerStatisticsWidget
+- PauseWidget pauseWidget
+- InformationWidget informationWidget
+- GameExitWidget gameExitWidget
+- GameOverWidget gameOverWidget
+- boolean jumpButtonVisible
+- GameplayInfo gameplayInfo
+- I18NBundle i18NBundle
+- GameInfo gameInfo
+- void setupUI()
+- void buttonProcessing()
++ void gameOver()
++ void updateLanguage()
++ Touchpad getTouchpad()
++ Button getPauseButton()
++ Button getJumpButton()
++ Button getCastButton()
++ Button getInformationButton()
++ Button getSwitchButton()
++ PlayerStatisticsWidget getPlayerStatisticsWidget()
++ PauseWidget getPauseWidget()
++ boolean isJumpButtonVisible()
++ void setJumpButtonVisible(boolean)
++ GameExitWidget getGameExitWidget()
++ GameOverWidget getGameOverWidget()
+}
+
+
+class com.thewizardsjourney.game.asset.material.MaterialsData {
+- ObjectMap<String,FixtureDef> materials
++ void putMaterial(MaterialAttributes)
++ ObjectMap<String,FixtureDef> getMaterials()
+}
+
+
+class com.thewizardsjourney.game.asset.material.MaterialAttributes {
+- String name
+- float density
+- float restitution
+- float friction
++ String getName()
++ void setName(String)
++ float getDensity()
++ void setDensity(float)
++ float getRestitution()
++ void setRestitution(float)
++ float getFriction()
++ void setFriction(float)
+}
+
+
+class com.thewizardsjourney.game.helper.GameInfo {
+- Array<String> mapGroupNames
+- Array<String> playerGroupNames
+- String selectedMapGroupName
+- String selectedPlayerGroupName
+- String menuMapGroupName
+- I18NBundle i18NBundle
+- String selectedLanguage
++ Array<String> getMapGroupNames()
++ void setMapGroupNames(Array<String>)
++ Array<String> getPlayerGroupNames()
++ void setPlayerGroupNames(Array<String>)
++ String getSelectedMapGroupName()
++ void setSelectedMapGroupName(String)
++ String getSelectedPlayerGroupName()
++ void setSelectedPlayerGroupName(String)
++ String getMenuMapGroupName()
++ Array<String> getMapGroupNamesForLevelSelection()
++ I18NBundle getI18NBundle()
++ void setI18NBundle(I18NBundle)
++ String getSelectedLanguage()
++ void setSelectedLanguage(String)
+}
+
+
+class com.thewizardsjourney.game.ecs.system.AnimationSystem {
+- ComponentMapper<AnimationComponent> animationComponentCM
+- ComponentMapper<RenderingComponent> renderComponentCM
+- ComponentMapper<FacingComponent> facingComponentCM
+# void processEntity(Entity,float)
+}
+
+
+class com.thewizardsjourney.game.map.MapObjectData {
+- MapObject object
+- float[] transformVertices(float[])
++ Shape getShapeStaticObject()
++ float[] getVerticesStaticObject()
++ Shape getShapeOtherObject()
++ Vector2 getCenterPositionOtherObject()
++ Vector2 getSizeOtherObject()
++ String getMaterial()
++ MapObject getObject()
+}
+
+
+class com.thewizardsjourney.game.helper.GameplayInfo {
+- boolean gameIsExit
+- PlayerStatisticsWidget playerStatisticsWidget
+- Button informationButton
+- InformationWidget informationWidget
+- GameHUD gameHUD
++ PlayerStatisticsWidget getPlayerStatisticsWidget()
++ void setPlayerStatisticsWidget(PlayerStatisticsWidget)
++ Button getInformationButton()
++ void setInformationButton(Button)
++ boolean isGameIsExit()
++ void setGameIsExit(boolean)
++ InformationWidget getInformationWidget()
++ void setInformationWidget(InformationWidget)
++ GameHUD getGameHUD()
++ void setGameHUD(GameHUD)
+}
+
+
+class com.thewizardsjourney.game.asset.animation.AnimationAttributes {
+- String state
+- float frameDuration
+- float animationSpeed
+- String playMode
+- Array<String> frames
++ String getState()
++ void setState(String)
++ float getFrameDuration()
++ void setFrameDuration(float)
++ float getAnimationSpeed()
++ void setAnimationSpeed(float)
++ String getPlayMode()
++ void setPlayMode(String)
++ Array<String> getFrames()
++ void setFrames(Array<String>)
+}
+
+
+class com.thewizardsjourney.game.ecs.component.PlayerComponent {
++ int number_of_coins
+}
+
+
+
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.EntityTypeComponent
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.InformationWidget
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent
+com.badlogic.gdx.InputAdapter <|-- com.thewizardsjourney.game.controller.InputHandler
+com.badlogic.gdx.ScreenAdapter <|-- com.thewizardsjourney.game.screen.MenuScreen
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.RenderingComponent
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.animation.AnimationsLoader
+com.thewizardsjourney.game.asset.animation.AnimationsLoader +.. com.thewizardsjourney.game.asset.animation.AnimationsLoader$AnimationsParameter
+com.thewizardsjourney.game.asset.animation.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.animation.AnimationsLoader$AnimationsParameter
+com.thewizardsjourney.game.constant.GlobalConstants +.. com.thewizardsjourney.game.constant.GlobalConstants$Screens
+com.thewizardsjourney.game.constant.GlobalConstants +.. com.thewizardsjourney.game.constant.GlobalConstants$Physics
+com.thewizardsjourney.game.constant.ECSConstants +.. com.thewizardsjourney.game.constant.ECSConstants$PhysicsSystem
+com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup <|-- com.thewizardsjourney.game.ui.widget.PlayerStatisticsWidget
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.SavePointComponent
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$AssetPath
+com.thewizardsjourney.game.constant.AssetConstants$AssetPath +.. com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Player
+com.thewizardsjourney.game.constant.AssetConstants$AssetPath +.. com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Map
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$TiledMapDefinitions
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AssetConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MaterialConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AnimationConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MapConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$PlayerConfig
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$Default
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$LoadingScreen
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$MenuScreen
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$GameScreen
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.material.MaterialsLoader
+com.thewizardsjourney.game.asset.material.MaterialsLoader +.. com.thewizardsjourney.game.asset.material.MaterialsLoader$MaterialsParameter
+com.thewizardsjourney.game.asset.material.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.material.MaterialsLoader$MaterialsParameter
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.FacingComponent
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.StatisticsComponent
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.GameOverWidget
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.SettingsWidget
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.MenuHUD
+com.thewizardsjourney.game.asset.Serializable <|.. com.thewizardsjourney.game.asset.AssetData
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PlayerMovementComponent
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerControlSystem
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.GameExitWidget
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PhysicsSystem
+java.util.Comparator <|.. com.thewizardsjourney.game.ecs.EntityComparator
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.TransformComponent
+com.thewizardsjourney.game.ecs.component.Comparable <|.. com.thewizardsjourney.game.ecs.component.TransformComponent
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerMovementSystem
+com.badlogic.ashley.core.EntitySystem <|-- com.thewizardsjourney.game.ecs.system.CameraSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.AnimationComponent
+com.badlogic.gdx.utils.Disposable <|.. com.thewizardsjourney.game.asset.AssetsHandler
+com.badlogic.gdx.assets.AssetErrorListener <|.. com.thewizardsjourney.game.asset.AssetsHandler
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.PauseWidget
+com.badlogic.ashley.systems.SortedIteratingSystem <|-- com.thewizardsjourney.game.ecs.system.RenderingSystem
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.map.MapSettingsLoader
+com.thewizardsjourney.game.asset.map.MapSettingsLoader +.. com.thewizardsjourney.game.asset.map.MapSettingsLoader$MapSettingsParameter
+com.thewizardsjourney.game.asset.map.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.map.MapSettingsLoader$MapSettingsParameter
+com.badlogic.gdx.ScreenAdapter <|-- com.thewizardsjourney.game.screen.LoadingScreen
+com.badlogic.ashley.core.EntitySystem <|-- com.thewizardsjourney.game.ecs.system.LightSystem
+com.badlogic.gdx.Game <|-- com.thewizardsjourney.game.TheWizardsJourney
+com.badlogic.ashley.core.EntitySystem <|-- com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerStatisticsSystem
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.SelectLevelWidget
+com.thewizardsjourney.game.map.MapHandler +.. com.thewizardsjourney.game.map.MapHandler$ObjectCreationHandler
+com.badlogic.gdx.physics.box2d.ContactListener <|.. com.thewizardsjourney.game.map.BodyContactListener
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.OutOfBoundsSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.CollisionComponent
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.player.PlayerSettingsLoader
+com.thewizardsjourney.game.asset.player.PlayerSettingsLoader +.. com.thewizardsjourney.game.asset.player.PlayerSettingsLoader$PlayerSettingsParameter
+com.thewizardsjourney.game.asset.player.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.player.PlayerSettingsLoader$PlayerSettingsParameter
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent
+com.badlogic.gdx.ScreenAdapter <|-- com.thewizardsjourney.game.screen.GameScreen
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.BodyComponent
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.GameHUD
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.AnimationSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PlayerComponent
+@enduml

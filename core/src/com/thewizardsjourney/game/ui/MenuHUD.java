@@ -39,6 +39,8 @@ public class MenuHUD extends Table {
         shopButton = new Button(skin, "game-shop-button");
         playButton = new Button(skin, "game-play-button");
         settingsWidget = new SettingsWidget(skin, gameInfo);
+        settingsWidget.updateMusicSlider(assetsHandler.getMusicVolume());
+        settingsWidget.updateSoundsSlider(assetsHandler.getSoundVolume());
         selectLevelWidget = new SelectLevelWidget(skin, gameInfo);
 
         settingsWidget.setVisible(false);
@@ -122,6 +124,20 @@ public class MenuHUD extends Table {
                 gameInfo.setI18NBundle(assetsHandler.get(AssetConstants.AssetGroups.Default.GROUP_NAME, selectedLanguage));
                 updateLanguage();
 
+            }
+        });
+
+        settingsWidget.getMusicSlider().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                assetsHandler.setMusicVolume(settingsWidget.getMusicSlider().getValue());
+            }
+        });
+
+        settingsWidget.getSoundSlider().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                assetsHandler.setSoundVolume(settingsWidget.getSoundSlider().getValue());
             }
         });
 

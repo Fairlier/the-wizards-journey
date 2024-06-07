@@ -50,7 +50,8 @@ public class LoadingScreen extends ScreenAdapter {
             if (previousScreen.equals(MenuScreen.class) && nextScreen.equals(GameScreen.class)) {
                 main.getAssetHandler().unloadGroup(AssetGroups.MenuScreen.GROUP_NAME);
                 for (String mapGroupName : main.getGameInfo().getMapGroupNames()) {
-                    if (mapGroupName.equals(main.getGameInfo().getSelectedMapGroupName())) {
+                    if (mapGroupName.equals(main.getGameInfo().getSelectedMapGroupName()) ||
+                            mapGroupName.equals(main.getGameInfo().getMenuMapGroupName())) {
                         continue;
                     }
                     main.getAssetHandler().unloadGroup(mapGroupName);
@@ -65,7 +66,6 @@ public class LoadingScreen extends ScreenAdapter {
                 main.getAssetHandler().loadGroup(AssetGroups.GameScreen.GROUP_NAME);
             } else if (previousScreen.equals(GameScreen.class) && nextScreen.equals(MenuScreen.class)) {
                 main.getAssetHandler().unloadGroup(AssetGroups.GameScreen.GROUP_NAME);
-
                 for (String mapGroupName : main.getGameInfo().getMapGroupNames()) {
                     if (mapGroupName.equals(main.getGameInfo().getSelectedMapGroupName())) {
                         continue;

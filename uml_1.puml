@@ -1,0 +1,291 @@
+@startuml
+class com.thewizardsjourney.game.ecs.component.EntityTypeComponent {
+}
+class com.thewizardsjourney.game.ui.widget.InformationWidget {
+}
+class com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent {
+}
+class com.thewizardsjourney.game.controller.InputHandler {
+}
+class com.thewizardsjourney.game.screen.MenuScreen {
+}
+class com.thewizardsjourney.game.ecs.component.RenderingComponent {
+}
+class com.thewizardsjourney.game.helper.AbilityInfo {
+}
+class com.thewizardsjourney.game.asset.animation.AnimationsLoader {
+}
+class com.thewizardsjourney.game.asset.animation.AnimationsLoader$AnimationsParameter {
+}
+class com.thewizardsjourney.game.constant.GlobalConstants {
+}
+class com.thewizardsjourney.game.constant.GlobalConstants$Screens {
+}
+class com.thewizardsjourney.game.constant.GlobalConstants$Physics {
+}
+class com.thewizardsjourney.game.helper.MapInfo {
+}
+class com.thewizardsjourney.game.constant.ECSConstants {
+}
+class com.thewizardsjourney.game.constant.ECSConstants$PhysicsSystem {
+}
+enum com.thewizardsjourney.game.constant.FacingDirection {
++  LEFT
++  RIGHT
+}
+
+enum com.thewizardsjourney.game.constant.AnimationState {
++  IDLE
++  JUMP
++  FALL
++  RUN
++  ABILITY
++  HURT
+}
+
+enum com.thewizardsjourney.game.constant.EntityType {
++  PLAYER
++  STATIC_OBJECT
++  DYNAMIC_OBJECT
++  SENSOR_SAVE_POINT
++  SENSOR_INFO
++  SENSOR_EXIT
++  SENSOR_HARM
++  COIN
++  SENSOR_PUZZLE
++  PRISMATIC
++  DISTANCE
++  ROPE
++  NONE
+}
+
+class com.thewizardsjourney.game.asset.player.PlayerSettingsData {
+}
+class com.thewizardsjourney.game.ui.widget.PlayerStatisticsWidget {
+}
+class com.thewizardsjourney.game.ecs.component.SavePointComponent {
+}
+class com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem {
+}
+class com.thewizardsjourney.game.asset.map.MapSettingsData {
+}
+class com.thewizardsjourney.game.constant.AssetConstants {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetPath {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Player {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Map {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$TiledMapDefinitions {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AssetConfig {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MaterialConfig {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AnimationConfig {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MapConfig {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$PlayerConfig {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$Default {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$LoadingScreen {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$MenuScreen {
+}
+class com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$GameScreen {
+}
+class com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem {
+}
+class com.thewizardsjourney.game.asset.material.MaterialsLoader {
+}
+class com.thewizardsjourney.game.asset.material.MaterialsLoader$MaterialsParameter {
+}
+class com.thewizardsjourney.game.ecs.component.FacingComponent {
+}
+class com.thewizardsjourney.game.asset.animation.AnimationsData {
+}
+class com.thewizardsjourney.game.ecs.component.StatisticsComponent {
+}
+class com.thewizardsjourney.game.ui.widget.GameOverWidget {
+}
+class com.thewizardsjourney.game.ui.widget.SettingsWidget {
+}
+class com.thewizardsjourney.game.ui.MenuHUD {
+}
+class com.thewizardsjourney.game.asset.AssetData {
+}
+class com.thewizardsjourney.game.ecs.component.PlayerMovementComponent {
+}
+class com.thewizardsjourney.game.helper.JointInfo {
+}
+class com.thewizardsjourney.game.ecs.system.PlayerControlSystem {
+}
+class com.thewizardsjourney.game.helper.PlayerInfo {
+}
+class com.thewizardsjourney.game.helper.EntityTypeInfo {
+}
+class com.thewizardsjourney.game.ui.widget.GameExitWidget {
+}
+class com.thewizardsjourney.game.ecs.system.PhysicsSystem {
+}
+class com.thewizardsjourney.game.ecs.EntityComparator {
+}
+class com.thewizardsjourney.game.ecs.component.TransformComponent {
+}
+class com.thewizardsjourney.game.ecs.system.PlayerMovementSystem {
+}
+class com.thewizardsjourney.game.ecs.system.CameraSystem {
+}
+class com.thewizardsjourney.game.ecs.component.AnimationComponent {
+}
+class com.thewizardsjourney.game.asset.AssetsHandler {
+}
+class com.thewizardsjourney.game.ui.widget.PauseWidget {
+}
+class com.thewizardsjourney.game.ecs.system.RenderingSystem {
+}
+class com.thewizardsjourney.game.asset.map.MapSettingsLoader {
+}
+class com.thewizardsjourney.game.asset.map.MapSettingsLoader$MapSettingsParameter {
+}
+class com.thewizardsjourney.game.screen.LoadingScreen {
+}
+class com.thewizardsjourney.game.ecs.system.LightSystem {
+}
+class com.thewizardsjourney.game.TheWizardsJourney {
+}
+class com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem {
+}
+class com.thewizardsjourney.game.ecs.system.PlayerStatisticsSystem {
+}
+class com.thewizardsjourney.game.ui.widget.SelectLevelWidget {
+}
+class com.thewizardsjourney.game.map.MapHandler {
+}
+interface com.thewizardsjourney.game.map.MapHandler$ObjectCreationHandler {
+}
+class com.thewizardsjourney.game.map.BodyContactListener {
+}
+class com.thewizardsjourney.game.map.PuzzleGroupObject {
+}
+class com.thewizardsjourney.game.ecs.system.OutOfBoundsSystem {
+}
+class com.thewizardsjourney.game.ecs.component.CollisionComponent {
+}
+class com.thewizardsjourney.game.asset.player.PlayerSettingsLoader {
+}
+class com.thewizardsjourney.game.asset.player.PlayerSettingsLoader$PlayerSettingsParameter {
+}
+class com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent {
+}
+class com.thewizardsjourney.game.screen.GameScreen {
+}
+class com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem {
+}
+class com.thewizardsjourney.game.ecs.component.BodyComponent {
+}
+class com.thewizardsjourney.game.ui.GameHUD {
+}
+class com.thewizardsjourney.game.asset.material.MaterialsData {
+}
+class com.thewizardsjourney.game.asset.material.MaterialAttributes {
+}
+class com.thewizardsjourney.game.helper.GameInfo {
+}
+class com.thewizardsjourney.game.ecs.system.AnimationSystem {
+}
+class com.thewizardsjourney.game.map.MapObjectData {
+}
+class com.thewizardsjourney.game.helper.GameplayInfo {
+}
+class com.thewizardsjourney.game.asset.animation.AnimationAttributes {
+}
+class com.thewizardsjourney.game.ecs.component.PlayerComponent {
+}
+
+
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.EntityTypeComponent
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.InformationWidget
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PlayerAbilityComponent
+com.badlogic.gdx.InputAdapter <|-- com.thewizardsjourney.game.controller.InputHandler
+com.badlogic.gdx.ScreenAdapter <|-- com.thewizardsjourney.game.screen.MenuScreen
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.RenderingComponent
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.animation.AnimationsLoader
+com.thewizardsjourney.game.asset.animation.AnimationsLoader +.. com.thewizardsjourney.game.asset.animation.AnimationsLoader$AnimationsParameter
+com.thewizardsjourney.game.asset.animation.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.animation.AnimationsLoader$AnimationsParameter
+com.thewizardsjourney.game.constant.GlobalConstants +.. com.thewizardsjourney.game.constant.GlobalConstants$Screens
+com.thewizardsjourney.game.constant.GlobalConstants +.. com.thewizardsjourney.game.constant.GlobalConstants$Physics
+com.thewizardsjourney.game.constant.ECSConstants +.. com.thewizardsjourney.game.constant.ECSConstants$PhysicsSystem
+com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup <|-- com.thewizardsjourney.game.ui.widget.PlayerStatisticsWidget
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.SavePointComponent
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerAbilitySystem
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$AssetPath
+com.thewizardsjourney.game.constant.AssetConstants$AssetPath +.. com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Player
+com.thewizardsjourney.game.constant.AssetConstants$AssetPath +.. com.thewizardsjourney.game.constant.AssetConstants$AssetPath$Map
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$TiledMapDefinitions
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AssetConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MaterialConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$AnimationConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$MapConfig
+com.thewizardsjourney.game.constant.AssetConstants$CustomAsset +.. com.thewizardsjourney.game.constant.AssetConstants$CustomAsset$PlayerConfig
+com.thewizardsjourney.game.constant.AssetConstants +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$Default
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$LoadingScreen
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$MenuScreen
+com.thewizardsjourney.game.constant.AssetConstants$AssetGroups +.. com.thewizardsjourney.game.constant.AssetConstants$AssetGroups$GameScreen
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerCollisionSystem
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.material.MaterialsLoader
+com.thewizardsjourney.game.asset.material.MaterialsLoader +.. com.thewizardsjourney.game.asset.material.MaterialsLoader$MaterialsParameter
+com.thewizardsjourney.game.asset.material.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.material.MaterialsLoader$MaterialsParameter
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.FacingComponent
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.StatisticsComponent
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.GameOverWidget
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.SettingsWidget
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.MenuHUD
+com.thewizardsjourney.game.asset.Serializable <|.. com.thewizardsjourney.game.asset.AssetData
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PlayerMovementComponent
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerControlSystem
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.GameExitWidget
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PhysicsSystem
+java.util.Comparator <|.. com.thewizardsjourney.game.ecs.EntityComparator
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.TransformComponent
+com.thewizardsjourney.game.ecs.component.Comparable <|.. com.thewizardsjourney.game.ecs.component.TransformComponent
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerMovementSystem
+com.badlogic.ashley.core.EntitySystem <|-- com.thewizardsjourney.game.ecs.system.CameraSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.AnimationComponent
+com.badlogic.gdx.utils.Disposable <|.. com.thewizardsjourney.game.asset.AssetsHandler
+com.badlogic.gdx.assets.AssetErrorListener <|.. com.thewizardsjourney.game.asset.AssetsHandler
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.PauseWidget
+com.badlogic.ashley.systems.SortedIteratingSystem <|-- com.thewizardsjourney.game.ecs.system.RenderingSystem
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.map.MapSettingsLoader
+com.thewizardsjourney.game.asset.map.MapSettingsLoader +.. com.thewizardsjourney.game.asset.map.MapSettingsLoader$MapSettingsParameter
+com.thewizardsjourney.game.asset.map.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.map.MapSettingsLoader$MapSettingsParameter
+com.badlogic.gdx.ScreenAdapter <|-- com.thewizardsjourney.game.screen.LoadingScreen
+com.badlogic.ashley.core.EntitySystem <|-- com.thewizardsjourney.game.ecs.system.LightSystem
+com.badlogic.gdx.Game <|-- com.thewizardsjourney.game.TheWizardsJourney
+com.badlogic.ashley.core.EntitySystem <|-- com.thewizardsjourney.game.ecs.system.PhysicsDebugSystem
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PlayerStatisticsSystem
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.widget.SelectLevelWidget
+com.thewizardsjourney.game.map.MapHandler +.. com.thewizardsjourney.game.map.MapHandler$ObjectCreationHandler
+com.badlogic.gdx.physics.box2d.ContactListener <|.. com.thewizardsjourney.game.map.BodyContactListener
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.OutOfBoundsSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.CollisionComponent
+com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader <|-- com.thewizardsjourney.game.asset.player.PlayerSettingsLoader
+com.thewizardsjourney.game.asset.player.PlayerSettingsLoader +.. com.thewizardsjourney.game.asset.player.PlayerSettingsLoader$PlayerSettingsParameter
+com.thewizardsjourney.game.asset.player.AssetLoaderParameters <|-- com.thewizardsjourney.game.asset.player.PlayerSettingsLoader$PlayerSettingsParameter
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PuzzleSensorComponent
+com.badlogic.gdx.ScreenAdapter <|-- com.thewizardsjourney.game.screen.GameScreen
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.PuzzleSensorSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.BodyComponent
+com.badlogic.gdx.scenes.scene2d.ui.Table <|-- com.thewizardsjourney.game.ui.GameHUD
+com.badlogic.ashley.systems.IteratingSystem <|-- com.thewizardsjourney.game.ecs.system.AnimationSystem
+com.badlogic.ashley.core.Component <|.. com.thewizardsjourney.game.ecs.component.PlayerComponent
+@enduml

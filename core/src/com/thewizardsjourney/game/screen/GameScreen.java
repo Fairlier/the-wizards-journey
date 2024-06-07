@@ -104,6 +104,7 @@ public class GameScreen extends ScreenAdapter {
         );
         viewport.getCamera().update();
         viewport.update((int) GAME_SCENE_WIDTH, (int) GAME_SCENE_HEIGHT);
+
         batch = new SpriteBatch();
         stage = new Stage(new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT), batch);
 
@@ -232,6 +233,7 @@ public class GameScreen extends ScreenAdapter {
         gameHUD.getPauseWidget().getHomeButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                main.getGameInfo().setSelectedMapGroupName(main.getGameInfo().getMenuMapGroupName());
                 main.setIntermediateScreen(main.getGameScreen().getClass(), main.getMenuScreen().getClass());
             }
         });
@@ -246,6 +248,7 @@ public class GameScreen extends ScreenAdapter {
         gameHUD.getGameExitWidget().getHomeButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                main.getGameInfo().setSelectedMapGroupName(main.getGameInfo().getMenuMapGroupName());
                 main.setIntermediateScreen(main.getGameScreen().getClass(), main.getMenuScreen().getClass());
             }
         });
@@ -260,6 +263,7 @@ public class GameScreen extends ScreenAdapter {
         gameHUD.getGameOverWidget().getHomeButton().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                main.getGameInfo().setSelectedMapGroupName(main.getGameInfo().getMenuMapGroupName());
                 main.setIntermediateScreen(main.getGameScreen().getClass(), main.getMenuScreen().getClass());
             }
         });

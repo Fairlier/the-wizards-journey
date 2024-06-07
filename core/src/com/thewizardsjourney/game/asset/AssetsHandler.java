@@ -4,8 +4,10 @@ import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.Map;
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.Player;
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_DEFAULT_LANGUAGE;
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_DEFAULT_MUSIC_VOLUME;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_DEFAULT_SOUNDS_VOLUME;
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_MUSIC_VOLUME;
 import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_LANGUAGE;
+import static com.thewizardsjourney.game.constant.AssetConstants.AssetPath.SETTINGS_SOUNDS_VOLUME;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -267,6 +269,23 @@ public class AssetsHandler implements Disposable, AssetErrorListener {
         }
         catch (Exception e) {
             return SETTINGS_DEFAULT_MUSIC_VOLUME;
+        }
+    }
+
+    public void setSoundVolume(float volume) {
+        FileHandle file = Gdx.files.local(SETTINGS_SOUNDS_VOLUME);
+        String data = String.valueOf(volume);
+        file.writeString(data, false);
+    }
+
+    public float getSoundVolume() {
+        try {
+            FileHandle file = Gdx.files.local(SETTINGS_SOUNDS_VOLUME);
+            String volume = file.readString();
+            return Float.parseFloat(volume);
+        }
+        catch (Exception e) {
+            return SETTINGS_DEFAULT_SOUNDS_VOLUME;
         }
     }
 

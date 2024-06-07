@@ -99,6 +99,7 @@ public class MapHandler {
         createObjects(mapInfo.getMap(), LN_OTHER_OBJECTS, this::createOtherObjects);
 
         MapLayers layers = mapInfo.getMap().getLayers();
+
         for (MapLayer layer : layers) {
             if (layer.getName().startsWith(LN_PUZZLE_OBJECTS)) {
                 createObjects(mapInfo.getMap(), layer.getName(), this::createPuzzleObjects);
