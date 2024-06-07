@@ -93,6 +93,7 @@ public class AssetConstants {
             public static final String GROUP_NAME = "default";
             public static final String ENGLISH_LANGUAGE = "english_language";
             public static final String RUSSIAN_LANGUAGE = "russian_language";
+            public static final String MUSIC = "music";
         }
 
         public static class LoadingScreen {

@@ -1,5 +1,6 @@
 package com.thewizardsjourney.game.helper;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
 
@@ -11,6 +12,7 @@ public class GameInfo {
     private final String menuMapGroupName = "maps_menu_map";
     private I18NBundle i18NBundle;
     private String selectedLanguage = "";
+    private Music music;
 
     public GameInfo() {}
 
@@ -71,5 +73,13 @@ public class GameInfo {
 
     public void setSelectedLanguage(String selectedLanguage) {
         this.selectedLanguage = selectedLanguage;
+    }
+
+    public Music getMusic() {
+        return music;
+    }
+
+    public void setMusic(Music music) {
+        this.music = music;
     }
 }

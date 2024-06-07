@@ -38,6 +38,10 @@ public class LoadingScreen extends ScreenAdapter {
         i18NBundle = main.getAssetHandler().get(AssetGroups.Default.GROUP_NAME, language);
         main.getGameInfo().setSelectedLanguage(language);
         main.getGameInfo().setI18NBundle(i18NBundle);
+        main.getGameInfo().setMusic(main.getAssetHandler().get(AssetGroups.Default.GROUP_NAME, AssetGroups.Default.MUSIC));
+        main.getGameInfo().getMusic().setVolume(main.getAssetHandler().getMusicVolume());
+        main.getGameInfo().getMusic().setLooping(true);
+        main.getGameInfo().getMusic().play();
     }
 
     @Override

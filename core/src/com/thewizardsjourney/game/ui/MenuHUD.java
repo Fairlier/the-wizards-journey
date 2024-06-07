@@ -131,6 +131,7 @@ public class MenuHUD extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 assetsHandler.setMusicVolume(settingsWidget.getMusicSlider().getValue());
+                gameInfo.getMusic().setVolume(assetsHandler.getMusicVolume());
             }
         });
 

@@ -14,6 +14,11 @@
 			"name" : "russian_language",
 			"type" : "com.badlogic.gdx.utils.I18NBundle",
 			"path" : "data/i18n/ru"
+		},
+		{
+			"name" : "music",
+			"type" : "com.badlogic.gdx.audio.Music",
+			"path" : "data/music/main_menu.wav"
 		}
 	]
 }

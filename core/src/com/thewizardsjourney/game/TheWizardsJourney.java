@@ -2,6 +2,7 @@ package com.thewizardsjourney.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.thewizardsjourney.game.asset.AssetsHandler;
 import com.thewizardsjourney.game.helper.GameInfo;
 import com.thewizardsjourney.game.screen.GameScreen;
