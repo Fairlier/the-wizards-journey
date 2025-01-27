@@ -8,9 +8,9 @@
 
 В игре на данный момент реализовано 2 уровня и поддерживается русский и английский языки.
 
-Видео, демонстрирующее игровой процесс:
+Видео, демонстрирующее игровой процесс: [видео](https://drive.google.com/file/d/147XdvLawYahKSssbRmJ4Yu0gxOScUWXr/view?usp=sharing)
 
-[![image](https://raw.githubusercontent.com/Fairlier/the-wizards-journey/refs/heads/master/assets/the-wizards-journey.png?token=GHSAT0AAAAAACYGSYUZWESQMMZA6HMLLYJCZ4XZBGQ)](https://drive.google.com/file/d/147XdvLawYahKSssbRmJ4Yu0gxOScUWXr/view?usp=sharing)
+![image](https://media.discordapp.net/attachments/786554540442386432/1333500836600615013/the-wizards-journey.png?ex=67991eee&is=6797cd6e&hm=5d95d2c2a373d8e02ca0721da73d8f3062851074d69085aeede2ce133efda8c8&=&format=webp&quality=lossless&width=1100&height=619)
 
 ### Credits
 
