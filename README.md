@@ -1,4 +1,4 @@
-![puzzle_0](https://github.com/user-attachments/assets/cf491e29-9e50-4538-87c5-d822faaacef3)# The Wizard's Journey
+# The Wizard's Journey
 
 **The Wizard's Journey** — это мобильная игра, разработанная в рамках выпускной квалификационной работы.
 
