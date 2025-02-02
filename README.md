@@ -11,3 +11,5 @@
 Видео, демонстрирующее игровой процесс: [видео](https://drive.google.com/file/d/147XdvLawYahKSssbRmJ4Yu0gxOScUWXr/view?usp=sharing)
 
 [![image](https://drive.google.com/uc?export=download&id=1lwo3Ucx08dcZ9YTRnLw15xsNhhESyhx3)](https://drive.google.com/uc?export=download&id=147XdvLawYahKSssbRmJ4Yu0gxOScUWXr)
+
+https://drive.google.com/uc?export=download&id=147XdvLawYahKSssbRmJ4Yu0gxOScUWXr
