@@ -1,4 +1,4 @@
-# The Wizard's Journey
+![puzzle_0](https://github.com/user-attachments/assets/cf491e29-9e50-4538-87c5-d822faaacef3)# The Wizard's Journey
 
 **The Wizard's Journey** — это мобильная игра, разработанная в рамках выпускной квалификационной работы.
 
@@ -8,8 +8,16 @@
 
 В игре на данный момент реализовано 2 уровня и поддерживается русский и английский языки.
 
-Видео, демонстрирующее игровой процесс: [видео](https://drive.google.com/file/d/147XdvLawYahKSssbRmJ4Yu0gxOScUWXr/view?usp=sharing)
+Видео, демонстрирующее полный игровой процесс: [видео](https://drive.google.com/file/d/147XdvLawYahKSssbRmJ4Yu0gxOScUWXr/view?usp=sharing)
 
-[![image](https://drive.google.com/uc?export=download&id=1lwo3Ucx08dcZ9YTRnLw15xsNhhESyhx3)](https://drive.google.com/uc?export=download&id=147XdvLawYahKSssbRmJ4Yu0gxOScUWXr)
+Видео из главного меню:
 
-https://drive.google.com/uc?export=download&id=147XdvLawYahKSssbRmJ4Yu0gxOScUWXr
+https://github.com/user-attachments/assets/a6001c90-e5e3-447a-85b8-94e57ed0897b
+
+Игровые механики:
+
+![puzzle_0](https://github.com/user-attachments/assets/517fe81c-32c8-45fd-92dc-ed587f0c4f6d)
+![game_mechanics_0](https://github.com/user-attachments/assets/861e76bb-faa7-40ac-802f-e85a97f675f3)
+
+![puzzle_1](https://github.com/user-attachments/assets/093d4e2b-8715-4f9b-88dd-028eef8733e7)
+![game_mechanics_1](https://github.com/user-attachments/assets/3390f45a-508a-499f-b8bb-e7b2878e6aa8)
